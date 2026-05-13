@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+
 import { Navigation } from "@/components/sumos/Navigation";
 import { Footer } from "@/components/sumos/Footer";
 import { Institutions } from "@/components/sumos/Institutions";
@@ -7,24 +7,6 @@ import tipTravel from "@/assets/tip-travel.jpg";
 import tipHome from "@/assets/tip-home.jpg";
 import tipEngage from "@/assets/tip-engage.jpg";
 
-export const Route = createFileRoute("/tips")({
-  head: () => ({
-    meta: [
-      { title: "Tips and Tricks — SuMoS" },
-      {
-        name: "description",
-        content:
-          "Practical suggestions to reduce your carbon footprint while traveling, at home, and through learning.",
-      },
-      { property: "og:title", content: "Tips and Tricks — SuMoS" },
-      {
-        property: "og:description",
-        content: "Sustainable habits and tips for students.",
-      },
-    ],
-  }),
-  component: TipsPage,
-});
 
 type Tip = {
   image: string;
@@ -136,3 +118,4 @@ function TipsPage() {
     </main>
   );
 }
+export default TipsPage;

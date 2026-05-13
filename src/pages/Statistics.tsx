@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+
 import {
   Radar,
   RadarChart,
@@ -15,25 +15,6 @@ import iconGlobe from "@/assets/icon-globe.gif";
 import iconChecklistStat from "@/assets/icon-checklist-stat.svg";
 import iconTimeStat from "@/assets/icon-time-stat.svg";
 
-export const Route = createFileRoute("/statistics")({
-  head: () => ({
-    meta: [
-      { title: "Statistics — SuMoS" },
-      {
-        name: "description",
-        content:
-          "Explore aggregated statistics on students' green awareness, sustainable habits, and ecological footprint across SuMoS partner countries.",
-      },
-      { property: "og:title", content: "Statistics — SuMoS" },
-      {
-        property: "og:description",
-        content:
-          "Aggregated insights on students' sustainable mobility from the Erasmus+ SuMoS project.",
-      },
-    ],
-  }),
-  component: StatisticsPage,
-});
 
 /* ---------- Footprint bar chart (top) ---------- */
 
@@ -311,3 +292,4 @@ function StatisticsPage() {
     </main>
   );
 }
+export default StatisticsPage;
