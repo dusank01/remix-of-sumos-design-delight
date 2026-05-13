@@ -3,108 +3,215 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { GaugeChart } from "@/components/shared/GaugeChart";
 import { BadgeDisplay } from "@/components/shared/BadgeDisplay";
 import { useSurvey } from "@/contexts/SurveyContext";
-import { surveyQuestions, getBadge, type SurveyQuestion } from "@/data/mockData";
+import {
+  surveyQuestions,
+  getBadge,
+  suggestions,
+  type SurveyQuestion,
+} from "@/data/mockData";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BarChart3 } from "lucide-react";
 
 export default function SurveyResults() {
   const { state, getScore } = useSurvey();
   const score = getScore();
   const badge = getBadge(score);
 
-  const categories = [
-    { name: "Awareness", icon: "☀️", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Awareness") },
-    { name: "Attitudes", icon: "💭", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Attitudes") },
-    { name: "Habits", icon: "🔄", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Habits") },
-    { name: "Barriers", icon: "🚧", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Barriers") },
+  const avg = (qs: SurveyQuestion[]) =>
+    qs.length > 0
+      ? Number(
+          (
+            qs
+              .map((q: SurveyQuestion) => Number(state.answers[q.id]) || 0)
+              .reduce((a: number, b: number) => a + b, 0) / qs.length
+          ).toFixed(1),
+        )
+      : 0;
+
+  const mainCategories = [
+    { name: "Awareness", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Awareness") },
+    { name: "Attitudes", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Attitudes") },
+    { name: "Habits", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Habits") },
   ];
+
+  const habitSubs = [
+    { name: "Travel", questions: surveyQuestions.filter((q: SurveyQuestion) => q.subcategory === "Travel") },
+    { name: "Living and accommodation", questions: surveyQuestions.filter((q: SurveyQuestion) => q.subcategory === "Living & accommodation") },
+    { name: "Buying and consumption", questions: surveyQuestions.filter((q: SurveyQuestion) => q.subcategory === "Buying & consumption") },
+    { name: "Digital habits", questions: surveyQuestions.filter((q: SurveyQuestion) => q.subcategory === "Digital habits") },
+    { name: "Community engagement", questions: surveyQuestions.filter((q: SurveyQuestion) => q.subcategory === "Community engagement") },
+  ];
+
+  const suggestionFor = (cat: string): string[] => {
+    const pool: string[] = [];
+    if (cat === "Habits") {
+      Object.values(suggestions).forEach((arr) =>
+        arr.forEach((s) => s.tips.forEach((t) => pool.push(t))),
+      );
+    } else {
+      // Generic eco tips for Awareness/Attitudes
+      pool.push(
+        "Considering low-emission transport options",
+        "Familiarity with green travel incentives",
+        "Familiarity with green travel incentives",
+        "Learning about sustainable travel options",
+      );
+    }
+    return pool.slice(0, 4);
+  };
 
   return (
     <Layout>
-      <PageHeader title="View detailed results" subtitle="Students' Green Awareness and Sustainable Habits" />
+      <PageHeader
+        title="View detailed results"
+        subtitle="Students' Green Awareness and Sustainable Habits"
+      />
 
-      <div className="container py-8">
-        <div className="mx-auto max-w-4xl space-y-8">
-          {/* My Green Profile */}
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="rounded-lg border-2 border-secondary bg-card p-6 text-center">
-              <p className="mb-3 text-base font-bold text-foreground">My Green Profile</p>
-              <BadgeDisplay name={badge.name} description="" size="sm" />
+      {/* Eco profile band (white) */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-[1100px] px-6 py-10 sm:px-10">
+          <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
+            {/* Profile card */}
+            <div className="rounded-xl border-2 border-brand-green-soft bg-card p-6 text-center shadow-[var(--shadow-card)]">
+              <p className="mb-3 text-sm font-semibold text-brand-blue-deep">
+                My Eco Profile
+              </p>
+              <BadgeDisplay name={badge.name} description="" size="lg" />
               <p className="mt-4 text-sm text-muted-foreground">
-                Your result is: <span className="text-xl font-bold text-secondary">{score.toFixed(1).replace(".", ",")}</span>
+                Your result is:{" "}
+                <span className="text-xl font-extrabold text-brand-blue-deep">
+                  {score.toFixed(1).replace(".", ",")}
+                </span>
               </p>
             </div>
-            <div className="lg:col-span-2 rounded-lg border bg-card p-6">
-              <h3 className="mb-3 text-base font-bold text-foreground">Description</h3>
-              <p className="mb-3 text-sm text-muted-foreground leading-relaxed">
-                Earned by participants who are <strong>moderately engaged</strong> in green and sustainable behavior.
-                They <strong>make conscious choices</strong> to reduce their environmental impact — such as using public transport, saving energy and water, and occasionally choosing eco-friendly options.
+
+            {/* Description */}
+            <div className="flex flex-col justify-center">
+              <h3 className="mb-3 text-base font-bold text-brand-blue-deep">
+                Description
+              </h3>
+              <p className="mb-3 text-sm leading-relaxed text-[#444444]">
+                Earned by participants who are{" "}
+                <strong>moderately engaged</strong> in green and sustainable
+                behavior.
               </p>
-              <Link to="/survey/tips" className="inline-flex items-center text-sm font-medium text-secondary hover:underline">
+              <p className="mb-4 text-sm leading-relaxed text-[#444444]">
+                They <strong>make conscious choices</strong> to reduce their
+                environmental impact — such as using public transport, saving
+                energy and water, and occasionally choosing eco-friendly
+                options.
+              </p>
+              <Link
+                to="/survey/tips"
+                className="inline-flex items-center text-sm font-semibold text-brand-blue hover:underline"
+              >
                 View suggestions <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Category breakdowns */}
-          {categories.map(cat => {
-            const catScore = cat.questions.length > 0
-              ? Number((cat.questions.map((q: SurveyQuestion) => Number(state.answers[q.id]) || 0).reduce((a: number, b: number) => a + b, 0) / cat.questions.length).toFixed(1))
-              : 0;
-            return (
-              <div key={cat.name} className="rounded-lg border bg-card p-6">
-                <div className="grid gap-6 lg:grid-cols-4">
-                  {/* Gauge */}
-                  <div className="flex flex-col items-center justify-center">
-                    <GaugeChart value={catScore} size={120} />
+      {/* "What should you do next?" — gray section */}
+      <section className="bg-[var(--section-muted)]">
+        <div className="mx-auto max-w-[1100px] px-6 py-12 sm:px-10">
+          <h2 className="mb-8 text-2xl font-extrabold text-brand-blue-deep">
+            What should you do next?
+          </h2>
+
+          {/* Main 3 categories */}
+          <div className="space-y-4">
+            {mainCategories.map((cat) => {
+              const value = avg(cat.questions);
+              const tips = suggestionFor(cat.name);
+              return (
+                <div
+                  key={cat.name}
+                  className="grid items-center gap-6 rounded-xl bg-card p-5 shadow-[var(--shadow-card)] md:grid-cols-[220px_1fr]"
+                >
+                  <div className="flex flex-col items-center">
+                    <p className="mb-2 text-xs font-semibold text-brand-blue-deep">
+                      {cat.name}
+                    </p>
+                    <GaugeChart value={value} size={150} />
                   </div>
-
-                  {/* Questions with score bars */}
-                  <div className="lg:col-span-3 space-y-4">
-                    <h3 className="flex items-center gap-2 text-lg font-bold text-primary">
-                      <span>{cat.icon}</span> {cat.name}
-                    </h3>
-                    {cat.questions.map((q: SurveyQuestion) => {
-                      const val = Number(state.answers[q.id]) || 0;
-                      const pct = (val / 5) * 100;
-                      // Color coding matching prototype
-                      const barColors = [
-                        "bg-destructive/60",     // 1 - red
-                        "bg-orange-400",          // 2 - orange  
-                        "bg-yellow-400",          // 3 - yellow
-                        "bg-secondary/70",        // 4 - light green
-                        "bg-secondary",           // 5 - green
-                      ];
-                      return (
-                        <div key={q.id} className="flex items-center gap-4">
-                          <span className="min-w-[220px] text-xs text-muted-foreground">• {q.text.length > 50 ? q.text.slice(0, 50) + "..." : q.text}</span>
-                          <div className="flex flex-1 items-center gap-1">
-                            {[1, 2, 3, 4, 5].map(n => (
-                              <div key={n} className="flex flex-col items-center flex-1">
-                                <div className={`h-2.5 w-full rounded-full ${n <= val ? barColors[Math.min(val - 1, 4)] : "bg-muted"}`} />
-                                <span className="text-[9px] text-muted-foreground mt-0.5">{n}</span>
-                              </div>
-                            ))}
-                          </div>
-                          <span className="text-xs w-4">{pct >= 80 ? "🟢" : pct >= 40 ? "🟡" : "🔴"}</span>
-                        </div>
-                      );
-                    })}
+                  <div>
+                    <h4 className="mb-2 text-sm font-bold text-brand-blue-deep">
+                      Suggestion
+                    </h4>
+                    <ul className="space-y-1.5 text-sm text-[#444444]">
+                      {tips.map((tip, i) => (
+                        <li key={i} className="flex gap-2">
+                          <span className="text-brand-green">•</span>
+                          <span>{tip}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+
+          {/* Habit subcategory grid */}
+          <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3">
+            {habitSubs.map((sub) => {
+              const value = avg(sub.questions);
+              return (
+                <div
+                  key={sub.name}
+                  className="flex flex-col items-center rounded-xl bg-card p-5 shadow-[var(--shadow-card)]"
+                >
+                  <p className="mb-3 min-h-[32px] text-center text-xs font-semibold text-brand-blue-deep">
+                    {sub.name}
+                  </p>
+                  <GaugeChart value={value} size={120} />
+                </div>
+              );
+            })}
+          </div>
 
           {/* Send via email */}
-          <div className="text-center">
-            <Button className="rounded-full bg-secondary px-10 text-secondary-foreground hover:bg-secondary/90">
+          <div className="mt-10 text-center">
+            <Button className="rounded-full bg-brand-green px-10 py-6 text-white shadow-[var(--shadow-card)] hover:bg-brand-green/90">
               Send via email <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Next steps */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-[1100px] px-6 py-12 sm:px-10">
+          <h2 className="mb-6 text-2xl font-extrabold text-brand-blue-deep">
+            Next steps...
+          </h2>
+          <Link
+            to="/benchmark"
+            className="group relative block rounded-xl border border-border bg-card p-6 pt-8 transition-shadow hover:shadow-[var(--shadow-card)]"
+          >
+            <span className="absolute -top-3 left-6 rounded-full bg-brand-green px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+              Step 02
+            </span>
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-brand-blue/10">
+                <BarChart3 className="h-6 w-6 text-brand-blue" />
+              </div>
+              <div className="flex-1">
+                <h3 className="mb-1 text-lg font-bold text-brand-green">
+                  Launch benchmark
+                </h3>
+                <p className="text-sm text-[#444444]">
+                  Compare your results with others based on gender, country,
+                  mobility participation, etc.
+                </p>
+              </div>
+              <ArrowRight className="mt-2 h-5 w-5 text-brand-blue-deep transition-transform group-hover:translate-x-1" />
+            </div>
+          </Link>
+        </div>
+      </section>
     </Layout>
   );
 }
