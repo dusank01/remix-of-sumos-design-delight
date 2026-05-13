@@ -1,4 +1,5 @@
-import { ArrowRight, Info, ClipboardList, Hourglass, Globe2 } from "lucide-react";
+import { ArrowRight, Info, ClipboardList, Hourglass } from "lucide-react";
+import iconGlobe from "@/assets/icon-globe.gif";
 
 const bars = [
   { label: "Awareness", value: 3.5 },

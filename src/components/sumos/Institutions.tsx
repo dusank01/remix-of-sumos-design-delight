@@ -1,11 +1,15 @@
-type Inst = { name: string; sub?: string; color: string };
+import logoFoi from "@/assets/logo-foi.png";
+import logoEsiea from "@/assets/logo-esiea.png";
+import logoZilina from "@/assets/logo-zilina.png";
+import logoMaribor from "@/assets/logo-maribor.png";
+import logoFon from "@/assets/logo-fon.png";
 
-const items: Inst[] = [
-  { name: "foi", color: "text-pink-600" },
-  { name: "esiea", color: "text-white" },
-  { name: "UNIVERSITY OF ZILINA", sub: "Faculty of Management Science and Informatics", color: "text-amber-600" },
-  { name: "University of Maribor", sub: "Faculty of Organizational Sciences", color: "text-brand-blue-deep" },
-  { name: "ΦΟΗ", sub: "UNIVERSITY OF BELGRADE\nFACULTY OF ORGANIZATIONAL SCIENCES", color: "text-brand-blue-deep" },
+const items = [
+  { name: "FOI", src: logoFoi },
+  { name: "ESIEA", src: logoEsiea },
+  { name: "University of Žilina", src: logoZilina },
+  { name: "University of Maribor", src: logoMaribor },
+  { name: "FON Belgrade", src: logoFon },
 ];
 
 export function Institutions() {
@@ -19,22 +23,14 @@ export function Institutions() {
           {items.map((it) => (
             <div
               key={it.name}
-              className="grid h-[180px] place-items-center rounded-xl border border-border bg-card p-4 shadow-sm transition-transform hover:-translate-y-1"
+              className="grid h-[180px] place-items-center rounded-xl border border-border bg-card p-6 transition-transform hover:-translate-y-1"
             >
-              <div className="text-center">
-                <div
-                  className={`text-2xl font-bold ${it.color} ${
-                    it.name === "esiea" ? "rounded bg-sky-500 px-3 py-1 text-white" : ""
-                  }`}
-                >
-                  {it.name}
-                </div>
-                {it.sub && (
-                  <div className="mt-2 whitespace-pre-line text-[9px] font-semibold leading-tight text-brand-slate">
-                    {it.sub}
-                  </div>
-                )}
-              </div>
+              <img
+                src={it.src}
+                alt={it.name}
+                className="max-h-[120px] max-w-full object-contain"
+                loading="lazy"
+              />
             </div>
           ))}
         </div>
