@@ -66,25 +66,25 @@ function EcoScore() {
     <div className="flex h-[288px] w-full flex-col items-center justify-between rounded-[12px] bg-white px-6 pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
       <h3 className="text-[20px] font-semibold text-[#64a550]">Eco score</h3>
       <div className="flex flex-col items-center">
-        <div className="relative h-[120px] w-[212px]">
-          <svg viewBox="0 0 200 110" className="h-full w-full">
+        <div className="relative h-[110px] w-[212px]">
+          <svg viewBox="0 0 212 110" className="h-full w-full">
             <path
-              d="M10,100 A90,90 0 0 1 190,100"
+              d="M16,106 A90,90 0 0 1 196,106"
               fill="none"
-              stroke="#e5e7eb"
-              strokeWidth="14"
-              strokeLinecap="round"
+              stroke="#E5E7EB"
+              strokeWidth="30"
+              strokeLinecap="butt"
             />
             <path
-              d="M10,100 A90,90 0 0 1 190,100"
+              d="M16,106 A90,90 0 0 1 196,106"
               fill="none"
-              stroke="#64a550"
-              strokeWidth="14"
-              strokeLinecap="round"
+              stroke="#64A550"
+              strokeWidth="30"
+              strokeLinecap="butt"
               strokeDasharray={`${dash} ${circ}`}
             />
           </svg>
-          <div className="absolute inset-x-0 bottom-0 text-center text-[40px] font-bold leading-none text-[#233662]">
+          <div className="absolute inset-x-0 bottom-1 text-center text-[40px] font-bold leading-none text-[#233662]">
             {value.toString().replace(".", ",")}
           </div>
         </div>
