@@ -1,4 +1,5 @@
-import { ArrowRight, Info, ClipboardList, Hourglass, Globe2 } from "lucide-react";
+import { ArrowRight, Info, ClipboardList, Hourglass } from "lucide-react";
+import iconGlobe from "@/assets/icon-globe.gif";
 
 const bars = [
   { label: "Awareness", value: 3.5 },
@@ -96,10 +97,14 @@ function EcoScore() {
   );
 }
 
-const stats = [
-  { icon: ClipboardList, label: "NUMBER OF FILLED SURVEYS", value: "520", color: "text-brand-blue" },
-  { icon: Hourglass, label: "AVERAGE COMPLETION TIME", value: "10m 42s", color: "text-brand-green-soft" },
-  { icon: Globe2, label: "TOP ECO PROFILE", value: "Eco Explorer", color: "text-brand-green" },
+type Stat =
+  | { kind: "lucide"; Icon: typeof ClipboardList; label: string; value: string; color: string }
+  | { kind: "img"; src: string; label: string; value: string; color: string };
+
+const stats: Stat[] = [
+  { kind: "lucide", Icon: ClipboardList, label: "NUMBER OF FILLED SURVEYS", value: "520", color: "text-brand-blue" },
+  { kind: "lucide", Icon: Hourglass, label: "AVERAGE COMPLETION TIME", value: "10m 42s", color: "text-brand-green-soft" },
+  { kind: "img", src: iconGlobe, label: "TOP ECO PROFILE", value: "Eco Explorer", color: "text-brand-green" },
 ];
 
 export function Statistics() {
@@ -117,12 +122,16 @@ export function Statistics() {
           <EcoScore />
         </div>
         <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {stats.map(({ icon: Icon, label, value, color }) => (
-            <div key={label} className="flex items-center gap-4 rounded-xl border border-border bg-card p-6">
-              <Icon className={`h-12 w-12 ${color}`} strokeWidth={1.6} />
+          {stats.map((s) => (
+            <div key={s.label} className="flex items-center gap-4 rounded-xl border border-border bg-card p-6">
+              {s.kind === "lucide" ? (
+                <s.Icon className={`h-12 w-12 ${s.color}`} strokeWidth={1.6} />
+              ) : (
+                <img src={s.src} alt="" className="h-12 w-12 object-contain" />
+              )}
               <div>
-                <div className="text-[11px] font-semibold tracking-wider text-muted-foreground">{label}</div>
-                <div className={`mt-1 text-lg font-bold ${color}`}>{value}</div>
+                <div className="text-[11px] font-semibold tracking-wider text-muted-foreground">{s.label}</div>
+                <div className={`mt-1 text-lg font-bold ${s.color}`}>{s.value}</div>
               </div>
             </div>
           ))}
