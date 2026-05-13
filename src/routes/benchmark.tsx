@@ -81,21 +81,26 @@ function Gauge({
 
   return (
     <div className="relative h-[167px] w-[212px]">
+      {/* Arc occupies top 106px of the container (matches Figma graphic height 105.953px). */}
       <svg
-        viewBox="0 0 212 210"
-        className="block h-full w-full"
+        viewBox="0 0 212 106"
+        width="212"
+        height="106"
+        preserveAspectRatio="xMidYMin meet"
+        className="absolute left-0 top-0 block"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path d={arcPath(180)} fill={trackColor} />
         <path d={arcPath(ratio * 180)} fill={color} />
       </svg>
-      <div className="absolute left-0 right-0 top-[78px] text-center text-[40px] font-bold text-[#233662]">
+      {/* Value sits inside the half-donut opening (Figma: top ~143px from container top with -translate-y-1/2). */}
+      <div className="absolute left-0 right-0 top-[123px] -translate-y-1/2 text-center font-bold text-[40px] leading-none text-[#233662]">
         {value.toString().replace(".", ",")}
       </div>
-      <div className="absolute left-[6px] top-[133px] text-[12px] text-[#bfbfbf]">
+      <div className="absolute left-[6px] top-[155px] text-[12px] leading-none text-[#bfbfbf]">
         0
       </div>
-      <div className="absolute right-[6px] top-[133px] text-[12px] text-[#bfbfbf]">
+      <div className="absolute right-[6px] top-[155px] text-[12px] leading-none text-[#bfbfbf]">
         {max}
       </div>
     </div>
