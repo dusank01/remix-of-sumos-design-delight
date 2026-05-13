@@ -131,16 +131,7 @@ function TipsPage() {
         </div>
       </section>
 
-      {/* Institutions */}
-      <section className="bg-white py-8">
-        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-[160px]">
-          <h2 className="mb-8 text-center text-[32px] font-bold text-[#233662] md:text-[40px]">
-            Explore Green practices by institution
-          </h2>
-        </div>
-        <Institutions />
-      </section>
-
+      <Institutions />
       <Footer />
     </main>
   );
