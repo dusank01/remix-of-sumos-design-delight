@@ -10,21 +10,17 @@ export function BadgeDisplay({ name, size = "lg" }: BadgeDisplayProps) {
   return (
     <div className="flex flex-col items-center gap-2 text-center">
       <div
-        className={`flex items-center justify-center rounded-full bg-[var(--brand-green-soft)]/30 ${
+        className={`flex items-center justify-center rounded-full bg-brand-green-soft/30 ${
           size === "lg" ? "h-24 w-24" : "h-16 w-16"
         }`}
       >
         <Globe2
-          className={`text-[hsl(var(--brand-green))] ${
-            size === "lg" ? "h-12 w-12" : "h-9 w-9"
-          }`}
+          className={`text-brand-green ${size === "lg" ? "h-12 w-12" : "h-9 w-9"}`}
           strokeWidth={1.5}
         />
       </div>
       <h3
-        className={`font-extrabold text-[hsl(var(--brand-green))] ${
-          size === "lg" ? "text-xl" : "text-base"
-        }`}
+        className={`font-extrabold text-brand-green ${size === "lg" ? "text-xl" : "text-base"}`}
       >
         {name}
       </h3>
