@@ -4,6 +4,8 @@ import Index from "./pages/Index";
 import Benchmark from "./pages/Benchmark";
 import Statistics from "./pages/Statistics";
 import Tips from "./pages/Tips";
+import Survey from "./pages/Survey";
+import SurveyResults from "./pages/SurveyResults";
 
 function NotFound() {
   return (
@@ -49,6 +51,9 @@ export default function App() {
         <Route path="/benchmark" element={<Benchmark />} />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/tips" element={<Tips />} />
+        <Route path="/survey" element={<Survey />} />
+        <Route path="/survey/results" element={<SurveyResults />} />
+        <Route path="/survey/tips" element={<Tips />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

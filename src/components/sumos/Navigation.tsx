@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import navLogo from "@/assets/nav-logo.png";
 
 const links: { label: string; to: string }[] = [
-  { label: "SURVEY", to: "/#survey" },
+  { label: "SURVEY", to: "/survey" },
   { label: "BENCHMARK", to: "/benchmark" },
   { label: "STATISTICS", to: "/statistics" },
   { label: "TIPS AND TRICKS", to: "/tips" },
