@@ -14,9 +14,9 @@ const items = [
 
 export function Institutions() {
   return (
-    <section id="tips" className="bg-background pb-16 pt-8">
-      <div className="mx-auto max-w-[1280px] px-10 text-center">
-        <h2 className="mb-10 text-3xl font-extrabold text-brand-blue-deep">
+    <section id="tips" className="bg-background pb-12 pt-8 md:pb-16">
+      <div className="mx-auto max-w-[1440px] px-6 text-center sm:px-10 lg:px-[160px]">
+        <h2 className="mb-8 text-[28px] font-extrabold text-brand-blue-deep md:mb-10 md:text-3xl">
           Explore Green practices by institution
         </h2>
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-5">

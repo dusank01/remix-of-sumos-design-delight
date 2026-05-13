@@ -112,15 +112,15 @@ const stats: Stat[] = [
 
 export function Statistics() {
   return (
-    <section id="statistics" className="bg-[#f5f5f5] py-20">
-      <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-[160px]">
-        <div className="flex items-center justify-between">
-          <h2 className="font-display text-[40px] font-bold text-[#233662]">Explore statistics</h2>
+    <section id="statistics" className="bg-[#f5f5f5] py-12 md:py-20">
+      <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-6 sm:px-10 lg:px-[160px]">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-display text-[28px] font-bold text-[#233662] sm:text-[32px] md:text-[40px]">Explore statistics</h2>
           <a
             href="#"
-            className="inline-flex items-center gap-1 rounded-lg px-6 py-3 text-[16px] font-medium text-[#518efa]"
+            className="inline-flex items-center gap-1 rounded-lg px-4 py-2 text-[15px] font-medium text-[#518efa] md:px-6 md:py-3 md:text-[16px]"
           >
-            Go to statistics <ArrowRight className="h-6 w-6" />
+            Go to statistics <ArrowRight className="h-5 w-5 md:h-6 md:w-6" />
           </a>
         </div>
 

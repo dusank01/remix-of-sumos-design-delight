@@ -11,11 +11,11 @@ export function Navigation() {
           "0 13px 14px rgba(0,0,0,0.04), 0 50px 25px rgba(0,0,0,0.04), 0 114px 34px rgba(0,0,0,0.02), 0 202px 40.5px rgba(0,0,0,0.01)",
       }}
     >
-      <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-[160px]">
-        <a href="/" className="block h-[100px] w-[233.645px] shrink-0" aria-label="SuMoS">
+      <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-6 sm:px-10 lg:px-[160px]">
+        <a href="/" className="block h-[72px] w-[170px] shrink-0 md:h-[100px] md:w-[233.645px]" aria-label="SuMoS">
           <img src={navLogo} alt="SuMoS — Strengthening the ecosystem for sustainable student mobility" className="h-full w-full object-contain" />
         </a>
-        <ul className="flex items-center gap-2">
+        <ul className="hidden items-center gap-2 md:flex">
           {links.map((label) => (
             <li key={label} className="flex h-[144px] items-center justify-center px-2">
               <a
