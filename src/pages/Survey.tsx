@@ -385,12 +385,12 @@ export default function SurveyPage() {
         subtitle="Students' Green Awareness and Sustainable Habits"
       />
 
-      <div className="container py-8">
-        <div className={cn("relative mx-auto flex flex-col md:block items-start justify-center", hasConsented && currentStep === 0 && !showBeforeFinish ? "max-w-[1400px]" : "max-w-3xl")}>
+      <div className="w-full px-4 py-8">
+        <div className="relative mx-auto w-full max-w-3xl">
           
           {/* Left Sidebar (Question Navigator) - absolute so it doesn't shift centered content */}
           {hasConsented && currentStep === 0 && !showBeforeFinish && (
-            <div className="hidden lg:block lg:absolute lg:left-0 lg:top-0 w-64 xl:w-80 shrink-0">
+            <div className="hidden lg:block lg:absolute lg:right-full lg:top-0 lg:mr-8 w-64 xl:w-80 shrink-0">
               <div className="sticky top-8 max-h-[85vh] overflow-y-auto rounded-lg border bg-card p-4 shadow-sm scrollbar-thin">
                 <h3 className="text-sm font-bold mb-4 text-foreground text-center">Question Navigator</h3>
                 <div className="grid grid-cols-10 gap-1">
