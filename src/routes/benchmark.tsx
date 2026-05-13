@@ -173,7 +173,7 @@ function BenchmarkPage() {
                       Overall
                     </div>
                   </div>
-                  <Gauge value={4.8} color="#64a550" />
+                  <Gauge value={4.8} fillRatio={0.8} color="#64a550" />
                 </div>
                 <div className="flex flex-col items-center gap-3">
                   <div className="text-center">
@@ -184,7 +184,7 @@ function BenchmarkPage() {
                       Overall
                     </div>
                   </div>
-                  <Gauge value={3.6} color="#518efa" />
+                  <Gauge value={3.6} fillRatio={0.4} color="#518efa" />
                 </div>
               </div>
             </div>
