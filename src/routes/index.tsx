@@ -28,7 +28,7 @@ function Index() {
       <Hero />
       <StepCards />
       <Statistics />
-      <Awareness />
+      <div className="hidden"><Awareness /></div>
       <Institutions />
       <Footer />
     </main>
