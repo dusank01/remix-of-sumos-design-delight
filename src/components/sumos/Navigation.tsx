@@ -1,8 +1,15 @@
+import { Link, useLocation } from "@tanstack/react-router";
 import navLogo from "@/assets/nav-logo.png";
 
-const links = ["SURVEY", "BENCHMARK", "STATISTICS", "TIPS AND TRICKS"];
+const links: { label: string; to: string }[] = [
+  { label: "SURVEY", to: "/#survey" },
+  { label: "BENCHMARK", to: "/#benchmark" },
+  { label: "STATISTICS", to: "/statistics" },
+  { label: "TIPS AND TRICKS", to: "/#tips" },
+];
 
 export function Navigation() {
+  const location = useLocation();
   return (
     <header
       className="bg-white"
@@ -12,20 +19,28 @@ export function Navigation() {
       }}
     >
       <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-6 sm:px-10 lg:px-[160px]">
-        <a href="/" className="block h-[72px] w-[170px] shrink-0 md:h-[100px] md:w-[233.645px]" aria-label="SuMoS">
+        <Link to="/" className="block h-[72px] w-[170px] shrink-0 md:h-[100px] md:w-[233.645px]" aria-label="SuMoS">
           <img src={navLogo} alt="SuMoS — Strengthening the ecosystem for sustainable student mobility" className="h-full w-full object-contain" />
-        </a>
+        </Link>
         <ul className="hidden items-center gap-2 md:flex">
-          {links.map((label) => (
-            <li key={label} className="flex h-[144px] items-center justify-center px-2">
-              <a
-                href={`#${label.toLowerCase().replace(/\s+/g, "-")}`}
-                className="whitespace-nowrap text-center text-[14px] font-medium uppercase text-[#233662] transition-colors hover:text-[#518efa]"
-              >
-                {label}
-              </a>
-            </li>
-          ))}
+          {links.map(({ label, to }) => {
+            const path = to.split("#")[0] || "/";
+            const isActive = location.pathname === path && (path !== "/" || to === "/");
+            return (
+              <li key={label} className="flex">
+                <a
+                  href={to}
+                  className={`flex h-[144px] items-center justify-center whitespace-nowrap px-2 text-center text-[14px] font-medium uppercase transition-colors ${
+                    isActive
+                      ? "bg-[#233662] px-4 text-white"
+                      : "text-[#233662] hover:text-[#518efa]"
+                  }`}
+                >
+                  {label}
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </header>
