@@ -41,41 +41,45 @@
 }
 
 :root {
-  --radius: 0.75rem;
+  /* Figma: cards/buttons use 12px radius */
+  --radius: 12px;
 
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.27 0.06 264);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.27 0.06 264);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.27 0.06 264);
+  /* Figma SuMos brand tokens (locked to exact hex from Figma variables) */
+  --brand-blue: #518efa;          /* SuMos/blue/100 */
+  --brand-slate: #455369;         /* SuMos/blue/200 */
+  --brand-blue-deep: #233662;     /* SuMos/blue/300 */
+  --brand-navy: #233662;
+  --brand-green: #64a550;         /* SuMos/green/300 */
+  --brand-green-soft: #b6d989;    /* SuMos/green/200 */
+  --brand-gray-50: #ffffff;       /* SuMos/gray/50 */
+  --brand-gray-100: #e5e7eb;      /* SuMos/gray/100 */
+  --brand-gray-200: #bfbfbf;      /* SuMos/gray/200 */
+  --brand-gray-300: #444444;      /* SuMos/gray/300 */
 
-  /* Primary = SuMoS blue #518efa */
-  --primary: oklch(0.66 0.18 257);
-  --primary-foreground: oklch(1 0 0);
+  --background: #ffffff;
+  --foreground: #233662;
+  --card: #ffffff;
+  --card-foreground: #233662;
+  --popover: #ffffff;
+  --popover-foreground: #233662;
 
-  --secondary: oklch(0.96 0.01 250);
-  --secondary-foreground: oklch(0.27 0.06 264);
-  --muted: oklch(0.97 0.005 250);
-  --muted-foreground: oklch(0.5 0.03 257);
-  --accent: oklch(0.96 0.01 250);
-  --accent-foreground: oklch(0.27 0.06 264);
-  --destructive: oklch(0.6 0.22 27);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.92 0.01 255);
-  --input: oklch(0.92 0.01 255);
-  --ring: oklch(0.66 0.18 257);
+  --primary: #518efa;
+  --primary-foreground: #ffffff;
 
-  /* SuMoS brand tokens */
-  --brand-blue: oklch(0.66 0.18 257);          /* #518efa */
-  --brand-blue-deep: oklch(0.34 0.08 264);     /* #233662 */
-  --brand-navy: oklch(0.27 0.06 264);
-  --brand-slate: oklch(0.42 0.04 257);          /* #455369 */
-  --brand-green: oklch(0.66 0.14 142);           /* #64a550 */
-  --brand-green-soft: oklch(0.86 0.13 130);      /* #b6d989 */
+  --secondary: #f3f4f6;
+  --secondary-foreground: #233662;
+  --muted: #f8f9fb;
+  --muted-foreground: #455369;
+  --accent: #f3f4f6;
+  --accent-foreground: #233662;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #518efa;
 
-  --hero-bg: oklch(0.97 0.015 250);
-  --section-muted: oklch(0.965 0.005 250);
+  --hero-bg: #eef3fc;
+  --section-muted: #f4f5f7;
 
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(35 54 98 / 0.10);
 }
