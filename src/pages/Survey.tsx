@@ -390,7 +390,7 @@ export default function SurveyPage() {
           
           {/* Left Sidebar (Question Navigator) - absolute so it doesn't shift centered content */}
           {hasConsented && currentStep === 0 && !showBeforeFinish && (
-            <div className="hidden lg:block lg:absolute lg:left-0 lg:top-0 w-64 xl:w-80 shrink-0">
+            <div className="hidden lg:block lg:absolute lg:right-full lg:top-0 lg:mr-8 w-64 xl:w-80 shrink-0">
               <div className="sticky top-8 max-h-[85vh] overflow-y-auto rounded-lg border bg-card p-4 shadow-sm scrollbar-thin">
                 <h3 className="text-sm font-bold mb-4 text-foreground text-center">Question Navigator</h3>
                 <div className="grid grid-cols-10 gap-1">
