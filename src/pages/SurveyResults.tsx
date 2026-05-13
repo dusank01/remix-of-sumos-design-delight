@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { GaugeChart } from "@/components/shared/GaugeChart";
 import { BadgeDisplay } from "@/components/shared/BadgeDisplay";
 import { useSurvey } from "@/contexts/SurveyContext";
-import { surveyQuestions, getBadge } from "@/data/mockData";
+import { surveyQuestions, getBadge, type SurveyQuestion } from "@/data/mockData";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
@@ -14,10 +14,10 @@ export default function SurveyResults() {
   const badge = getBadge(score);
 
   const categories = [
-    { name: "Awareness", icon: "☀️", questions: surveyQuestions.filter(q => q.category === "Awareness") },
-    { name: "Attitudes", icon: "💭", questions: surveyQuestions.filter(q => q.category === "Attitudes") },
-    { name: "Habits", icon: "🔄", questions: surveyQuestions.filter(q => q.category === "Habits") },
-    { name: "Barriers", icon: "🚧", questions: surveyQuestions.filter(q => q.category === "Barriers") },
+    { name: "Awareness", icon: "☀️", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Awareness") },
+    { name: "Attitudes", icon: "💭", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Attitudes") },
+    { name: "Habits", icon: "🔄", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Habits") },
+    { name: "Barriers", icon: "🚧", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Barriers") },
   ];
 
   return (
@@ -50,7 +50,7 @@ export default function SurveyResults() {
           {/* Category breakdowns */}
           {categories.map(cat => {
             const catScore = cat.questions.length > 0
-              ? Number((cat.questions.map(q => Number(state.answers[q.id]) || 0).reduce((a, b) => a + b, 0) / cat.questions.length).toFixed(1))
+              ? Number((cat.questions.map((q: SurveyQuestion) => Number(state.answers[q.id]) || 0).reduce((a: number, b: number) => a + b, 0) / cat.questions.length).toFixed(1))
               : 0;
             return (
               <div key={cat.name} className="rounded-lg border bg-card p-6">
@@ -65,7 +65,7 @@ export default function SurveyResults() {
                     <h3 className="flex items-center gap-2 text-lg font-bold text-primary">
                       <span>{cat.icon}</span> {cat.name}
                     </h3>
-                    {cat.questions.map(q => {
+                    {cat.questions.map((q: SurveyQuestion) => {
                       const val = Number(state.answers[q.id]) || 0;
                       const pct = (val / 5) * 100;
                       // Color coding matching prototype

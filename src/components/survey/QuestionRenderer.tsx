@@ -27,7 +27,7 @@ export function QuestionRenderer({ question, value, onChange }: Props) {
         <LikertScale
           questionText={displayText}
           value={v}
-          onChange={(n) => onChange(n)}
+          onChange={(n: number) => onChange(n)}
           labels={["Strongly disagree", "Strongly agree"]}
         />
       );
@@ -46,7 +46,7 @@ export function QuestionRenderer({ question, value, onChange }: Props) {
         <NumberInput
           questionText={displayText}
           value={typeof value === "number" ? value : undefined}
-          onChange={(n) => onChange(n)}
+          onChange={(n) => { if (n !== undefined) onChange(n); }}
         />
       );
     case "TEXT":

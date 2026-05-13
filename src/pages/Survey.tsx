@@ -369,7 +369,7 @@ export default function SurveyPage() {
   const progress = getProgress();
 
   const comparisonData = [
-    ...countryFootprintData.slice(0, 5).map((d) => ({ ...d, isYou: false })),
+    ...countryFootprintData.slice(0, 5).map((d: { country: string; score: number; color: string }) => ({ ...d, isYou: false })),
     { country: "You", score, color: "hsl(210, 70%, 55%)", isYou: true },
   ];
 
