@@ -447,9 +447,9 @@ export default function SurveyPage() {
                           const isActive = i === groupIdx;
                           let btnClass = "border bg-card text-muted-foreground hover:bg-muted";
                           
-                          if (isActive) btnClass = "bg-primary text-primary-foreground";
-                          else if (status === "completed") btnClass = "bg-secondary text-secondary-foreground";
-                          else if (status === "partial") btnClass = "bg-primary text-primary-foreground opacity-80";
+                          if (isActive) btnClass = "bg-primary text-brand-blue-deep-foreground";
+                          else if (status === "completed") btnClass = "bg-brand-green text-white";
+                          else if (status === "partial") btnClass = "bg-primary text-brand-blue-deep-foreground opacity-80";
 
                           return (
                             <button
@@ -490,11 +490,11 @@ export default function SurveyPage() {
                                   className={cn(
                                     "flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-colors",
                                     subIdx === i
-                                      ? "bg-primary text-primary-foreground"
+                                      ? "bg-primary text-brand-blue-deep-foreground"
                                       : getSubStatus(sub, state.answers) === "completed"
-                                        ? "bg-secondary text-secondary-foreground"
+                                        ? "bg-brand-green text-white"
                                         : getSubStatus(sub, state.answers) === "partial"
-                                          ? "bg-primary text-primary-foreground opacity-80"
+                                          ? "bg-primary text-brand-blue-deep-foreground opacity-80"
                                           : "bg-muted text-muted-foreground",
                                   )}
                                 >
@@ -556,7 +556,7 @@ export default function SurveyPage() {
                             {progress}%
                           </span>
                           <Button
-                            className="rounded-full bg-secondary px-8 text-secondary-foreground hover:bg-secondary/90"
+                            className="rounded-full bg-secondary px-8 text-white hover:bg-brand-green/90"
                             onClick={goNext}
                           >
                             {isLastGroup && isLastSub ? "Finish" : "Next"}
@@ -578,7 +578,7 @@ export default function SurveyPage() {
                       return (
                         <div
                           key={g.key}
-                          className="flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold tracking-wider bg-secondary text-secondary-foreground"
+                          className="flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold tracking-wider bg-brand-green text-white"
                         >
                           <Icon className="h-3.5 w-3.5" />
                           {g.label}
@@ -587,10 +587,10 @@ export default function SurveyPage() {
                     })}
                   </div>
 
-                  <div className="rounded-lg bg-sumos-gray p-10">
+                  <div className="rounded-lg bg-[var(--hero-bg)] p-10">
                     <div className="grid gap-8 lg:grid-cols-2 items-center">
                       <div>
-                        <h2 className="mb-4 text-2xl font-bold text-primary">
+                        <h2 className="mb-4 text-2xl font-bold text-brand-blue-deep">
                           Before finishing the survey....
                         </h2>
                         <p className="mb-6 text-sm text-muted-foreground">
@@ -599,7 +599,7 @@ export default function SurveyPage() {
                         </p>
                         <div className="space-y-3 max-w-xs">
                           <Button
-                            className="w-full rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90 py-3"
+                            className="w-full rounded-full bg-brand-green text-white hover:bg-brand-green/90 py-3"
                             onClick={() => handleAttemptChoice(true)}
                           >
                             Real attempt
@@ -615,8 +615,8 @@ export default function SurveyPage() {
                       </div>
                       <div className="hidden lg:flex items-center justify-center">
                         <div className="relative">
-                          <div className="h-48 w-32 rounded-t-full bg-secondary/15" />
-                          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-8 w-20 rounded bg-secondary/10" />
+                          <div className="h-48 w-32 rounded-t-full bg-brand-green/15" />
+                          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-8 w-20 rounded bg-brand-green/10" />
                         </div>
                       </div>
                     </div>
@@ -638,7 +638,7 @@ export default function SurveyPage() {
                         99%
                       </span>
                       <Button
-                        className="rounded-full bg-secondary px-8 text-secondary-foreground hover:bg-secondary/90"
+                        className="rounded-full bg-secondary px-8 text-white hover:bg-brand-green/90"
                         onClick={() => handleAttemptChoice(true)}
                       >
                         Finish
@@ -652,15 +652,15 @@ export default function SurveyPage() {
               {/* ─────────── Step 2: Results ─────────── */}
               {currentStep === 2 && (
                 <div className="space-y-8">
-                  <div className="rounded-lg bg-sumos-gray py-10 text-center">
-                    <h2 className="mb-2 text-3xl font-extrabold text-secondary">
+                  <div className="rounded-lg bg-[var(--hero-bg)] py-10 text-center">
+                    <h2 className="mb-2 text-3xl font-extrabold text-brand-green">
                       Congratulations!
                     </h2>
                     <p className="mb-6 text-sm text-muted-foreground">
                       You've earned the {badge.name} badge!
                     </p>
 
-                    <div className="mx-auto mb-6 inline-block rounded-lg border-2 border-secondary bg-card p-8">
+                    <div className="mx-auto mb-6 inline-block rounded-lg border-2 border-brand-green-soft bg-card p-8">
                       <p className="mb-3 text-base font-bold text-foreground">
                         My Green Profile
                       </p>
@@ -675,7 +675,7 @@ export default function SurveyPage() {
                       <p className="text-sm text-muted-foreground">
                         Your result is:
                       </p>
-                      <p className="text-5xl font-bold text-secondary mt-1">
+                      <p className="text-5xl font-bold text-brand-green mt-1">
                         {score.toFixed(1).replace(".", ",")}
                       </p>
                     </div>
@@ -716,7 +716,7 @@ export default function SurveyPage() {
                         </BarChart>
                       </ResponsiveContainer>
                       <div className="mt-3 border-t pt-3">
-                        <p className="text-xs font-semibold text-secondary">
+                        <p className="text-xs font-semibold text-brand-green">
                           Overview:
                         </p>
                         <p className="text-xs text-muted-foreground">
@@ -727,7 +727,7 @@ export default function SurveyPage() {
                     </div>
 
                     <div className="rounded-lg border bg-card p-6">
-                      <p className="mb-1 text-center text-xl font-extrabold text-primary">
+                      <p className="mb-1 text-center text-xl font-extrabold text-brand-blue-deep">
                         SuMoS
                       </p>
                       <h3 className="mb-4 text-center text-lg font-bold text-foreground">
@@ -745,7 +745,7 @@ export default function SurveyPage() {
                         placeholder="example@email.com"
                         className="mb-4 mt-1"
                       />
-                      <Button className="w-full rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90">
+                      <Button className="w-full rounded-full bg-brand-green text-white hover:bg-brand-green/90">
                         Send results <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </div>
@@ -781,13 +781,13 @@ export default function SurveyPage() {
                           to={card.link}
                           className="group relative rounded-lg border bg-card p-6 pt-8 transition-shadow hover:shadow-md"
                         >
-                          <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-secondary px-4 py-1 text-[10px] font-bold text-secondary-foreground">
+                          <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-secondary px-4 py-1 text-[10px] font-bold text-white">
                             {card.step}
                           </span>
                           <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                            <card.icon className="h-5 w-5 text-primary" />
+                            <card.icon className="h-5 w-5 text-brand-blue-deep" />
                           </div>
-                          <h3 className="text-sm font-bold text-secondary">
+                          <h3 className="text-sm font-bold text-brand-green">
                             {card.title}
                           </h3>
                         </Link>
@@ -811,9 +811,9 @@ export default function SurveyPage() {
       <Dialog open={showEmailModal} onOpenChange={setShowEmailModal}>
         <DialogContent className="max-w-md">
           <div className="flex justify-center mb-2">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary/10">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-green/10">
               <svg
-                className="h-8 w-8 text-secondary"
+                className="h-8 w-8 text-brand-green"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -825,7 +825,7 @@ export default function SurveyPage() {
             </div>
           </div>
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-primary text-center">
+            <DialogTitle className="text-xl font-bold text-brand-blue-deep text-center">
               Before You Continue
             </DialogTitle>
             <DialogDescription className="text-sm text-center">
@@ -852,7 +852,7 @@ export default function SurveyPage() {
             </p>
             <Button
               onClick={handleEmailSubmit}
-              className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+              className="w-full rounded-full bg-primary text-brand-blue-deep-foreground hover:bg-primary/90"
             >
               Get my Benchmark Code
             </Button>
