@@ -12,7 +12,7 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute -left-[61px] -top-[67px] h-[637px] w-[791px] max-w-none"
       />
-      <div className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-10 px-[160px] pt-16 pb-6 md:grid-cols-2 md:items-center">
+      <div className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-10 px-6 pt-12 pb-6 sm:px-10 md:grid-cols-2 md:items-center md:pt-16 lg:px-[160px]">
         <div className="relative flex flex-col gap-6">
           <img
             src={sumosBadge}
