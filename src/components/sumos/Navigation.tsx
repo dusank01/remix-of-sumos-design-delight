@@ -3,7 +3,7 @@ import navLogo from "@/assets/nav-logo.png";
 
 const links: { label: string; to: string }[] = [
   { label: "SURVEY", to: "/#survey" },
-  { label: "BENCHMARK", to: "/#benchmark" },
+  { label: "BENCHMARK", to: "/benchmark" },
   { label: "STATISTICS", to: "/statistics" },
   { label: "TIPS AND TRICKS", to: "/tips" },
 ];
