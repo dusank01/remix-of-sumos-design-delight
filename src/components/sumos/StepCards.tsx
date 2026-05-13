@@ -44,8 +44,8 @@ const steps: Step[] = [
 
 export function StepCards() {
   return (
-    <section id="survey" className="bg-background pb-16 pt-4">
-      <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-6 px-10 md:grid-cols-3">
+    <section id="survey" className="bg-background pb-12 pt-4 md:pb-16">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-6 px-6 sm:px-10 md:grid-cols-3 lg:px-[160px]">
         {steps.map(({ step, badgeBg, titleColor, borderColor, icon, title, desc }) => (
           <article
             key={title}
