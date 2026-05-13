@@ -522,7 +522,7 @@ export default function SurveyPage() {
                                   </span>
                                 </button>
                                 {i < currentGroup.subSteps.length - 1 && (
-                                  <div className="mt-4 h-px w-6 bg-border" />
+                                  <div className="mt-4 h-px flex-1 min-w-[16px] bg-border" />
                                 )}
                               </div>
                             );
