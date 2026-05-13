@@ -117,7 +117,7 @@ export function Statistics() {
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display text-[28px] font-bold text-[#233662] sm:text-[32px] md:text-[40px]">Explore statistics</h2>
           <a
-            href="#"
+            href="/statistics"
             className="inline-flex items-center gap-1 rounded-lg px-4 py-2 text-[15px] font-medium text-[#518efa] md:px-6 md:py-3 md:text-[16px]"
           >
             Go to statistics <ArrowRight className="h-5 w-5 md:h-6 md:w-6" />
