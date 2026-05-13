@@ -9,30 +9,34 @@ export function Hero() {
         aria-hidden
         className="pointer-events-none absolute -left-24 -top-16 h-[680px] w-[820px] rounded-[60%] bg-hero-bg"
       />
-      <div className="relative mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-10 py-20 md:grid-cols-2 md:items-center">
-        <div className="relative">
+      <div className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-10 px-[160px] pt-16 pb-6 md:grid-cols-2 md:items-center">
+        <div className="relative flex flex-col gap-6">
           <img
             src={sumosBadge}
             alt="SuMoS"
-            className="mb-8 h-12 w-auto object-contain"
+            className="h-[48px] w-[148.966px] object-contain"
           />
-          <h1 className="mb-6 font-display text-5xl font-extrabold leading-tight text-brand-blue-deep md:text-6xl">
-            Benchmarking tool
-          </h1>
-          <p className="mb-8 max-w-xl text-base leading-relaxed text-brand-slate">
-            The benchmarking tool is part of the Erasmus+ European Commission
-            co-funded Education project{" "}
-            <strong className="font-semibold text-brand-blue-deep">
-              "Strengthening the Ecosystem for Sustainable Modern Industry"
-            </strong>{" "}
-            (SuMoS).
-          </p>
-          <a
-            href="#survey"
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_8px_20px_-8px_rgb(81_142_250_/_0.6)] transition-transform hover:-translate-y-0.5"
-          >
-            Take a survey <ArrowRight className="h-4 w-4" />
-          </a>
+          <div className="flex flex-col gap-4">
+            <h1 className="font-display text-[48px] font-extrabold leading-tight text-[#233662]">
+              Benchmarking tool
+            </h1>
+            <div className="flex flex-col gap-7 items-start">
+              <p className="max-w-[602px] text-[18px] leading-[26px] text-[#444444]">
+                The benchmarking tool is part of the Erasmus+ European Commission
+                co-funded Education project{" "}
+                <span className="font-semibold">
+                  &ldquo;Strengthening the Ecosystem for Sustainable Modern Industry&rdquo;
+                </span>{" "}
+                (SuMoS).
+              </p>
+              <a
+                href="#survey"
+                className="inline-flex items-center gap-1 rounded-lg bg-[#518efa] px-6 py-3 text-[16px] font-medium text-white transition-transform hover:-translate-y-0.5"
+              >
+                Take a survey <ArrowRight className="h-6 w-6" />
+              </a>
+            </div>
+          </div>
         </div>
         <div className="relative flex justify-center">
           <img
@@ -40,7 +44,7 @@ export function Hero() {
             alt="Student with laptop surrounded by European landmarks"
             width={1024}
             height={960}
-            className="h-auto w-full max-w-[520px] object-contain"
+            className="h-auto w-full max-w-[492px] object-contain"
           />
         </div>
       </div>
