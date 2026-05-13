@@ -870,7 +870,7 @@ export default function SurveyPage() {
             </p>
             <Button
               onClick={handleEmailSubmit}
-              className="w-full rounded-full bg-primary text-brand-blue-deep-foreground hover:bg-primary/90"
+              className="w-full rounded-full bg-brand-blue-deep text-white hover:bg-primary/90"
             >
               Get my Benchmark Code
             </Button>
