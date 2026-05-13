@@ -112,8 +112,8 @@ const stats: Stat[] = [
 
 export function Statistics() {
   return (
-    <section id="statistics" className="bg-[#f5f5f5] py-20">
-      <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-[160px]">
+    <section id="statistics" className="bg-[#f5f5f5] py-12 md:py-20">
+      <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-6 sm:px-10 lg:px-[160px]">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-[40px] font-bold text-[#233662]">Explore statistics</h2>
           <a
