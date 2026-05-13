@@ -198,7 +198,7 @@ function BenchmarkPage() {
                       Overall
                     </div>
                   </div>
-                  <Gauge value={4.8} max={5} color="#64A550" />
+                  <Gauge value={3} max={5} color="#64A550" />
                 </div>
                 <div className="flex flex-1 flex-col items-center justify-center gap-4">
                   <div className="flex flex-col items-center gap-1 text-center">
