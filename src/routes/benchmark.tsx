@@ -39,69 +39,47 @@ const radarData = [
 
 function Gauge({
   value,
-  max = 5,
+  fillRatio,
   color,
-  trackColor = "#E5E7EB",
+  trackColor = "#e9ecf1",
 }: {
   value: number;
-  max?: number;
+  fillRatio: number;
   color: string;
   trackColor?: string;
 }) {
-  // Half-donut geometry matching the provided SVG (212x210 viewBox).
-  // Outer radius 105.849, inner radius ~76.21 (stroke width ~29.64), centered at (105.849, 105.849).
-  const cx = 105.849;
-  const cy = 105.849;
-  const rOuter = 105.849;
-  const rInner = 76.211;
-  const ratio = Math.max(0, Math.min(1, value / max));
-
-  // Build a half-donut arc path from angle 180° (left) sweeping clockwise by `ratio * 180°`.
-  // Angles measured from +x axis; top half uses negative y in SVG (y grows downward, so we use sin with negation).
-  const polar = (r: number, deg: number) => {
-    const rad = (deg * Math.PI) / 180;
-    return { x: cx + r * Math.cos(rad), y: cy - r * Math.sin(rad) };
-  };
-
-  const arcPath = (sweepDeg: number) => {
-    if (sweepDeg <= 0) return "";
-    const startOuter = polar(rOuter, 180);
-    const endOuter = polar(rOuter, 180 - sweepDeg);
-    const endInner = polar(rInner, 180 - sweepDeg);
-    const startInner = polar(rInner, 180);
-    const largeArc = sweepDeg > 180 ? 1 : 0;
-    return [
-      `M ${startOuter.x} ${startOuter.y}`,
-      `A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${endOuter.x} ${endOuter.y}`,
-      `L ${endInner.x} ${endInner.y}`,
-      `A ${rInner} ${rInner} 0 ${largeArc} 0 ${startInner.x} ${startInner.y}`,
-      "Z",
-    ].join(" ");
-  };
-
+  const r = 90;
+  const cx = 110;
+  const cy = 110;
+  const circ = Math.PI * r;
+  const ratio = Math.max(0, Math.min(1, fillRatio));
   return (
     <div className="relative h-[167px] w-[212px]">
-      {/* Arc occupies top 106px of the container (matches Figma graphic height 105.953px). */}
-      <svg
-        viewBox="0 0 212 106"
-        width="212"
-        height="106"
-        preserveAspectRatio="xMidYMin meet"
-        className="absolute left-0 top-0 block"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d={arcPath(180)} fill={trackColor} />
-        <path d={arcPath(ratio * 180)} fill={color} />
+      <svg viewBox="0 0 220 130" className="block h-full w-full">
+        <path
+          d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
+          fill="none"
+          stroke={trackColor}
+          strokeWidth={20}
+          strokeLinecap="round"
+        />
+        <path
+          d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
+          fill="none"
+          stroke={color}
+          strokeWidth={20}
+          strokeLinecap="round"
+          strokeDasharray={`${circ * ratio} ${circ}`}
+        />
       </svg>
-      {/* Value sits inside the half-donut opening. */}
-      <div className="absolute left-0 right-0 top-[92px] text-center font-bold text-[40px] leading-none text-[#233662]">
+      <div className="absolute left-0 right-0 top-[78px] text-center text-[40px] font-bold text-[#233662]">
         {value.toString().replace(".", ",")}
       </div>
-      <div className="absolute left-[6px] top-[155px] text-[12px] leading-none text-[#bfbfbf]">
+      <div className="absolute left-[6px] top-[133px] text-[12px] text-[#bfbfbf]">
         0
       </div>
-      <div className="absolute right-[6px] top-[155px] text-[12px] leading-none text-[#bfbfbf]">
-        {max}
+      <div className="absolute right-[6px] top-[133px] text-[12px] text-[#bfbfbf]">
+        600
       </div>
     </div>
   );
@@ -198,7 +176,7 @@ function BenchmarkPage() {
                       Overall
                     </div>
                   </div>
-                  <Gauge value={4.8} max={5} color="#64A550" />
+                  <Gauge value={4.8} fillRatio={0.8} color="#64a550" />
                 </div>
                 <div className="flex flex-1 flex-col items-center justify-center gap-4">
                   <div className="flex flex-col items-center gap-1 text-center">
@@ -209,7 +187,7 @@ function BenchmarkPage() {
                       Overall
                     </div>
                   </div>
-                  <Gauge value={3.6} max={5} color="#518EFA" />
+                  <Gauge value={3.6} fillRatio={0.4} color="#518efa" />
                 </div>
               </div>
             </div>
