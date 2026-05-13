@@ -255,7 +255,7 @@ function BenchmarkPage() {
               </div>
               <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
                 <div className="flex items-center gap-2">
-                  <span className="h-2 w-[21px] bg-[#233662]" />
+                  <span className="h-2 w-[21px] bg-[#528ffa]" />
                   <span className="text-[14px] font-semibold text-[#444]">
                     Me
                   </span>
