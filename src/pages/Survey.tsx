@@ -385,15 +385,8 @@ export default function SurveyPage() {
         subtitle="Students' Green Awareness and Sustainable Habits"
       />
 
-      <div
-        className={cn(
-          "mx-auto w-full py-8",
-          hasConsented && currentStep === 0 && !showBeforeFinish
-            ? "max-w-[1440px] px-6 sm:px-10"
-            : "max-w-[1440px] px-6 sm:px-10 lg:px-[160px]",
-        )}
-      >
-        <div className={cn("mx-auto flex flex-col md:flex-row items-start justify-center", hasConsented && currentStep === 0 && !showBeforeFinish ? "gap-6 xl:gap-10" : "max-w-3xl")}>
+      <div className="mx-auto w-full max-w-[1440px] px-6 py-8 sm:px-10 lg:px-[160px]">
+        <div className={cn("mx-auto flex flex-col md:flex-row items-start justify-center", hasConsented && currentStep === 0 && !showBeforeFinish ? "gap-8 xl:gap-12 max-w-[1400px]" : "max-w-3xl")}>
           
           {/* Left Sidebar (Question Navigator) */}
           {hasConsented && currentStep === 0 && !showBeforeFinish && (
