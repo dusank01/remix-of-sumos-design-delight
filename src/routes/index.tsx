@@ -1,26 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navigation } from "@/components/sumos/Navigation";
+import { Hero } from "@/components/sumos/Hero";
+import { StepCards } from "@/components/sumos/StepCards";
+import { Statistics } from "@/components/sumos/Statistics";
+import { Awareness } from "@/components/sumos/Awareness";
+import { Institutions } from "@/components/sumos/Institutions";
+import { Footer } from "@/components/sumos/Footer";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "SuMoS — Benchmarking tool for sustainable student mobility" },
+      {
+        name: "description",
+        content:
+          "Benchmark students' green awareness and sustainable habits across Europe. Part of the Erasmus+ SuMoS project.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
-
 function Index() {
-  return <PlaceholderIndex />;
+  return (
+    <main className="min-h-screen bg-background">
+      <Navigation />
+      <Hero />
+      <StepCards />
+      <Statistics />
+      <Awareness />
+      <Institutions />
+      <Footer />
+    </main>
+  );
 }
