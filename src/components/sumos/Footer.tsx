@@ -41,7 +41,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-border bg-section-muted py-4">
-        <p className="mx-auto max-w-[1280px] px-10 text-center text-xs text-muted-foreground">
+        <p className="mx-auto max-w-[1440px] px-6 text-center text-xs text-muted-foreground sm:px-10 lg:px-[160px]">
           The sole responsibility for the content of this website lies with the authors. It does not necessarily reflect the opinion of the European Union.
           <br />
           Copyright © 2025 FOI Varaždin. All Rights Reserved.
