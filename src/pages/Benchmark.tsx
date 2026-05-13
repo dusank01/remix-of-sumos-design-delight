@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -11,24 +11,6 @@ import { Navigation } from "@/components/sumos/Navigation";
 import { Footer } from "@/components/sumos/Footer";
 import sumosWordmark from "@/assets/sumos-wordmark.png";
 
-export const Route = createFileRoute("/benchmark")({
-  head: () => ({
-    meta: [
-      { title: "Benchmark — SuMoS" },
-      {
-        name: "description",
-        content:
-          "Benchmark your green score with a friend or yourself using a unique code.",
-      },
-      { property: "og:title", content: "Benchmark — SuMoS" },
-      {
-        property: "og:description",
-        content: "Compare green scores 1-to-1 with another respondent.",
-      },
-    ],
-  }),
-  component: BenchmarkPage,
-});
 
 const radarData = [
   { axis: "Awareness", me: 3.5, mate: 4 },
@@ -337,3 +319,4 @@ function BenchmarkPage() {
     </main>
   );
 }
+export default BenchmarkPage;
