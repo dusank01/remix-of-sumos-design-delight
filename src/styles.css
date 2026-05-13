@@ -51,8 +51,8 @@
   --color-brand-slate: var(--brand-slate);
   --color-hero-bg: var(--hero-bg);
   --color-section-muted: var(--section-muted);
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Plus Jakarta Sans", "Inter", sans-serif;
+  --font-sans: "Gilroy", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Gilroy", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
