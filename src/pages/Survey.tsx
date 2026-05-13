@@ -606,26 +606,26 @@ export default function SurveyPage() {
                     })}
                   </div>
 
-                  <div className="rounded-lg bg-[var(--hero-bg)] p-10">
-                    <div className="grid gap-8 lg:grid-cols-2 items-center">
-                      <div>
-                        <h2 className="mb-4 text-2xl font-bold text-brand-blue-deep">
+                  <div className="rounded-3xl bg-white p-6 sm:p-10 shadow-sm border border-border">
+                    <div className="grid gap-12 lg:grid-cols-2 items-center px-2 sm:px-8">
+                      <div className="flex flex-col gap-8">
+                        <h2 className="text-3xl sm:text-[36px] font-bold leading-tight text-brand-blue-deep">
                           Before finishing the survey....
                         </h2>
-                        <p className="mb-6 text-sm text-muted-foreground">
+                        <p className="text-lg sm:text-xl text-[#444] leading-snug">
                           Please tell us whether you actually completed the
                           survey for real or were just trying it out.
                         </p>
-                        <div className="space-y-3 max-w-xs">
+                        <div className="flex flex-col gap-4 w-full max-w-[400px]">
                           <Button
-                            className="w-full rounded-full bg-brand-green text-white hover:bg-brand-green/90 py-3"
+                            className="h-12 w-full rounded-lg bg-[#518efa] text-white hover:bg-[#518efa]/90 text-base font-medium"
                             onClick={() => handleAttemptChoice(true)}
                           >
                             Real attempt
                           </Button>
                           <Button
                             variant="outline"
-                            className="w-full rounded-full py-3"
+                            className="h-12 w-full rounded-lg border border-[#444] text-[#444] hover:bg-muted text-base font-medium"
                             onClick={() => handleAttemptChoice(false)}
                           >
                             Just trying it out (pilot attempt)
@@ -633,10 +633,11 @@ export default function SurveyPage() {
                         </div>
                       </div>
                       <div className="hidden lg:flex items-center justify-center">
-                        <div className="relative">
-                          <div className="h-48 w-32 rounded-t-full bg-brand-green/15" />
-                          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-8 w-20 rounded bg-brand-green/10" />
-                        </div>
+                        <img
+                          src={beforeFinishIllustration}
+                          alt="Survey completion illustration"
+                          className="h-auto w-full max-w-[348px]"
+                        />
                       </div>
                     </div>
                   </div>
