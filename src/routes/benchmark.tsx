@@ -93,8 +93,8 @@ function Gauge({
         <path d={arcPath(180)} fill={trackColor} />
         <path d={arcPath(ratio * 180)} fill={color} />
       </svg>
-      {/* Value sits inside the half-donut opening (Figma: top ~143px from container top with -translate-y-1/2). */}
-      <div className="absolute left-0 right-0 top-[123px] -translate-y-1/2 text-center font-bold text-[40px] leading-none text-[#233662]">
+      {/* Value sits inside the half-donut opening. */}
+      <div className="absolute left-0 right-0 top-[92px] text-center font-bold text-[40px] leading-none text-[#233662]">
         {value.toString().replace(".", ",")}
       </div>
       <div className="absolute left-[6px] top-[155px] text-[12px] leading-none text-[#bfbfbf]">
