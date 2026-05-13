@@ -4,7 +4,7 @@ import euLogo from "@/assets/eu-cofunded.png";
 export function Footer() {
   return (
     <footer className="border-t border-border bg-background">
-      <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-8 px-10 py-8 md:grid-cols-3 md:items-center">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-8 px-6 py-8 sm:px-10 md:grid-cols-3 md:items-center lg:px-[160px]">
         <div>
           <h4 className="mb-3 text-sm font-bold text-brand-blue-deep">Project Coordinator</h4>
           <p className="flex items-center gap-2 text-sm text-brand-slate">
