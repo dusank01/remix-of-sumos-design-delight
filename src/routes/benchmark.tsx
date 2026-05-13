@@ -277,6 +277,59 @@ function BenchmarkPage() {
               </div>
             </div>
           </div>
+
+          {/* Barriers subsections radar */}
+          <div className="flex w-full flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)]">
+            <div className="flex w-full flex-col items-center gap-3">
+              <h3 className="w-full px-6 text-[24px] font-semibold leading-none text-[#233662]">
+                Barriers — subsection averages
+              </h3>
+              <div className="h-px w-full bg-[#e5e7eb]" />
+            </div>
+            <div className="h-[400px] w-full max-w-[560px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart data={barriersRadarData} outerRadius="70%">
+                  <PolarGrid stroke="#bfbfbf" />
+                  <PolarAngleAxis
+                    dataKey="axis"
+                    tick={{ fill: "#444", fontSize: 12 }}
+                  />
+                  <PolarRadiusAxis
+                    angle={90}
+                    domain={[0, 5]}
+                    tick={{ fill: "#bfbfbf", fontSize: 10 }}
+                    stroke="transparent"
+                  />
+                  <Radar
+                    name="My colleague"
+                    dataKey="mate"
+                    stroke="#b6d989"
+                    fill="#b6d989"
+                    fillOpacity={0.55}
+                  />
+                  <Radar
+                    name="Me"
+                    dataKey="me"
+                    stroke="#233662"
+                    fill="#233662"
+                    fillOpacity={0.35}
+                  />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-[21px] bg-[#528ffa]" />
+                <span className="text-[14px] font-semibold text-[#444]">Me</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-[21px] bg-[#b6d989]" />
+                <span className="text-[14px] font-semibold text-[#444]">
+                  My colleague
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
