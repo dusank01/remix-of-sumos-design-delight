@@ -439,17 +439,27 @@ export default function SurveyPage() {
                     </div>
                   ) : (
                     <>
-                      {/* Glavni tab-ovi (grupe) */}
-                      <div className="flex gap-2 justify-center flex-wrap">
+                      {/* Glavni tab-ovi (grupe) — povezani pill row kao u Figmi */}
+                      <div className="mx-auto inline-flex flex-wrap items-center justify-center gap-2 rounded-full bg-card p-1 shadow-[var(--shadow-card)]">
                         {groups.map((g, i) => {
                           const Icon = g.icon;
                           const status = getGroupStatus(g, state.answers);
                           const isActive = i === groupIdx;
-                          let btnClass = "border bg-card text-muted-foreground hover:bg-muted";
-                          
-                          if (isActive) btnClass = "bg-primary text-brand-blue-deep-foreground";
-                          else if (status === "completed") btnClass = "bg-brand-green text-white";
-                          else if (status === "partial") btnClass = "bg-primary text-brand-blue-deep-foreground opacity-80";
+                          let btnClass =
+                            "bg-card text-muted-foreground border border-border hover:bg-muted";
+
+                          if (isActive) {
+                            btnClass = "bg-brand-green text-white shadow-sm";
+                          } else if (i < groupIdx) {
+                            btnClass =
+                              i === 0
+                                ? "bg-brand-blue-deep text-white"
+                                : "bg-brand-blue text-white";
+                          } else if (status === "completed") {
+                            btnClass = "bg-brand-blue text-white";
+                          } else if (status === "partial") {
+                            btnClass = "bg-brand-blue/70 text-white";
+                          }
 
                           return (
                             <button
@@ -460,7 +470,7 @@ export default function SurveyPage() {
                                 setSubIdx(0);
                               }}
                               className={cn(
-                                "flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold tracking-wider transition-colors",
+                                "flex items-center gap-2 rounded-full px-5 py-2 text-xs font-bold tracking-wider transition-colors",
                                 btnClass,
                               )}
                             >
@@ -473,42 +483,50 @@ export default function SurveyPage() {
 
                       {/* Pod-koraci (samo ako grupa ima više sub-step-ova, npr. HABITS) */}
                       {currentGroup && currentGroup.subSteps.length > 1 && (
-                        <div className="flex items-center justify-center gap-0 py-2 flex-wrap">
-                          {currentGroup.subSteps.map((sub, i) => (
-                            <div
-                              key={sub.category}
-                              className="flex items-center"
-                            >
-                              <button
-                                onClick={() => {
-                                  setErrorKey(null);
-                                  setSubIdx(i);
-                                }}
-                                className="flex flex-col items-center gap-1.5"
-                              >
-                                <div
-                                  className={cn(
-                                    "flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-colors",
-                                    subIdx === i
-                                      ? "bg-primary text-brand-blue-deep-foreground"
-                                      : getSubStatus(sub, state.answers) === "completed"
-                                        ? "bg-brand-green text-white"
-                                        : getSubStatus(sub, state.answers) === "partial"
-                                          ? "bg-primary text-brand-blue-deep-foreground opacity-80"
-                                          : "bg-muted text-muted-foreground",
-                                  )}
+                        <div className="flex items-start justify-center gap-0 py-4 flex-wrap">
+                          {currentGroup.subSteps.map((sub, i) => {
+                            const subStatus = getSubStatus(sub, state.answers);
+                            const isCurrent = subIdx === i;
+                            return (
+                              <div key={sub.category} className="flex items-start">
+                                <button
+                                  onClick={() => {
+                                    setErrorKey(null);
+                                    setSubIdx(i);
+                                  }}
+                                  className="flex w-[110px] flex-col items-center gap-2"
                                 >
-                                  {String(i + 1).padStart(2, "0")}
-                                </div>
-                                <span className="max-w-[90px] text-center text-[10px] text-muted-foreground leading-tight">
-                                  {shortSubLabel(sub.category)}
-                                </span>
-                              </button>
-                              {i < currentGroup.subSteps.length - 1 && (
-                                <div className="mx-2 h-px w-10 bg-border" />
-                              )}
-                            </div>
-                          ))}
+                                  <div
+                                    className={cn(
+                                      "flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold transition-colors",
+                                      isCurrent
+                                        ? "bg-brand-green text-white"
+                                        : subStatus === "completed"
+                                          ? "bg-brand-blue text-white"
+                                          : subStatus === "partial"
+                                            ? "bg-brand-blue/70 text-white"
+                                            : "bg-card border border-border text-muted-foreground",
+                                    )}
+                                  >
+                                    {String(i + 1).padStart(2, "0")}
+                                  </div>
+                                  <span
+                                    className={cn(
+                                      "max-w-[100px] text-center text-[11px] leading-tight",
+                                      isCurrent
+                                        ? "font-semibold text-brand-blue-deep"
+                                        : "text-muted-foreground",
+                                    )}
+                                  >
+                                    {shortSubLabel(sub.category)}
+                                  </span>
+                                </button>
+                                {i < currentGroup.subSteps.length - 1 && (
+                                  <div className="mt-4 h-px w-6 bg-border" />
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
                       )}
 
