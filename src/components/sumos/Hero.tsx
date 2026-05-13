@@ -1,13 +1,16 @@
 import { ArrowRight } from "lucide-react";
 import heroImg from "@/assets/hero-illustration.png";
 import sumosBadge from "@/assets/hero-sumos-logo.png";
+import heroBgShape from "@/assets/hero-bg-shape.svg";
 
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-background">
-      <div
+      <img
+        src={heroBgShape}
+        alt=""
         aria-hidden
-        className="pointer-events-none absolute -left-24 -top-16 h-[680px] w-[820px] rounded-[60%] bg-hero-bg"
+        className="pointer-events-none absolute -left-[61px] -top-[67px] h-[637px] w-[791px] max-w-none"
       />
       <div className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-10 px-[160px] pt-16 pb-6 md:grid-cols-2 md:items-center">
         <div className="relative flex flex-col gap-6">
