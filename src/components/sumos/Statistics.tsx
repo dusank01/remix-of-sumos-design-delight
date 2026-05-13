@@ -61,7 +61,7 @@ function EcoScore() {
   const circ = Math.PI * 90;
   const dash = circ * pct;
   return (
-    <div className="flex h-[288px] w-[360px] flex-col items-center justify-between rounded-[12px] bg-white px-6 pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
+    <div className="flex h-[288px] w-full flex-col items-center justify-between rounded-[12px] bg-white px-6 pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
       <h3 className="text-[20px] font-semibold text-[#64a550]">Eco score</h3>
       <div className="flex flex-col items-center">
         <div className="relative h-[120px] w-[212px]">
