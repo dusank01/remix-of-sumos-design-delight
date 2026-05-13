@@ -1,4 +1,4 @@
-import { Award } from "lucide-react";
+import { Globe2 } from "lucide-react";
 
 interface BadgeDisplayProps {
   name: string;
@@ -6,16 +6,28 @@ interface BadgeDisplayProps {
   size?: "sm" | "lg";
 }
 
-export function BadgeDisplay({ name, description, size = "lg" }: BadgeDisplayProps) {
+export function BadgeDisplay({ name, size = "lg" }: BadgeDisplayProps) {
   return (
-    <div className="flex flex-col items-center gap-3 text-center">
-      <div className={`flex items-center justify-center rounded-full bg-emerald-100 ${size === "lg" ? "h-24 w-24" : "h-16 w-16"}`}>
-        <Award className={`text-emerald-600 ${size === "lg" ? "h-12 w-12" : "h-8 w-8"}`} />
+    <div className="flex flex-col items-center gap-2 text-center">
+      <div
+        className={`flex items-center justify-center rounded-full bg-[var(--brand-green-soft)]/30 ${
+          size === "lg" ? "h-24 w-24" : "h-16 w-16"
+        }`}
+      >
+        <Globe2
+          className={`text-[hsl(var(--brand-green))] ${
+            size === "lg" ? "h-12 w-12" : "h-9 w-9"
+          }`}
+          strokeWidth={1.5}
+        />
       </div>
-      <div>
-        <h3 className={`font-bold text-foreground ${size === "lg" ? "text-xl" : "text-base"}`}>{name}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-      </div>
+      <h3
+        className={`font-extrabold text-[hsl(var(--brand-green))] ${
+          size === "lg" ? "text-xl" : "text-base"
+        }`}
+      >
+        {name}
+      </h3>
     </div>
   );
 }
