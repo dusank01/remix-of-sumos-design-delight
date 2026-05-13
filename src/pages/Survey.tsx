@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import beforeFinishIllustration from "@/assets/before-finish-illustration.svg";
 
 import {
   Dialog,
