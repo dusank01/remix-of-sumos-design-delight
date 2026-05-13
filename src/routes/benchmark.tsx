@@ -80,8 +80,7 @@ function Gauge({
   };
 
   return (
-    <div className="relative h-[167px] w-[212px]">
-      {/* Arc occupies top 106px of the container (matches Figma graphic height 105.953px). */}
+    <div className="relative h-[130px] w-[212px]">
       <svg
         viewBox="0 0 212 106"
         width="212"
@@ -93,14 +92,15 @@ function Gauge({
         <path d={arcPath(180)} fill={trackColor} />
         <path d={arcPath(ratio * 180)} fill={color} />
       </svg>
-      {/* Value sits inside the half-donut opening. */}
-      <div className="absolute left-0 right-0 top-[92px] text-center font-bold text-[40px] leading-none text-[#233662]">
+      {/* Value centered in the arc opening */}
+      <div className="absolute left-0 right-0 top-[58px] text-center font-bold text-[40px] leading-none text-[#233662]">
         {value.toString().replace(".", ",")}
       </div>
-      <div className="absolute left-[6px] top-[155px] text-[12px] leading-none text-[#bfbfbf]">
+      {/* 0 / max labels just below arc endpoints */}
+      <div className="absolute left-[2px] top-[112px] text-[12px] leading-none text-[#bfbfbf]">
         0
       </div>
-      <div className="absolute right-[6px] top-[155px] text-[12px] leading-none text-[#bfbfbf]">
+      <div className="absolute right-[2px] top-[112px] text-[12px] leading-none text-[#bfbfbf]">
         {max}
       </div>
     </div>
