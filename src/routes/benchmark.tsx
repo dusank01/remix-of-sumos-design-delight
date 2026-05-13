@@ -31,30 +31,30 @@ export const Route = createFileRoute("/benchmark")({
 });
 
 const radarData = [
-  { axis: "Sustainable arrival", me: 4, mate: 3 },
-  { axis: "Digital habits", me: 4, mate: 3 },
+  { axis: "Sustainable arrival", me: 2.5, mate: 4 },
+  { axis: "Digital habits", me: 2.5, mate: 4 },
   { axis: "Food and consumption", me: 3, mate: 4 },
   { axis: "Living and accommodation", me: 4, mate: 3 },
 ];
 
 function Gauge({
   value,
-  max = 5,
+  fillRatio,
   color,
   trackColor = "#e9ecf1",
 }: {
   value: number;
-  max?: number;
+  fillRatio: number;
   color: string;
   trackColor?: string;
 }) {
   const r = 90;
   const cx = 110;
   const cy = 110;
-  const circ = Math.PI * r; // half-circle length
-  const ratio = Math.max(0, Math.min(1, value / max));
+  const circ = Math.PI * r;
+  const ratio = Math.max(0, Math.min(1, fillRatio));
   return (
-    <div className="relative h-[140px] w-[220px]">
+    <div className="relative h-[167px] w-[212px]">
       <svg viewBox="0 0 220 130" className="block h-full w-full">
         <path
           d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
@@ -72,15 +72,14 @@ function Gauge({
           strokeDasharray={`${circ * ratio} ${circ}`}
         />
       </svg>
-      <div
-        className="absolute left-0 right-0 text-center text-[40px] font-bold"
-        style={{ bottom: 8, color }}
-      >
+      <div className="absolute left-0 right-0 top-[78px] text-center text-[40px] font-bold text-[#233662]">
         {value.toString().replace(".", ",")}
       </div>
-      <div className="absolute bottom-0 left-2 text-[12px] text-[#bfbfbf]">0</div>
-      <div className="absolute bottom-0 right-2 text-[12px] text-[#bfbfbf]">
-        {max}
+      <div className="absolute left-[6px] top-[133px] text-[12px] text-[#bfbfbf]">
+        0
+      </div>
+      <div className="absolute right-[6px] top-[133px] text-[12px] text-[#bfbfbf]">
+        600
       </div>
     </div>
   );
