@@ -1,27 +1,21 @@
-import { ArrowRight, Leaf } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import heroImg from "@/assets/hero-illustration.png";
+import sumosBadge from "@/assets/hero-sumos-logo.png";
 
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-background">
-      {/* Soft cloud background shape */}
       <div
         aria-hidden
         className="pointer-events-none absolute -left-24 -top-16 h-[680px] w-[820px] rounded-[60%] bg-hero-bg"
       />
       <div className="relative mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-10 py-20 md:grid-cols-2 md:items-center">
         <div className="relative">
-          <div className="mb-8 inline-flex items-center gap-2">
-            <span className="text-3xl font-extrabold tracking-tight text-brand-blue">
-              SuM
-            </span>
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-brand-blue-deep text-brand-green-soft">
-              <Leaf className="h-4 w-4" />
-            </span>
-            <span className="text-3xl font-extrabold tracking-tight text-brand-blue">
-              S
-            </span>
-          </div>
+          <img
+            src={sumosBadge}
+            alt="SuMoS"
+            className="mb-8 h-12 w-auto object-contain"
+          />
           <h1 className="mb-6 font-display text-5xl font-extrabold leading-tight text-brand-blue-deep md:text-6xl">
             Benchmarking tool
           </h1>
