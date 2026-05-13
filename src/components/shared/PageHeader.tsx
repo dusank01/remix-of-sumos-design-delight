@@ -8,13 +8,13 @@ interface PageHeaderProps {
 export function PageHeader({ title, subtitle }: PageHeaderProps) {
   return (
     <div className="bg-background">
-      <div className="mx-auto flex max-w-[1440px] items-start justify-between gap-6 px-6 py-10 sm:px-10 lg:px-[160px]">
+      <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-6 px-6 py-10 sm:px-10 lg:px-[160px]">
         <div>
-          <h1 className="mt-1 text-[#444444] font-semibold text-sm">
+          <h1 className="font-display text-[36px] font-extrabold leading-tight text-brand-blue-deep sm:text-[42px]">
             {title}
           </h1>
           {subtitle && (
-            <p className="mt-1 text-[14px] text-[#444444]">{subtitle}</p>
+            <p className="mt-2 text-sm text-[#444444]">{subtitle}</p>
           )}
         </div>
         <img
