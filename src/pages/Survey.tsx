@@ -385,7 +385,7 @@ export default function SurveyPage() {
         subtitle="Students' Green Awareness and Sustainable Habits"
       />
 
-      <div className="mx-auto w-full max-w-[1440px] px-6 py-8 sm:px-10 lg:px-[160px]">
+      <div className="container py-8">
         <div className={cn("mx-auto flex flex-col md:flex-row items-start justify-center", hasConsented && currentStep === 0 && !showBeforeFinish ? "gap-8 xl:gap-12 max-w-[1400px]" : "max-w-3xl")}>
           
           {/* Left Sidebar (Question Navigator) */}
