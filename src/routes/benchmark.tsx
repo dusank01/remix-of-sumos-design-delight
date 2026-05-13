@@ -105,7 +105,7 @@ function Gauge({
         {value.toString().replace(".", ",")}
       </div>
       {/* 0 / max labels just below arc endpoints */}
-      <div className="absolute right-[2px] top-[112px] text-[12px] leading-none text-[#bfbfbf] px-[10px]">
+      <div className="absolute left-[2px] top-[112px] text-[12px] leading-none text-[#bfbfbf]">
         0
       </div>
       <div className="absolute right-[2px] top-[112px] text-[12px] leading-none text-[#bfbfbf]">
