@@ -1,4 +1,6 @@
 import { ArrowRight } from "lucide-react";
+import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import worldData from "@/assets/countries-110m.json";
 
 const left = [
   { country: "Germany", value: 85 },
@@ -20,7 +22,7 @@ function Bar({ country, value }: { country: string; value: number }) {
         <span className="text-brand-slate">{country}</span>
         <span className="font-semibold text-brand-blue-deep">{value}%</span>
       </div>
-      <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
         <div className="h-full rounded-full bg-brand-green" style={{ width: `${value}%` }} />
       </div>
     </div>
@@ -29,7 +31,7 @@ function Bar({ country, value }: { country: string; value: number }) {
 
 export function Awareness() {
   return (
-    <section id="benchmark" className="bg-background py-20">
+    <section id="benchmark" className="bg-background py-16">
       <div className="mx-auto max-w-[1280px] px-10">
         <div className="mb-8 flex items-end justify-between">
           <h2 className="text-4xl font-extrabold text-brand-blue-deep">Green awareness</h2>
@@ -38,38 +40,35 @@ export function Awareness() {
           </a>
         </div>
 
-        {/* World map illustration (light dotted) */}
-        <div className="mb-8 overflow-hidden rounded-xl border border-border bg-card p-8">
-          <svg viewBox="0 0 1000 380" className="h-auto w-full text-border" aria-hidden>
-            {Array.from({ length: 38 }).map((_, row) =>
-              Array.from({ length: 100 }).map((_, col) => {
-                // Rough world silhouette mask
-                const x = col * 10 + 5;
-                const y = row * 10 + 5;
-                const cx = x - 500;
-                const cy = y - 190;
-                const land =
-                  // Eurasia
-                  (cx > -180 && cx < 280 && cy > -120 && cy < 30 &&
-                    Math.sin((cx + cy) / 30) + Math.cos(cx / 40) > -0.3) ||
-                  // Africa
-                  (cx > -120 && cx < 60 && cy > 0 && cy < 140 &&
-                    Math.cos(cx / 50) + Math.sin(cy / 40) > -0.4) ||
-                  // Americas
-                  (cx > -420 && cx < -200 && cy > -120 && cy < 160 &&
-                    Math.sin((cx - cy) / 35) > -0.2) ||
-                  // Oceania
-                  (cx > 180 && cx < 300 && cy > 80 && cy < 140);
-                if (!land) return null;
-                return (
-                  <circle key={`${row}-${col}`} cx={x} cy={y} r="1.4" fill="currentColor" />
-                );
-              })
-            )}
-          </svg>
+        <div className="mb-8 overflow-hidden">
+          <ComposableMap
+            projectionConfig={{ scale: 155 }}
+            width={980}
+            height={460}
+            style={{ width: "100%", height: "auto" }}
+          >
+            <Geographies geography={worldData as object}>
+              {({ geographies }) =>
+                geographies.map((geo) => (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill="transparent"
+                    stroke="var(--brand-blue-deep)"
+                    strokeWidth={0.4}
+                    style={{
+                      default: { outline: "none" },
+                      hover: { outline: "none", fill: "var(--brand-blue)", fillOpacity: 0.1 },
+                      pressed: { outline: "none" },
+                    }}
+                  />
+                ))
+              }
+            </Geographies>
+          </ComposableMap>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-8 shadow-[var(--shadow-card)]">
+        <div className="rounded-xl border border-border bg-card p-8">
           <h3 className="mb-6 text-lg font-semibold text-brand-blue-deep">
             Level of awareness by country
           </h3>

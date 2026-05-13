@@ -1,32 +1,54 @@
-import { ArrowRight, Info, ClipboardCheck, Hourglass, Globe2 } from "lucide-react";
+import { ArrowRight, Info, ClipboardList, Hourglass, Globe2 } from "lucide-react";
 
 const bars = [
-  { label: "Awareness", value: 92 },
-  { label: "Attitudes", value: 92 },
-  { label: "Habits", value: 38 },
-  { label: "Barriers", value: 75 },
+  { label: "Awareness", value: 3.5 },
+  { label: "Attitudes", value: 3.5 },
+  { label: "Habits", value: 1.5 },
+  { label: "Barriers", value: 2.8 },
 ];
 
 function FootprintChart() {
+  const max = 5;
+  const ticks = [5, 4, 3, 2, 1, 0];
   return (
-    <div className="rounded-xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
-      <div className="mb-4 flex items-center justify-between">
+    <div className="rounded-xl border border-border bg-card p-6">
+      <div className="mb-6 flex items-center justify-between">
         <h3 className="text-base font-semibold text-brand-blue-deep">
           Students ecological footprint
         </h3>
         <Info className="h-5 w-5 text-muted-foreground" />
       </div>
-      <div className="flex h-[200px] gap-4 border-b border-l border-border pl-3">
-        {bars.map((b) => (
-          <div key={b.label} className="flex flex-1 flex-col items-center justify-end">
-            <div
-              className="w-full rounded-t-md bg-brand-blue/90"
-              style={{ height: `${b.value}%` }}
-              title={`${b.label}`}
-            />
-            <span className="mt-2 text-[11px] text-muted-foreground">{b.label}</span>
+      <div className="flex gap-3">
+        <div className="flex h-[180px] flex-col justify-between text-[11px] text-muted-foreground">
+          {ticks.map((t) => (
+            <span key={t}>{t}</span>
+          ))}
+        </div>
+        <div className="relative flex-1">
+          {/* grid lines */}
+          <div className="absolute inset-0 flex flex-col justify-between">
+            {ticks.map((t) => (
+              <div key={t} className="h-px w-full bg-border" />
+            ))}
           </div>
-        ))}
+          <div className="relative flex h-[180px] items-end gap-8 px-6">
+            {bars.map((b) => (
+              <div key={b.label} className="flex flex-1 flex-col items-center">
+                <div
+                  className="w-full rounded-t-sm bg-brand-blue/85"
+                  style={{ height: `${(b.value / max) * 100}%` }}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="mt-2 flex gap-8 px-6">
+            {bars.map((b) => (
+              <span key={b.label} className="flex-1 text-center text-[11px] text-muted-foreground">
+                {b.label}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -36,53 +58,53 @@ function EcoScore() {
   const value = 4.7;
   const max = 5;
   const pct = value / max;
-  const radius = 80;
-  const circ = Math.PI * radius; // semicircle
+  // Semicircle: viewBox 200x110, arc from (10,100) to (190,100) radius 90
+  const circ = Math.PI * 90;
   const dash = circ * pct;
   return (
-    <div className="rounded-xl border border-border bg-card p-6 text-center shadow-[var(--shadow-card)]">
-      <h3 className="mb-4 text-base font-semibold text-brand-blue-deep">Eco score</h3>
-      <div className="relative mx-auto h-[120px] w-[200px]">
+    <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-card p-6 text-center">
+      <h3 className="mb-2 text-base font-semibold text-brand-green">Eco score</h3>
+      <div className="relative h-[120px] w-[220px]">
         <svg viewBox="0 0 200 110" className="h-full w-full">
           <path
             d="M10,100 A90,90 0 0 1 190,100"
             fill="none"
-            stroke="hsl(0 0% 92%)"
-            strokeWidth="14"
+            stroke="hsl(220 13% 91%)"
+            strokeWidth="16"
             strokeLinecap="round"
           />
           <path
             d="M10,100 A90,90 0 0 1 190,100"
             fill="none"
             stroke="var(--brand-green)"
-            strokeWidth="14"
+            strokeWidth="16"
             strokeLinecap="round"
             strokeDasharray={`${dash} ${circ}`}
           />
         </svg>
-        <div className="absolute inset-x-0 bottom-2 text-3xl font-extrabold text-brand-green">
+        <div className="absolute inset-x-0 bottom-1 text-3xl font-extrabold text-brand-blue-deep">
           {value.toString().replace(".", ",")}
         </div>
       </div>
-      <div className="mt-2 flex justify-between px-2 text-xs text-muted-foreground">
+      <div className="-mt-2 flex w-[220px] justify-between px-3 text-xs text-muted-foreground">
         <span>0</span><span>5</span>
       </div>
-      <p className="mt-2 text-sm text-brand-slate">
-        The overall eco score is <span className="font-semibold text-brand-green">Excellent</span>
+      <p className="mt-3 text-sm text-brand-slate">
+        The overall eco score is <span className="font-bold text-brand-blue-deep">Excellent</span>
       </p>
     </div>
   );
 }
 
 const stats = [
-  { icon: ClipboardCheck, label: "NUMBER OF FILLED SURVEYS", value: "520", color: "text-brand-blue" },
-  { icon: Hourglass, label: "AVERAGE COMPLETION TIME", value: "10m 42s", color: "text-brand-blue-deep" },
+  { icon: ClipboardList, label: "NUMBER OF FILLED SURVEYS", value: "520", color: "text-brand-blue" },
+  { icon: Hourglass, label: "AVERAGE COMPLETION TIME", value: "10m 42s", color: "text-brand-green-soft" },
   { icon: Globe2, label: "TOP ECO PROFILE", value: "Eco Explorer", color: "text-brand-green" },
 ];
 
 export function Statistics() {
   return (
-    <section id="statistics" className="bg-section-muted py-20">
+    <section id="statistics" className="bg-section-muted py-16">
       <div className="mx-auto max-w-[1280px] px-10">
         <div className="mb-8 flex items-end justify-between">
           <h2 className="text-4xl font-extrabold text-brand-blue-deep">Explore statistics</h2>
@@ -96,10 +118,8 @@ export function Statistics() {
         </div>
         <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
           {stats.map(({ icon: Icon, label, value, color }) => (
-            <div key={label} className="flex items-center gap-4 rounded-xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
-              <div className="grid h-14 w-14 place-items-center rounded-lg bg-secondary">
-                <Icon className={`h-7 w-7 ${color}`} />
-              </div>
+            <div key={label} className="flex items-center gap-4 rounded-xl border border-border bg-card p-6">
+              <Icon className={`h-12 w-12 ${color}`} strokeWidth={1.6} />
               <div>
                 <div className="text-[11px] font-semibold tracking-wider text-muted-foreground">{label}</div>
                 <div className={`mt-1 text-lg font-bold ${color}`}>{value}</div>
