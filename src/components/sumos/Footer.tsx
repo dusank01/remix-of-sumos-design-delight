@@ -1,5 +1,6 @@
-import { Leaf, User, Building2, Mail } from "lucide-react";
+import { User, Building2, Mail } from "lucide-react";
 import euLogo from "@/assets/eu-cofunded.png";
+import sumosLogo from "@/assets/logo-2.png";
 
 export function Footer() {
   return (
@@ -21,19 +22,8 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="flex items-center justify-center gap-3">
-          <span className="grid h-14 w-14 place-items-center rounded-full bg-brand-blue-deep">
-            <Leaf className="h-6 w-6 text-brand-green-soft" />
-          </span>
-          <p className="text-[12px] font-semibold leading-[1.35] text-brand-blue-deep">
-            Strengthening the
-            <br />
-            ecosystem for
-            <br />
-            <span className="text-brand-green">sustainable</span> student
-            <br />
-            mobility
-          </p>
+        <div className="flex items-center justify-center">
+          <img src={sumosLogo} alt="Strengthening the ecosystem for sustainable student mobility" className="h-16 w-auto" />
         </div>
 
         <div className="flex items-center justify-center md:justify-end">
