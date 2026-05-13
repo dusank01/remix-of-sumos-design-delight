@@ -57,7 +57,7 @@ function FootprintChart() {
 }
 
 function EcoScore() {
-  const value = 4.7;
+  const value = 4;
   const max = 5;
   const pct = value / max;
   const circ = Math.PI * 90;
