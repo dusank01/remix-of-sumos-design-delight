@@ -106,12 +106,12 @@ function BenchmarkPage() {
 
       {/* Benchmark with a friend or yourself */}
       <section className="bg-white">
-        <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-6 pb-20 pt-10 sm:px-10 lg:px-[160px]">
-          <div className="flex flex-col gap-2">
-            <h2 className="text-[28px] font-semibold text-[#233662] md:text-[32px]">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-6 pb-20 pt-8 sm:px-10 lg:px-[160px]">
+          <div className="flex flex-col gap-4">
+            <h2 className="text-[28px] font-semibold leading-tight text-[#233662] md:text-[32px]">
               Benchmark with a friend or yourself
             </h2>
-            <p className="text-[16px] text-[#444] md:text-[18px]">
+            <p className="text-[18px] leading-snug text-[#444] md:text-[20px]">
               This option allows user to{" "}
               <span className="font-semibold">make 1 to 1 benchmark</span> with
               other respondents, using their code.
@@ -122,8 +122,8 @@ function BenchmarkPage() {
 
           <div className="flex flex-col gap-3 md:flex-row md:items-stretch">
             {/* Form card */}
-            <div className="flex w-full shrink-0 flex-col justify-between gap-8 rounded-[12px] border border-[#e5e7eb] bg-white p-6 shadow-[0_0_20px_0_rgba(94,98,120,0.08)] md:w-[280px]">
-              <div className="flex flex-col gap-5">
+            <div className="flex w-full shrink-0 flex-col items-center justify-between gap-6 rounded-[12px] bg-white px-4 py-6 shadow-[0_0_20px_0_rgba(94,98,120,0.08)] md:w-[280px]">
+              <div className="flex w-full flex-col gap-5">
                 <div className="flex flex-col gap-1">
                   <label className="px-2 text-[14px] font-semibold text-[#444]">
                     Your code
@@ -148,39 +148,42 @@ function BenchmarkPage() {
                   />
                 </div>
               </div>
-              <button className="h-10 w-full rounded-[8px] bg-[#64a550] px-6 text-[16px] font-medium text-white transition-colors hover:bg-[#5a9347]">
-                Compare
-              </button>
+              <div className="flex w-full flex-col items-center gap-1">
+                <button className="h-10 w-full rounded-[8px] bg-[#64a550] px-6 text-[16px] font-medium text-white transition-colors hover:bg-[#5a9347]">
+                  Compare
+                </button>
+                <div className="h-8 w-[138px]" />
+              </div>
             </div>
 
             {/* Ecological footprint card */}
-            <div className="flex flex-1 flex-col gap-8 rounded-[12px] bg-white p-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)]">
+            <div className="flex flex-1 flex-col gap-8 rounded-[12px] bg-white p-6 shadow-[0_0_10px_0_rgba(94,98,120,0.08)]">
               <div className="flex items-center justify-between">
-                <h3 className="text-[20px] font-semibold text-[#233662] md:text-[24px]">
+                <h3 className="text-[24px] font-semibold leading-none text-[#233662]">
                   Students ecological footprint
                 </h3>
                 <span className="grid h-6 w-6 place-items-center rounded-full border border-[#bfbfbf] text-[12px] text-[#bfbfbf]">
                   i
                 </span>
               </div>
-              <div className="flex flex-col items-center justify-around gap-6 md:flex-row">
-                <div className="flex flex-col items-center gap-3">
-                  <div className="text-center">
-                    <div className="text-[18px] font-semibold text-[#64a550] md:text-[20px]">
+              <div className="flex flex-col items-start justify-between gap-6 md:flex-row">
+                <div className="flex flex-1 flex-col items-center justify-center gap-4">
+                  <div className="flex flex-col items-center gap-1 text-center">
+                    <div className="text-[20px] font-semibold leading-none text-[#64a550]">
                       Your green score
                     </div>
-                    <div className="text-[16px] text-[#444] md:text-[18px]">
+                    <div className="text-[18px] leading-none text-[#444]">
                       Overall
                     </div>
                   </div>
                   <Gauge value={4.8} fillRatio={0.8} color="#64a550" />
                 </div>
-                <div className="flex flex-col items-center gap-3">
-                  <div className="text-center">
-                    <div className="text-[18px] font-semibold text-[#518efa] md:text-[20px]">
+                <div className="flex flex-1 flex-col items-center justify-center gap-4">
+                  <div className="flex flex-col items-center gap-1 text-center">
+                    <div className="text-[20px] font-semibold leading-none text-[#518efa]">
                       Another green score
                     </div>
-                    <div className="text-[16px] text-[#444] md:text-[18px]">
+                    <div className="text-[18px] leading-none text-[#444]">
                       Overall
                     </div>
                   </div>
@@ -190,10 +193,13 @@ function BenchmarkPage() {
             </div>
 
             {/* Radar card */}
-            <div className="flex w-full shrink-0 flex-col gap-4 rounded-[12px] bg-white p-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)] md:w-[300px]">
-              <h3 className="border-b border-[#e5e7eb] pb-3 text-[20px] font-semibold text-[#233662] md:text-[24px]">
-                Student mobility
-              </h3>
+            <div className="flex w-full shrink-0 flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)] md:w-[300px]">
+              <div className="flex w-full flex-col items-center gap-3">
+                <h3 className="w-full px-6 text-[24px] font-semibold leading-none text-[#233662]">
+                  Student mobility
+                </h3>
+                <div className="h-px w-full bg-[#e5e7eb]" />
+              </div>
               <div className="h-[230px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={radarData} outerRadius={75}>
@@ -225,14 +231,18 @@ function BenchmarkPage() {
                   </RadarChart>
                 </ResponsiveContainer>
               </div>
-              <div className="flex items-center justify-center gap-4 text-[12px]">
+              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
                 <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-sm bg-[#233662]" />
-                  <span className="text-[#444]">Me</span>
+                  <span className="h-2 w-[21px] bg-[#233662]" />
+                  <span className="text-[14px] font-semibold text-[#444]">
+                    Me
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-sm bg-[#b6d989]" />
-                  <span className="text-[#444]">My colleague</span>
+                  <span className="h-2 w-[21px] bg-[#b6d989]" />
+                  <span className="text-[14px] font-semibold text-[#444]">
+                    My colleague
+                  </span>
                 </div>
               </div>
             </div>
