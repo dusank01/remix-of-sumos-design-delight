@@ -483,7 +483,7 @@ export default function SurveyPage() {
 
                       {/* Pod-koraci (samo ako grupa ima više sub-step-ova, npr. HABITS) */}
                       {currentGroup && currentGroup.subSteps.length > 1 && (
-                        <div className="flex items-start justify-center gap-0 py-4 flex-wrap">
+                        <div className="flex items-start justify-center gap-0 py-4 flex-nowrap w-full overflow-x-auto">
                           {currentGroup.subSteps.map((sub, i) => {
                             const subStatus = getSubStatus(sub, state.answers);
                             const isCurrent = subIdx === i;
@@ -522,7 +522,7 @@ export default function SurveyPage() {
                                   </span>
                                 </button>
                                 {i < currentGroup.subSteps.length - 1 && (
-                                  <div className="mt-4 h-px w-6 bg-border" />
+                                  <div className="mt-4 h-px flex-1 min-w-[16px] bg-border" />
                                 )}
                               </div>
                             );
