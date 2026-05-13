@@ -23,7 +23,7 @@ export function Footer() {
         </div>
 
         <div className="flex items-center justify-center">
-          <img src={sumosLogo} alt="Strengthening the ecosystem for sustainable student mobility" className="h-16 w-auto" />
+          <img src={sumosLogo} alt="Strengthening the ecosystem for sustainable student mobility" className="h-[77px] w-auto" />
         </div>
 
         <div className="flex items-center justify-center md:justify-end">
