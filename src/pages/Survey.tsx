@@ -556,7 +556,7 @@ export default function SurveyPage() {
                             {progress}%
                           </span>
                           <Button
-                            className="rounded-full bg-secondary px-8 text-white hover:bg-brand-green/90"
+                            className="rounded-full bg-brand-green px-8 text-white hover:bg-brand-green/90"
                             onClick={goNext}
                           >
                             {isLastGroup && isLastSub ? "Finish" : "Next"}
@@ -638,7 +638,7 @@ export default function SurveyPage() {
                         99%
                       </span>
                       <Button
-                        className="rounded-full bg-secondary px-8 text-white hover:bg-brand-green/90"
+                        className="rounded-full bg-brand-green px-8 text-white hover:bg-brand-green/90"
                         onClick={() => handleAttemptChoice(true)}
                       >
                         Finish
@@ -781,7 +781,7 @@ export default function SurveyPage() {
                           to={card.link}
                           className="group relative rounded-lg border bg-card p-6 pt-8 transition-shadow hover:shadow-md"
                         >
-                          <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-secondary px-4 py-1 text-[10px] font-bold text-white">
+                          <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-green px-4 py-1 text-[10px] font-bold text-white">
                             {card.step}
                           </span>
                           <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
