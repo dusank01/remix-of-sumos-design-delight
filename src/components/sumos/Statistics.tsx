@@ -1,5 +1,7 @@
-import { ArrowRight, Info, ClipboardList, Hourglass } from "lucide-react";
+import { ArrowRight, Info } from "lucide-react";
 import iconGlobe from "@/assets/icon-globe.gif";
+import iconChecklistStat from "@/assets/icon-checklist-stat.svg";
+import iconTimeStat from "@/assets/icon-time-stat.svg";
 
 const bars = [
   { label: "Awareness", value: 3.5, color: "#518efa" },
@@ -100,14 +102,12 @@ function EcoScore() {
   );
 }
 
-type Stat =
-  | { kind: "lucide"; Icon: typeof ClipboardList; label: string; value: string; color: string }
-  | { kind: "img"; src: string; label: string; value: string; color: string };
+type Stat = { src: string; label: string; value: string; color: string };
 
 const stats: Stat[] = [
-  { kind: "lucide", Icon: ClipboardList, label: "Number of filled surveys", value: "520", color: "text-[#518efa]" },
-  { kind: "lucide", Icon: Hourglass, label: "Average completion time", value: "10m 42s", color: "text-[#b6d989]" },
-  { kind: "img", src: iconGlobe, label: "Top eco profile", value: "Eco Explorer", color: "text-[#64a550]" },
+  { src: iconChecklistStat, label: "Number of filled surveys", value: "520", color: "text-[#518efa]" },
+  { src: iconTimeStat, label: "Average completion time", value: "10m 42s", color: "text-[#b6d989]" },
+  { src: iconGlobe, label: "Top eco profile", value: "Eco Explorer", color: "text-[#64a550]" },
 ];
 
 export function Statistics() {
@@ -136,11 +136,7 @@ export function Statistics() {
                 key={s.label}
                 className="flex w-full items-center gap-4 rounded-lg border border-[#e5e7eb] bg-white p-6"
               >
-                {s.kind === "lucide" ? (
-                  <s.Icon className="h-14 w-14 text-[#233662]" strokeWidth={1.6} />
-                ) : (
-                  <img src={s.src} alt="" className="h-14 w-14 object-contain" />
-                )}
+                <img src={s.src} alt="" className="h-14 w-14 object-contain" />
                 <div className="flex flex-col gap-4">
                   <div className="text-[16px] font-semibold uppercase text-[#444444]">{s.label}</div>
                   <div className={`text-[24px] font-bold ${s.color}`}>{s.value}</div>
