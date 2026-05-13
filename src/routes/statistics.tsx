@@ -125,7 +125,7 @@ function GreenScore() {
         </div>
         <div className="mt-1 flex w-[212px] justify-between px-2 text-[12px] text-[#bfbfbf]">
           <span>0</span>
-          <span>600</span>
+          <span>5</span>
         </div>
       </div>
       <p className="text-center text-[16px] text-[#444444]">
