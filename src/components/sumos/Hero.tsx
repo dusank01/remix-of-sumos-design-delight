@@ -20,7 +20,7 @@ export function Hero() {
             className="h-[48px] w-[148.966px] object-contain"
           />
           <div className="flex flex-col gap-4">
-            <h1 className="font-display text-[48px] font-extrabold leading-tight text-[#233662]">
+            <h1 className="font-display text-[48px] leading-tight text-[#233662] font-bold">
               Benchmarking tool
             </h1>
             <div className="flex flex-col gap-7 items-start">
