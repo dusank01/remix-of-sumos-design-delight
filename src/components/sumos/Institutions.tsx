@@ -16,7 +16,7 @@ export function Institutions() {
   return (
     <section id="tips" className="bg-background pb-12 pt-8 md:pb-16">
       <div className="mx-auto max-w-[1440px] px-6 text-center sm:px-10 lg:px-[160px]">
-        <h2 className="mb-8 text-[28px] font-extrabold text-brand-blue-deep md:mb-10 md:text-3xl">
+        <h2 className="mb-8 text-[28px] text-brand-blue-deep md:mb-10 md:text-3xl font-bold">
           Explore Green practices by institution
         </h2>
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-5">
