@@ -1,11 +1,7 @@
 import type { Question, Submission } from "@/types/survey";
 
-// Load the API host from environment variables dynamically.
-// Fallback to an empty string so it defaults to a relative path if the env var is missing.
-const API_HOST = import.meta.env.VITE_API_HOST || "";
-
 export async function fetchQuestions(): Promise<Question[]> {
-  const response = await fetch(`${API_HOST}/api/questions`);
+  const response = await fetch(`/api/questions`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch questions");
@@ -22,7 +18,7 @@ export async function submitSurvey(submission: Submission): Promise<{
     categoryScores: Record<string, number>;
   };
 }> {
-  const response = await fetch(`${API_HOST}/api/submissions`, {
+  const response = await fetch(`/api/submissions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
