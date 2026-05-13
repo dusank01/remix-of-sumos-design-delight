@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation } from "react-router-dom";
 import navLogo from "@/assets/nav-logo.png";
 
 const links: { label: string; to: string }[] = [
