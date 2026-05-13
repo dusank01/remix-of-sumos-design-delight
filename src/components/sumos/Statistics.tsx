@@ -112,8 +112,8 @@ const stats: Stat[] = [
 
 export function Statistics() {
   return (
-    <section id="statistics" className="bg-[#f5f5f5] px-[160px] py-20">
-      <div className="mx-auto flex max-w-[1440px] flex-col gap-6">
+    <section id="statistics" className="bg-[#f5f5f5] py-20">
+      <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-[160px]">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-[40px] font-bold text-[#233662]">Explore statistics</h2>
           <a
@@ -125,16 +125,16 @@ export function Statistics() {
         </div>
 
         <div className="flex flex-col gap-10">
-          <div className="flex items-start justify-between">
+          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_360px]">
             <FootprintChart />
             <EcoScore />
           </div>
 
-          <div className="flex items-stretch justify-between">
+          <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
             {stats.map((s) => (
               <div
                 key={s.label}
-                className="flex w-[360px] items-center gap-4 rounded-lg border border-[#e5e7eb] bg-white p-6"
+                className="flex w-full items-center gap-4 rounded-lg border border-[#e5e7eb] bg-white p-6"
               >
                 {s.kind === "lucide" ? (
                   <s.Icon className="h-14 w-14 text-[#233662]" strokeWidth={1.6} />
