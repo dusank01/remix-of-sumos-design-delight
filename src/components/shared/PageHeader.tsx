@@ -10,7 +10,7 @@ export function PageHeader({ title, subtitle }: PageHeaderProps) {
     <div className="bg-background">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-6 px-6 py-10 sm:px-10 lg:px-[160px]">
         <div>
-          <h1 className="font-display text-[36px] font-extrabold leading-tight text-brand-blue-deep sm:text-[42px]">
+          <h1 className="font-display text-[36px] leading-tight text-brand-blue-deep sm:text-[42px] font-bold">
             {title}
           </h1>
           {subtitle && (
