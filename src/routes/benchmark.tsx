@@ -31,10 +31,18 @@ export const Route = createFileRoute("/benchmark")({
 });
 
 const radarData = [
-  { axis: "Sustainable arrival", me: 2.5, mate: 4 },
-  { axis: "Digital habits", me: 2.5, mate: 4 },
-  { axis: "Food and consumption", me: 3, mate: 4 },
-  { axis: "Living and accommodation", me: 4, mate: 3 },
+  { axis: "Awareness", me: 3.5, mate: 4 },
+  { axis: "Attitudes", me: 3, mate: 4.2 },
+  { axis: "Habits", me: 2.8, mate: 3.6 },
+  { axis: "Barriers", me: 4, mate: 3 },
+];
+
+const barriersRadarData = [
+  { axis: "Travel", me: 3.2, mate: 4 },
+  { axis: "Living and accommodation", me: 2.8, mate: 3.5 },
+  { axis: "Buying and consumption", me: 3.5, mate: 4.1 },
+  { axis: "Digital habits", me: 2.5, mate: 3 },
+  { axis: "Community engagement", me: 4, mate: 3.4 },
 ];
 
 function Gauge({
