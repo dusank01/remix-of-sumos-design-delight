@@ -57,8 +57,8 @@ export function GaugeChart({ value, maxValue = 5, size = 140, label, sublabel }:
           style={{ paddingBottom: size * 0.04 }}
         >
           <span
-            className="font-bold text-foreground"
-            style={{ fontSize: size * 0.28 }}
+            className="font-bold text-brand-blue-deep"
+            style={{ fontSize: size * 0.19 }}
           >
             {value.toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).replace(".", ",")}
           </span>
