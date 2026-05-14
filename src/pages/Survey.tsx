@@ -432,8 +432,8 @@ export default function SurveyPage() {
         subtitle="Students' Green Awareness and Sustainable Habits"
       />
 
-      <div className={cn("w-full", currentStep === 2 ? "py-8" : "px-4 py-8")}>
-        <div className={cn("relative mx-auto w-full", currentStep === 2 ? "max-w-[1120px]" : "max-w-3xl")}>
+      <div className={cn("w-full", currentStep === 2 ? "py-0" : "px-4 py-8")}>
+        <div className={cn("relative w-full", currentStep === 2 ? "" : "mx-auto max-w-3xl")}>
           
           {/* Left Sidebar (Question Navigator) - absolute so it doesn't shift centered content */}
           {hasConsented && currentStep === 0 && !showBeforeFinish && (
