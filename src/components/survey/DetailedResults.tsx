@@ -64,7 +64,7 @@ export function DetailedResults() {
     <div className="space-y-0">
       {/* Eco profile band */}
       <section className="bg-background">
-        <div className="mx-auto max-w-[1120px] px-6 pb-12 pt-8 sm:px-10">
+        <div className="mx-auto max-w-[1440px] px-6 pb-12 pt-8 sm:px-10 lg:px-[160px]">
           <div className="flex flex-col items-center gap-10 lg:flex-row lg:items-stretch lg:gap-[60px]">
             {/* Profile card */}
             <div className="flex flex-col items-center gap-3">
@@ -125,7 +125,7 @@ export function DetailedResults() {
 
       {/* What should you do next? */}
       <section className="bg-[#f5f5f5]">
-        <div className="mx-auto max-w-[1120px] px-6 pb-20 pt-8 sm:px-10">
+        <div className="mx-auto max-w-[1440px] px-6 pb-20 pt-8 sm:px-10 lg:px-[160px]">
           <h2 className="mb-8 text-[32px] font-bold text-brand-blue-deep sm:text-[40px]">
             What should you do next?
           </h2>
@@ -207,12 +207,12 @@ export function DetailedResults() {
 
       {/* Next steps */}
       <section className="bg-background">
-        <div className="mx-auto max-w-[1120px] px-6 pt-8 sm:px-10">
+        <div className="mx-auto max-w-[1440px] px-6 pt-8 sm:px-10 lg:px-[160px]">
           <h2 className="text-[32px] font-bold text-brand-blue-deep sm:text-[40px]">
             Next steps...
           </h2>
         </div>
-        <div className="mx-auto max-w-[1120px] px-6 pb-20 pt-12 sm:px-10">
+        <div className="mx-auto max-w-[1440px] px-6 pb-20 pt-12 sm:px-10 lg:px-[160px]">
           <Link
             to="/benchmark"
             className="group relative block rounded-lg border border-brand-green bg-card px-6 py-4 transition-shadow hover:shadow-[0_0_20px_rgba(94,98,120,0.12)]"
