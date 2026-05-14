@@ -1,21 +1,54 @@
 import { useSurvey } from "@/contexts/SurveyContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, BarChart3 } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
 import ecoGlobe from "@/assets/icon-globe.gif";
 
 const fmt = (n: number) =>
   n.toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).replace(".", ",");
 
-function CategoryGauge({ name, value }: { name: string; value: number }) {
+function CategoryGauge({
+  name,
+  value,
+  size = "lg",
+}: {
+  name: string;
+  value: number;
+  size?: "lg" | "sm";
+}) {
   const max = 5;
   const pct = Math.min(value / max, 1);
   const r = 90;
   const circ = Math.PI * r;
   const dash = circ * pct;
-  
+
   const color =
     pct >= 0.6 ? "#64a550" : pct >= 0.4 ? "#518efa" : pct >= 0.25 ? "#f0a500" : "#e85d3a";
+
+  if (size === "sm") {
+    return (
+      <div className="flex h-[200px] w-[200px] shrink-0 flex-col items-center justify-between rounded-[12px] bg-white px-3 pb-4 pt-5 shadow-[0_0_20px_rgba(94,98,120,0.08)] font-sans">
+        <h3 className="text-center text-[14px] font-semibold leading-tight text-sumos-blue-300">
+          {name}
+        </h3>
+        <div className="flex flex-col items-center">
+          <div className="relative h-[80px] w-[150px]">
+            <svg viewBox="0 0 212 110" className="h-full w-full">
+              <path d="M16,106 A90,90 0 0 1 196,106" fill="none" stroke="#E5E7EB" strokeWidth="22" />
+              <path d="M16,106 A90,90 0 0 1 196,106" fill="none" stroke={color} strokeWidth="22" strokeDasharray={`${dash} ${circ}`} />
+            </svg>
+            <div className="absolute inset-x-0 bottom-0 text-center text-[28px] font-bold leading-none text-sumos-blue-300">
+              {fmt(value)}
+            </div>
+          </div>
+          <div className="mt-1 flex w-[150px] justify-between px-2 text-[10px] text-sumos-gray-200">
+            <span>0</span>
+            <span>5</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-[288px] w-[360px] shrink-0 flex-col items-center justify-between rounded-[12px] bg-white px-6 pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)] font-sans">
@@ -44,9 +77,8 @@ function CategoryGauge({ name, value }: { name: string; value: number }) {
 
 export function DetailedResults() {
   const { state } = useSurvey();
-  
-  // TypeScript sada prepoznaje 'results' kao objekat koji sadrži 'scores' i 'feedback'
-  const results = state.results; 
+
+  const results = state.results;
   const scores = results?.scores;
   const feedback = results?.feedback;
 
@@ -54,21 +86,40 @@ export function DetailedResults() {
   const badgeName = feedback?.badge ?? "Eco Explorer";
   const overallMessage = feedback?.message ?? "";
 
-  const categoryConfig = [
-    { key: "Awareness", label: "Awareness" },
-    { key: "Attitudes", label: "Attitudes" },
-    { key: "Travel", label: "Travel habits" },
-    { key: "Living", label: "Living and accommodation" },
-    { key: "Consumption", label: "Buying and consumption" },
-    { key: "Digital", label: "Digital habits" },
-    { key: "Engagement", label: "Community engagement" },
+  const cs = scores?.categoryScores ?? {};
+  const sg = feedback?.suggestions ?? {};
+
+  const habitKeys = ["Travel", "Living", "Consumption", "Digital", "Engagement"] as const;
+  const habitValues = habitKeys.map((k) => cs[k] ?? 0);
+  const habitsAvg = habitValues.length
+    ? habitValues.reduce((a, b) => a + b, 0) / habitValues.length
+    : 0;
+
+  const toBullets = (s: string) =>
+    s
+      ? s
+          .split(/\r?\n|•|·|;|(?<=\.)\s+(?=[A-Z])/)
+          .map((x) => x.trim())
+          .filter(Boolean)
+      : [];
+
+  const mainCategories = [
+    { name: "Awareness", value: cs["Awareness"] ?? 0, bullets: toBullets(sg["Awareness"] ?? "") },
+    { name: "Attitudes", value: cs["Attitudes"] ?? 0, bullets: toBullets(sg["Attitudes"] ?? "") },
+    {
+      name: "Habits",
+      value: habitsAvg,
+      bullets: habitKeys.flatMap((k) => toBullets(sg[k] ?? "")).slice(0, 6),
+    },
   ];
 
-  const allCategories = categoryConfig.map(cfg => ({
-    name: cfg.label,
-    value: scores?.categoryScores?.[cfg.key] ?? 0,
-    suggestion: feedback?.suggestions?.[cfg.key] ?? ""
-  }));
+  const subHabits = [
+    { name: "Travel", value: cs["Travel"] ?? 0 },
+    { name: "Living and accommodation", value: cs["Living"] ?? 0 },
+    { name: "Buying and consumption", value: cs["Consumption"] ?? 0 },
+    { name: "Digital habits", value: cs["Digital"] ?? 0 },
+    { name: "Community engagement", value: cs["Engagement"] ?? 0 },
+  ];
 
   return (
     <div className="space-y-0 font-sans">
@@ -98,7 +149,7 @@ export function DetailedResults() {
               </div>
               <div className="flex justify-end">
                 <Link to="/benchmark" className="inline-flex items-center gap-1 rounded-lg px-6 py-3 text-base font-medium text-sumos-blue-100 hover:underline">
-                  View benchmark <ArrowRight className="h-5 w-5" />
+                  View suggestions <ArrowRight className="h-5 w-5" />
                 </Link>
               </div>
             </div>
@@ -111,15 +162,35 @@ export function DetailedResults() {
           <h2 className="mb-8 text-[32px] font-bold text-sumos-blue-300 sm:text-[40px]">What should you do next?</h2>
           <div className="h-px w-full bg-sumos-gray-100" />
           <div className="mt-10 space-y-12">
-            {allCategories.map((cat) => (
+            {mainCategories.map((cat) => (
               <div key={cat.name} className="flex w-full flex-col items-center gap-10 md:flex-row md:items-center">
                 <CategoryGauge name={cat.name} value={cat.value} />
                 <div className="flex-1 space-y-4 py-6">
                   <h4 className="text-2xl font-semibold text-sumos-blue-300">Suggestion</h4>
-                  <p className="text-base text-sumos-blue-200 leading-relaxed">{cat.suggestion}</p>
+                  {cat.bullets.length > 0 ? (
+                    <ul className="list-disc space-y-1 pl-6 text-base leading-relaxed text-sumos-blue-200">
+                      {cat.bullets.map((b, i) => (
+                        <li key={i}>{b}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-base leading-relaxed text-sumos-blue-200">—</p>
+                  )}
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="mt-12 flex flex-wrap justify-center gap-6">
+            {subHabits.map((cat) => (
+              <CategoryGauge key={cat.name} name={cat.name} value={cat.value} size="sm" />
+            ))}
+          </div>
+
+          <div className="mt-12 flex justify-center">
+            <Button className="bg-sumos-green-300 hover:bg-sumos-green-300/90 text-white px-8 py-6 text-base font-medium rounded-lg gap-2">
+              Send via email <Mail className="h-5 w-5" />
+            </Button>
           </div>
         </div>
       </section>
