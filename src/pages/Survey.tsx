@@ -422,7 +422,7 @@ export default function SurveyPage() {
 
   const headerTitle =
     currentStep === 2
-      ? "Export data & Download results"
+      ? "View detailed result"
       : "Complete the Survey";
 
   return (
