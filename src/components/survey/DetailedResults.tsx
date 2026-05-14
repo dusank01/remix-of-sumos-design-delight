@@ -29,33 +29,45 @@ export function DetailedResults() {
   const fmt = (n: number) =>
     n.toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
-  const mainCategories: { name: MainCategory; value: number }[] = [
+  const allCategories: { name: string; value: number }[] = [
     { name: "Awareness", value: pick("Awareness", local.categories.Awareness) },
     { name: "Attitudes", value: pick("Attitudes", local.categories.Attitudes) },
-    { name: "Habits", value: pick("Habits", local.categories.Habits) },
-  ];
-
-  const habitSubs: { name: HabitSubcategory; value: number }[] = [
-    { name: "Travel", value: pickSub("Travel") },
+    { name: "Travel habits", value: pickSub("Travel") },
     { name: "Living and accommodation", value: pickSub("Living and accommodation") },
     { name: "Buying and consumption", value: pickSub("Buying and consumption") },
     { name: "Digital habits", value: pickSub("Digital habits") },
     { name: "Community engagement", value: pickSub("Community engagement") },
   ];
 
+  const SUGGESTION_KEY: Record<string, string> = {
+    "Travel habits": "Travel",
+    "Living and accommodation": "Living & accommodation",
+    "Buying and consumption": "Buying & consumption",
+    "Digital habits": "Digital habits",
+    "Community engagement": "Community engagement",
+  };
+
+  const GENERIC_TIPS: Record<string, string[]> = {
+    Awareness: [
+      "Considering low-emission transport options",
+      "Familiarity with green travel incentives",
+      "Learning about sustainable travel options",
+      "Reading about climate and sustainability topics",
+    ],
+    Attitudes: [
+      "Reflecting on personal environmental values",
+      "Discussing sustainability with peers",
+      "Supporting eco-friendly initiatives",
+      "Prioritizing long-term environmental impact",
+    ],
+  };
+
   const suggestionFor = (cat: string): string[] => {
+    if (GENERIC_TIPS[cat]) return GENERIC_TIPS[cat].slice(0, 4);
+    const key = SUGGESTION_KEY[cat];
     const pool: string[] = [];
-    if (cat === "Habits") {
-      Object.values(suggestions).forEach((arr) =>
-        arr.forEach((s) => s.tips.forEach((t) => pool.push(t))),
-      );
-    } else {
-      pool.push(
-        "Considering low-emission transport options",
-        "Familiarity with green travel incentives",
-        "Familiarity with green travel incentives",
-        "Learning about sustainable travel options",
-      );
+    if (key && suggestions[key]) {
+      suggestions[key].forEach((s) => s.tips.forEach((t) => pool.push(t)));
     }
     return pool.slice(0, 4);
   };
@@ -132,21 +144,20 @@ export function DetailedResults() {
 
           <div className="h-px w-full bg-[#e5e7eb]" />
 
-          {/* Main 3 categories */}
+          {/* All categories — same large format with suggestions */}
           <div className="mt-10 space-y-12">
-            {mainCategories.map((cat) => {
-              const value = cat.value;
+            {allCategories.map((cat) => {
               const tips = suggestionFor(cat.name);
               return (
                 <div
                   key={cat.name}
                   className="flex w-full flex-col items-center gap-10 md:flex-row md:items-center md:gap-10"
                 >
-                  <div className="flex h-[280px] w-[320px] shrink-0 flex-col items-center justify-between rounded-xl border border-[#e5e7eb] bg-card pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
-                    <p className="text-2xl font-semibold text-brand-blue-deep">
+                  <div className="flex h-[280px] w-[320px] shrink-0 flex-col items-center justify-between rounded-xl border border-[#e5e7eb] bg-card px-4 pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
+                    <p className="text-center text-2xl font-semibold text-brand-blue-deep">
                       {cat.name}
                     </p>
-                    <GaugeChart value={value} size={210} />
+                    <GaugeChart value={cat.value} size={210} />
                   </div>
                   <div className="flex-1 space-y-4 py-6">
                     <h4 className="text-2xl font-semibold text-brand-blue-deep">
@@ -164,36 +175,6 @@ export function DetailedResults() {
                 </div>
               );
             })}
-          </div>
-
-          {/* Habit subcategory grid (3 + 2) */}
-          <div className="mt-12 flex flex-col items-center gap-6">
-            <div className="flex flex-wrap justify-center gap-6">
-              {habitSubs.slice(0, 3).map((sub) => (
-                <div
-                  key={sub.name}
-                  className="flex h-[240px] w-[280px] flex-col items-center justify-between rounded-xl border border-[#e5e7eb] bg-card py-6 shadow-[0_0_17px_rgba(94,98,120,0.08)]"
-                >
-                  <p className="px-4 text-center text-lg font-semibold text-brand-blue-deep">
-                    {sub.name}
-                  </p>
-                  <GaugeChart value={sub.value} size={180} />
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-wrap justify-center gap-6">
-              {habitSubs.slice(3).map((sub) => (
-                <div
-                  key={sub.name}
-                  className="flex h-[240px] w-[280px] flex-col items-center justify-between rounded-xl border border-[#e5e7eb] bg-card py-6 shadow-[0_0_17px_rgba(94,98,120,0.08)]"
-                >
-                  <p className="px-4 text-center text-lg font-semibold text-brand-blue-deep">
-                    {sub.name}
-                  </p>
-                  <GaugeChart value={sub.value} size={180} />
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Send via email */}
