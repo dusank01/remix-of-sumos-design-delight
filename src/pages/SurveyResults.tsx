@@ -2,47 +2,46 @@ import { Layout } from "@/components/layout/Layout";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { GaugeChart } from "@/components/shared/GaugeChart";
 import { useSurvey } from "@/contexts/SurveyContext";
+import { getBadge, suggestions } from "@/data/mockData";
 import {
-  surveyQuestions,
-  getBadge,
-  suggestions,
-  type SurveyQuestion,
-} from "@/data/mockData";
+  computeScores,
+  BACKEND_CATEGORY_KEY,
+  BACKEND_SUBCATEGORY_KEY,
+  type HabitSubcategory,
+  type MainCategory,
+} from "@/lib/scoring";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Globe2, BarChart3 } from "lucide-react";
 
 export default function SurveyResults() {
-  const { state, getScore } = useSurvey();
-  const score = getScore();
-  const badge = getBadge(score);
+  const { state, questions } = useSurvey();
 
-  const avg = (qs: SurveyQuestion[]) =>
-    qs.length > 0
-      ? Number(
-          (
-            qs
-              .map((q: SurveyQuestion) => Number(state.answers[q.id]) || 0)
-              .reduce((a: number, b: number) => a + b, 0) / qs.length
-          ).toFixed(1),
-        )
-      : 0;
+  const local = computeScores(state.answers, questions);
+  const backendCats = state.results?.categoryScores ?? {};
+  const pick = (mainKey: MainCategory, localValue: number) =>
+    backendCats[BACKEND_CATEGORY_KEY[mainKey]] ?? localValue;
+  const pickSub = (subKey: HabitSubcategory) =>
+    backendCats[BACKEND_SUBCATEGORY_KEY[subKey]] ?? local.subcategories[subKey];
+
+  const score = state.results?.overallScore ?? local.overall;
+  const badge = getBadge(score);
 
   const fmt = (n: number) =>
     n.toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
-  const mainCategories = [
-    { name: "Awareness", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Awareness") },
-    { name: "Attitudes", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Attitudes") },
-    { name: "Habits", questions: surveyQuestions.filter((q: SurveyQuestion) => q.category === "Habits") },
+  const mainCategories: { name: MainCategory; value: number }[] = [
+    { name: "Awareness", value: pick("Awareness", local.categories.Awareness) },
+    { name: "Attitudes", value: pick("Attitudes", local.categories.Attitudes) },
+    { name: "Habits", value: pick("Habits", local.categories.Habits) },
   ];
 
-  const habitSubs = [
-    { name: "Travel", questions: surveyQuestions.filter((q: SurveyQuestion) => q.subcategory === "Travel") },
-    { name: "Living and accommodation", questions: surveyQuestions.filter((q: SurveyQuestion) => q.subcategory === "Living & accommodation") },
-    { name: "Buying and consumption", questions: surveyQuestions.filter((q: SurveyQuestion) => q.subcategory === "Buying & consumption") },
-    { name: "Digital habits", questions: surveyQuestions.filter((q: SurveyQuestion) => q.subcategory === "Digital habits") },
-    { name: "Community engagement", questions: surveyQuestions.filter((q: SurveyQuestion) => q.subcategory === "Community engagement") },
+  const habitSubs: { name: HabitSubcategory; value: number }[] = [
+    { name: "Travel", value: pickSub("Travel") },
+    { name: "Living and accommodation", value: pickSub("Living and accommodation") },
+    { name: "Buying and consumption", value: pickSub("Buying and consumption") },
+    { name: "Digital habits", value: pickSub("Digital habits") },
+    { name: "Community engagement", value: pickSub("Community engagement") },
   ];
 
   const suggestionFor = (cat: string): string[] => {
@@ -137,7 +136,7 @@ export default function SurveyResults() {
           {/* Main 3 categories */}
           <div className="mt-10 space-y-12">
             {mainCategories.map((cat) => {
-              const value = avg(cat.questions);
+              const value = cat.value;
               const tips = suggestionFor(cat.name);
               return (
                 <div
@@ -172,7 +171,7 @@ export default function SurveyResults() {
           <div className="mt-12 flex flex-col items-center gap-6">
             <div className="flex flex-wrap justify-center gap-6">
               {habitSubs.slice(0, 3).map((sub) => {
-                const value = avg(sub.questions);
+                const value = sub.value;
                 return (
                   <div
                     key={sub.name}
@@ -188,7 +187,7 @@ export default function SurveyResults() {
             </div>
             <div className="flex flex-wrap justify-center gap-6">
               {habitSubs.slice(3).map((sub) => {
-                const value = avg(sub.questions);
+                const value = sub.value;
                 return (
                   <div
                     key={sub.name}
