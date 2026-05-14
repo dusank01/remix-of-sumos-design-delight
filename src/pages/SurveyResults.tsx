@@ -228,25 +228,22 @@ export default function SurveyResults() {
         <div className="mx-auto max-w-[1120px] px-6 pb-20 pt-12 sm:px-10">
           <Link
             to="/benchmark"
-            className="group relative block rounded-xl border border-brand-green bg-card px-6 py-6 transition-shadow hover:shadow-[0_0_20px_rgba(94,98,120,0.12)]"
+            className="group relative block rounded-lg border border-brand-green bg-card px-6 py-4 transition-shadow hover:shadow-[0_0_20px_rgba(94,98,120,0.12)]"
           >
             <span className="absolute -top-3 left-[244px] rounded-md bg-brand-green px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white">
               Step 02
             </span>
-            <div className="flex items-start gap-4">
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg bg-brand-blue/10">
-                <BarChart3 className="h-10 w-10 text-brand-blue" />
+            <div className="flex flex-col gap-3">
+              <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-brand-green/10">
+                <BarChart3 className="h-10 w-10 text-brand-green" />
               </div>
-              <div className="flex-1">
-                <h3 className="mb-2 text-[22px] font-bold text-brand-green">
-                  Launch benchmark
-                </h3>
-                <p className="text-base text-[#444444]">
-                  Compare your results with others based on gender, country,
-                  mobility participation, etc.
-                </p>
-              </div>
-              <ArrowRight className="mt-2 h-5 w-5 text-brand-blue-deep transition-transform group-hover:translate-x-1" />
+              <h3 className="text-[22px] font-bold text-brand-green">
+                Launch benchmark
+              </h3>
+              <p className="text-base text-[#444444]">
+                Compare your results with others based on gender, country,
+                mobility participation, etc.
+              </p>
             </div>
           </Link>
         </div>
