@@ -1,4 +1,4 @@
-
+import { useState, useMemo } from "react";
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -11,22 +11,31 @@ import { Navigation } from "@/components/sumos/Navigation";
 import { Footer } from "@/components/sumos/Footer";
 import sumosWordmark from "@/assets/sumos-wordmark.png";
 
+// --- Tipovi za API ---
+interface CategoryScores {
+  Awareness: number;
+  Attitudes: number;
+  Travel: number;
+  Living: number;
+  Consumption: number;
+  Digital: number;
+  Engagement: number;
+  Barriers: number;
+  Habits: number;
+  [key: string]: number;
+}
 
-const radarData = [
-  { axis: "Awareness", me: 3.5, mate: 4 },
-  { axis: "Attitudes", me: 3, mate: 4.2 },
-  { axis: "Habits", me: 2.8, mate: 3.6 },
-  { axis: "Barriers", me: 4, mate: 3 },
-];
+interface UserData {
+  ecoScore: number;
+  categoryScores: CategoryScores;
+}
 
-const barriersRadarData = [
-  { axis: "Travel", me: 3.2, mate: 4 },
-  { axis: "Living and accommodation", me: 2.8, mate: 3.5 },
-  { axis: "Buying and consumption", me: 3.5, mate: 4.1 },
-  { axis: "Digital habits", me: 2.5, mate: 3 },
-  { axis: "Community engagement", me: 4, mate: 3.4 },
-];
+interface BenchmarkResponse {
+  myData: UserData;
+  otherData: UserData;
+}
 
+// --- Gauge Komponenta (1 decimala, evropski format) ---
 function Gauge({
   value,
   max = 5,
@@ -38,16 +47,12 @@ function Gauge({
   color: string;
   trackColor?: string;
 }) {
-  // Half-donut geometry matching the provided SVG (212x210 viewBox).
-  // Outer radius 105.849, inner radius ~76.21 (stroke width ~29.64), centered at (105.849, 105.849).
   const cx = 105.849;
   const cy = 105.849;
   const rOuter = 105.849;
   const rInner = 76.211;
   const ratio = Math.max(0, Math.min(1, value / max));
 
-  // Build a half-donut arc path from angle 180° (left) sweeping clockwise by `ratio * 180°`.
-  // Angles measured from +x axis; top half uses negative y in SVG (y grows downward, so we use sin with negation).
   const polar = (r: number, deg: number) => {
     const rad = (deg * Math.PI) / 180;
     return { x: cx + r * Math.cos(rad), y: cy - r * Math.sin(rad) };
@@ -71,244 +76,207 @@ function Gauge({
 
   return (
     <div className="relative h-[130px] w-[212px]">
-      <svg
-        viewBox="0 0 212 106"
-        width="212"
-        height="106"
-        preserveAspectRatio="xMidYMin meet"
-        className="absolute left-0 top-0 block"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+      <svg viewBox="0 0 212 106" width="212" height="106" className="absolute left-0 top-0 block">
         <path d={arcPath(180)} fill={trackColor} />
         <path d={arcPath(ratio * 180)} fill={color} />
       </svg>
-      {/* Value centered in the arc opening */}
       <div className="absolute left-0 right-0 top-[58px] text-center font-bold text-[40px] leading-none text-[#233662]">
-        {value.toString().replace(".", ",")}
+        {value.toFixed(1).replace(".", ",")}
       </div>
-      {/* 0 / max labels just below arc endpoints */}
-      <div className="absolute left-[2px] top-[112px] px-[10px] text-[12px] leading-none text-[#bfbfbf]">
-        0
-      </div>
-      <div className="absolute right-[2px] top-[112px] px-[10px] text-[12px] leading-none text-[#bfbfbf]">
-        {max}
-      </div>
+      <div className="absolute left-[2px] top-[112px] px-[10px] text-[12px] leading-none text-[#bfbfbf]">0</div>
+      <div className="absolute right-[2px] top-[112px] px-[10px] text-[12px] leading-none text-[#bfbfbf]">{max}</div>
     </div>
   );
 }
 
 function BenchmarkPage() {
+  const [myCode, setMyCode] = useState("");
+  const [otherCode, setOtherCode] = useState("");
+  const [data, setData] = useState<BenchmarkResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const API_HOST = import.meta.env.VITE_API_HOST || "";
+
+  const handleCompare = async () => {
+    if (!myCode || !otherCode) return;
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_HOST}/api/benchmark/compare`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          myBenchmarkCode: myCode,
+          otherBenchmarkCode: otherCode,
+        }),
+      });
+      const result = await response.json();
+      setData(result);
+    } catch (error) {
+      console.error("Benchmark error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // --- Priprema podataka za Radare (Prazni ako nema podataka) ---
+  const radarData = useMemo(() => {
+    const categories = ["Awareness", "Attitudes", "Habits", "Barriers"];
+    return categories.map((cat) => ({
+      axis: cat,
+      me: data ? data.myData.categoryScores[cat] || 0 : 0,
+      mate: data ? data.otherData.categoryScores[cat] || 0 : 0,
+    }));
+  }, [data]);
+
+  const habitsRadarData = useMemo(() => {
+    const subCats = [
+      { key: "Travel", label: "Travel" },
+      { key: "Living", label: "Living and accommodation" },
+      { key: "Consumption", label: "Buying and consumption" },
+      { key: "Digital", label: "Digital habits" },
+      { key: "Engagement", label: "Community engagement" },
+    ];
+    return subCats.map((sub) => ({
+      axis: sub.label,
+      me: data ? data.myData.categoryScores[sub.key] || 0 : 0,
+      mate: data ? data.otherData.categoryScores[sub.key] || 0 : 0,
+    }));
+  }, [data]);
+
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background font-sans">
       <Navigation />
 
-      {/* Page title band */}
       <section className="border-b border-[#bfbfbf] bg-white">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-10 sm:px-10 lg:px-[160px]">
-          <h1 className="text-[40px] font-bold leading-tight text-[#233662] md:text-[48px]">
-            Benchmark
-          </h1>
-          <img
-            src={sumosWordmark}
-            alt="SuMoS"
-            className="hidden h-12 w-auto md:block"
-          />
+          <h1 className="text-[40px] font-bold text-[#233662] md:text-[48px]">Benchmark</h1>
+          <img src={sumosWordmark} alt="SuMoS" className="hidden h-12 w-auto md:block" />
         </div>
       </section>
 
-      {/* Benchmark with a friend or yourself */}
       <section className="bg-white">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-6 pb-20 pt-8 sm:px-10 lg:px-[160px]">
           <div className="flex flex-col gap-4">
-            <h2 className="text-[28px] font-semibold leading-tight text-[#233662] md:text-[32px]">
-              Benchmark with a friend or yourself
-            </h2>
-            <p className="text-[18px] leading-snug text-[#444] md:text-[20px]">
-              This option allows user to{" "}
-              <span className="font-semibold">make 1 to 1 benchmark</span> with
-              other respondents, using their code.
+            <h2 className="text-[28px] font-semibold text-[#233662] md:text-[32px]">Benchmark with a friend or yourself</h2>
+            <p className="text-[18px] text-[#444] md:text-[20px]">
+              This option allows user to <span className="font-semibold">make 1 to 1 benchmark</span> with other respondents.
             </p>
           </div>
 
           <div className="h-px w-full bg-[#e5e7eb]" />
 
-          <div className="flex flex-col gap-3 xl:flex-row xl:items-stretch">
+          {/* PRVI RED: Polja za kodove i Gauges */}
+          <div className="flex flex-col gap-6 xl:flex-row xl:items-stretch">
             {/* Form card */}
-            <div className="flex w-full shrink-0 flex-col items-center justify-between gap-6 rounded-[12px] bg-white px-4 py-6 shadow-[0_0_20px_0_rgba(94,98,120,0.08)] xl:w-[280px]">
-              <div className="flex w-full flex-col gap-5">
+            <div className="flex w-full shrink-0 flex-col justify-between gap-6 rounded-[12px] bg-white px-4 py-6 shadow-[0_0_20px_0_rgba(94,98,120,0.08)] xl:w-[280px]">
+              <div className="flex flex-col gap-5">
                 <div className="flex flex-col gap-1">
-                  <label className="px-2 text-[14px] font-semibold text-[#444]">
-                    Your code
-                  </label>
+                  <label className="px-2 text-[14px] font-semibold text-[#444]">Your code</label>
                   <input
                     type="text"
+                    value={myCode}
+                    onChange={(e) => setMyCode(e.target.value)}
                     placeholder="Enter your code"
-                    className="h-10 w-full rounded-[4px] border border-[#bfbfbf] bg-white px-3 text-[16px] text-[#444] placeholder:text-[#bfbfbf] focus:border-[#518efa] focus:outline-none"
+                    className="h-10 w-full rounded-[4px] border border-[#bfbfbf] bg-white px-3 text-[16px] focus:border-[#518efa] focus:outline-none"
                   />
-                  <button className="self-end pt-1 text-[12px] font-semibold text-[#518efa]">
-                    Forgot your code?
-                  </button>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="px-2 text-[14px] font-semibold text-[#444]">
-                    Another code
-                  </label>
+                  <label className="px-2 text-[14px] font-semibold text-[#444]">Another code</label>
                   <input
                     type="text"
+                    value={otherCode}
+                    onChange={(e) => setOtherCode(e.target.value)}
                     placeholder="Enter another code"
-                    className="h-10 w-full rounded-[4px] border border-[#bfbfbf] bg-white px-3 text-[16px] text-[#444] placeholder:text-[#bfbfbf] focus:border-[#518efa] focus:outline-none"
+                    className="h-10 w-full rounded-[4px] border border-[#bfbfbf] bg-white px-3 text-[16px] focus:border-[#518efa] focus:outline-none"
                   />
                 </div>
               </div>
-              <div className="flex w-full flex-col items-center gap-1">
-                <button className="h-10 w-full rounded-[8px] bg-[#64a550] px-6 text-[16px] font-medium text-white transition-colors hover:bg-[#5a9347]">
-                  Compare
-                </button>
-                <div className="h-8 w-[138px]" />
-              </div>
+              <button
+                onClick={handleCompare}
+                disabled={loading}
+                className="h-10 w-full rounded-[8px] bg-[#64a550] text-[16px] font-medium text-white transition-colors hover:bg-[#5a9347] disabled:opacity-50"
+              >
+                {loading ? "Comparing..." : "Compare"}
+              </button>
             </div>
 
             {/* Ecological footprint card */}
             <div className="flex flex-1 flex-col gap-8 rounded-[12px] bg-white p-6 shadow-[0_0_10px_0_rgba(94,98,120,0.08)]">
               <div className="flex items-center justify-between">
-                <h3 className="text-[24px] font-semibold leading-none text-[#233662]">
-                  Students ecological footprint
-                </h3>
-                <span className="grid h-6 w-6 place-items-center rounded-full border border-[#bfbfbf] text-[12px] text-[#bfbfbf]">
-                  i
-                </span>
+                <h3 className="text-[24px] font-semibold text-[#233662]">Students ecological footprint</h3>
+                <span className="grid h-6 w-6 place-items-center rounded-full border border-[#bfbfbf] text-[12px] text-[#bfbfbf]">i</span>
               </div>
-              <div className="flex flex-col items-start justify-between gap-6 md:flex-row">
-                <div className="flex flex-1 flex-col items-center justify-center gap-4">
-                  <div className="flex flex-col items-center gap-1 text-center">
-                    <div className="text-[20px] font-semibold leading-none text-[#64a550]">
-                      Your green score
-                    </div>
-                    <div className="text-[18px] leading-none text-[#444]">
-                      Overall
-                    </div>
+              <div className="flex flex-col items-center justify-around gap-6 md:flex-row">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="text-center">
+                    <div className="text-[20px] font-semibold text-[#64a550]">Your green score</div>
+                    <div className="text-[18px] text-[#444]">Overall</div>
                   </div>
-                  <Gauge value={3} max={5} color="#64A550" />
+                  <Gauge value={data?.myData.ecoScore || 0} color="#64A550" />
                 </div>
-                <div className="flex flex-1 flex-col items-center justify-center gap-4">
-                  <div className="flex flex-col items-center gap-1 text-center">
-                    <div className="text-[20px] font-semibold leading-none text-[#518efa]">
-                      Another green score
-                    </div>
-                    <div className="text-[18px] leading-none text-[#444]">
-                      Overall
-                    </div>
+                <div className="flex flex-col items-center gap-4">
+                  <div className="text-center">
+                    <div className="text-[20px] font-semibold text-[#518efa]">Another green score</div>
+                    <div className="text-[18px] text-[#444]">Overall</div>
                   </div>
-                  <Gauge value={3.6} max={5} color="#518EFA" />
-                </div>
-              </div>
-            </div>
-
-            {/* Radar card */}
-            <div className="flex w-full shrink-0 flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)] xl:w-[300px]">
-              <div className="flex w-full flex-col items-center gap-3">
-                <h3 className="w-full px-6 text-[24px] font-semibold leading-none text-[#233662]">
-                  Survey results
-                </h3>
-                <div className="h-px w-full bg-[#e5e7eb]" />
-              </div>
-              <div className="h-[230px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart data={radarData} outerRadius={75}>
-                    <PolarGrid stroke="#bfbfbf" />
-                    <PolarAngleAxis
-                      dataKey="axis"
-                      tick={{ fill: "#444", fontSize: 9 }}
-                    />
-                    <PolarRadiusAxis
-                      angle={90}
-                      domain={[0, 5]}
-                      tick={{ fill: "#bfbfbf", fontSize: 8 }}
-                      stroke="transparent"
-                    />
-                    <Radar
-                      name="My colleague"
-                      dataKey="mate"
-                      stroke="#b6d989"
-                      fill="#b6d989"
-                      fillOpacity={0.55}
-                    />
-                    <Radar
-                      name="Me"
-                      dataKey="me"
-                      stroke="#233662"
-                      fill="#233662"
-                      fillOpacity={0.35}
-                    />
-                  </RadarChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-[21px] bg-[#528ffa]" />
-                  <span className="text-[14px] font-semibold text-[#444]">
-                    Me
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-[21px] bg-[#b6d989]" />
-                  <span className="text-[14px] font-semibold text-[#444]">
-                    My colleague
-                  </span>
+                  <Gauge value={data?.otherData.ecoScore || 0} color="#518EFA" />
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Barriers subsections radar */}
-          <div className="flex w-full flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)]">
-            <div className="flex w-full flex-col items-center gap-3">
-              <h3 className="w-full px-6 text-[24px] font-semibold leading-none text-[#233662]">
-                Barriers — subsection averages
-              </h3>
+          {/* DRUGI RED: Radari */}
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-stretch">
+            {/* Survey Results Radar */}
+            <div className="flex flex-1 flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)]">
+              <h3 className="w-full px-6 text-[24px] font-semibold text-[#233662]">Survey results</h3>
               <div className="h-px w-full bg-[#e5e7eb]" />
-            </div>
-            <div className="h-[400px] w-full max-w-[560px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart data={barriersRadarData} outerRadius="70%">
-                  <PolarGrid stroke="#bfbfbf" />
-                  <PolarAngleAxis
-                    dataKey="axis"
-                    tick={{ fill: "#444", fontSize: 12 }}
-                  />
-                  <PolarRadiusAxis
-                    angle={90}
-                    domain={[0, 5]}
-                    tick={{ fill: "#bfbfbf", fontSize: 10 }}
-                    stroke="transparent"
-                  />
-                  <Radar
-                    name="My colleague"
-                    dataKey="mate"
-                    stroke="#b6d989"
-                    fill="#b6d989"
-                    fillOpacity={0.55}
-                  />
-                  <Radar
-                    name="Me"
-                    dataKey="me"
-                    stroke="#233662"
-                    fill="#233662"
-                    fillOpacity={0.35}
-                  />
-                </RadarChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-[21px] bg-[#528ffa]" />
-                <span className="text-[14px] font-semibold text-[#444]">Me</span>
+              <div className="h-[250px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RadarChart data={radarData} outerRadius={100}>
+                    <PolarGrid stroke="#bfbfbf" />
+                    <PolarAngleAxis dataKey="axis" tick={{ fill: "#444", fontSize: 13 }} />
+                    <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: "#bfbfbf", fontSize: 10 }} stroke="transparent" />
+                    <Radar name="Another" dataKey="mate" stroke="#518EFA" fill="#518EFA" fillOpacity={0.5} />
+                    <Radar name="Me" dataKey="me" stroke="#64A550" fill="#64A550" fillOpacity={0.5} />
+                  </RadarChart>
+                </ResponsiveContainer>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-[21px] bg-[#b6d989]" />
-                <span className="text-[14px] font-semibold text-[#444]">
-                  My colleague
-                </span>
+              <div className="flex gap-6">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-5 bg-[#64A550]" />
+                  <span className="text-[14px] font-semibold text-[#444]">Me</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-5 bg-[#518EFA]" />
+                  <span className="text-[14px] font-semibold text-[#444]">Another</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Habits Radar */}
+            <div className="flex flex-1 flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)]">
+              <h3 className="w-full px-6 text-[24px] font-semibold text-[#233662]">Habits — subsection averages</h3>
+              <div className="h-px w-full bg-[#e5e7eb]" />
+              <div className="h-[250px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RadarChart data={habitsRadarData} outerRadius={100}>
+                    <PolarGrid stroke="#bfbfbf" />
+                    <PolarAngleAxis dataKey="axis" tick={{ fill: "#444", fontSize: 13 }} />
+                    <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: "#bfbfbf", fontSize: 10 }} stroke="transparent" />
+                    <Radar name="Another" dataKey="mate" stroke="#518EFA" fill="#518EFA" fillOpacity={0.5} />
+                    <Radar name="Me" dataKey="me" stroke="#64A550" fill="#64A550" fillOpacity={0.5} />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex gap-6">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-5 bg-[#64A550]" />
+                  <span className="text-[14px] font-semibold text-[#444]">Me</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-5 bg-[#518EFA]" />
+                  <span className="text-[14px] font-semibold text-[#444]">Another</span>
+                </div>
               </div>
             </div>
           </div>
@@ -319,4 +287,5 @@ function BenchmarkPage() {
     </main>
   );
 }
+
 export default BenchmarkPage;
