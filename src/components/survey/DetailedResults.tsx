@@ -1,4 +1,3 @@
-import { GaugeChart } from "@/components/shared/GaugeChart";
 import { useSurvey } from "@/contexts/SurveyContext";
 import { getBadge, suggestions } from "@/data/mockData";
 import {
@@ -153,12 +152,7 @@ export function DetailedResults() {
                   key={cat.name}
                   className="flex w-full flex-col items-center gap-10 md:flex-row md:items-center md:gap-10"
                 >
-                  <div className="flex h-[280px] w-[320px] shrink-0 flex-col items-center justify-between rounded-xl border border-[#e5e7eb] bg-card px-4 pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
-                    <p className="text-center text-2xl font-semibold text-brand-blue-deep">
-                      {cat.name}
-                    </p>
-                    <GaugeChart value={cat.value} size={210} />
-                  </div>
+                  <CategoryGauge name={cat.name} value={cat.value} />
                   <div className="flex-1 space-y-4 py-6">
                     <h4 className="text-2xl font-semibold text-brand-blue-deep">
                       Suggestion
