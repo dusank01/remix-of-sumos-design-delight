@@ -147,7 +147,7 @@ export default function SurveyResults() {
               return (
                 <div
                   key={cat.name}
-                  className="flex flex-col items-center gap-10 md:flex-row md:items-center md:gap-10"
+                  className="flex w-full max-w-[680px] flex-col items-center gap-10 md:flex-row md:items-center md:gap-10"
                 >
                   <div className="flex h-[280px] w-[320px] shrink-0 flex-col items-center justify-between rounded-xl border border-[#e5e7eb] bg-card pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
                     <p className="text-2xl font-semibold text-brand-blue-deep">
