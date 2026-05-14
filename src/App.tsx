@@ -5,7 +5,7 @@ import Benchmark from "./pages/Benchmark";
 import Statistics from "./pages/Statistics";
 import Tips from "./pages/Tips";
 import Survey from "./pages/Survey";
-import SurveyResults from "./pages/SurveyResults";
+
 
 function NotFound() {
   return (
