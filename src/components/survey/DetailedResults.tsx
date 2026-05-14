@@ -12,6 +12,55 @@ import { Link } from "react-router-dom";
 import { ArrowRight, BarChart3 } from "lucide-react";
 import ecoGlobe from "@/assets/eco-profile-globe.png";
 
+function CategoryGauge({ name, value }: { name: string; value: number }) {
+  const max = 5;
+  const pct = Math.min(value / max, 1);
+  const r = 90;
+  const circ = Math.PI * r;
+  const dash = circ * pct;
+  const color =
+    pct >= 0.6 ? "#64a550" : pct >= 0.4 ? "#518efa" : pct >= 0.25 ? "#f0a500" : "#e85d3a";
+  const display = value
+    .toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+    .replace(".", ",");
+  return (
+    <div className="flex h-[288px] w-[360px] shrink-0 flex-col items-center justify-between rounded-[12px] bg-white px-6 pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
+      <h3 className="text-center text-[20px] font-semibold" style={{ color }}>
+        {name}
+      </h3>
+      <div className="flex flex-col items-center">
+        <div className="relative h-[110px] w-[212px]">
+          <svg viewBox="0 0 212 110" className="h-full w-full">
+            <path
+              d="M16,106 A90,90 0 0 1 196,106"
+              fill="none"
+              stroke="#E5E7EB"
+              strokeWidth="30"
+              strokeLinecap="butt"
+            />
+            <path
+              d="M16,106 A90,90 0 0 1 196,106"
+              fill="none"
+              stroke={color}
+              strokeWidth="30"
+              strokeLinecap="butt"
+              strokeDasharray={`${dash} ${circ}`}
+            />
+          </svg>
+          <div className="absolute inset-x-0 bottom-1 text-center text-[40px] font-bold leading-none text-[#233662]">
+            {display}
+          </div>
+        </div>
+        <div className="mt-1 flex w-[212px] justify-between px-2 text-[12px] text-[#bfbfbf]">
+          <span>0</span>
+          <span>5</span>
+        </div>
+      </div>
+      <p className="text-center text-[16px] text-[#444444]">Your score</p>
+    </div>
+  );
+}
+
 export function DetailedResults() {
   const { state, questions } = useSurvey();
 
