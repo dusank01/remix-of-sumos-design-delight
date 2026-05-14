@@ -174,11 +174,6 @@ export function DetailedResults() {
             ))}
           </div>
 
-          <div className="mt-12 flex justify-center">
-            <Button className="bg-sumos-green-300 hover:bg-sumos-green-300/90 text-white px-8 py-6 text-base font-medium rounded-lg gap-2">
-              Send via email <Mail className="h-5 w-5" />
-            </Button>
-          </div>
         </div>
       </section>
     </div>
