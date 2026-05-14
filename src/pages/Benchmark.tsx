@@ -205,7 +205,7 @@ function BenchmarkPage() {
             </div>
 
             {/* Radar card */}
-            <div className="flex w-full shrink-0 flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)] md:w-[300px]">
+            <div className="flex w-full shrink-0 flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)] lg:w-[300px]">
               <div className="flex w-full flex-col items-center gap-3">
                 <h3 className="w-full px-6 text-[24px] font-semibold leading-none text-[#233662]">
                   Survey results
