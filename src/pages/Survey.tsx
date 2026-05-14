@@ -606,6 +606,17 @@ export default function SurveyPage() {
 
                       {/* Bottom nav */}
                       <div className="space-y-3 pt-2">
+                        <div className="flex justify-end">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="rounded-full border-dashed text-xs"
+                            onClick={fillRandomAnswers}
+                          >
+                            🎲 Fill with random answers (dev)
+                          </Button>
+                        </div>
                         <div className="flex items-center justify-between">
                           <Button
                             variant="outline"
