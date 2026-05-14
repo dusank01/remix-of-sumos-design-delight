@@ -29,33 +29,45 @@ export function DetailedResults() {
   const fmt = (n: number) =>
     n.toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
-  const mainCategories: { name: MainCategory; value: number }[] = [
+  const allCategories: { name: string; value: number }[] = [
     { name: "Awareness", value: pick("Awareness", local.categories.Awareness) },
     { name: "Attitudes", value: pick("Attitudes", local.categories.Attitudes) },
-    { name: "Habits", value: pick("Habits", local.categories.Habits) },
-  ];
-
-  const habitSubs: { name: HabitSubcategory; value: number }[] = [
-    { name: "Travel", value: pickSub("Travel") },
+    { name: "Travel habits", value: pickSub("Travel") },
     { name: "Living and accommodation", value: pickSub("Living and accommodation") },
     { name: "Buying and consumption", value: pickSub("Buying and consumption") },
     { name: "Digital habits", value: pickSub("Digital habits") },
     { name: "Community engagement", value: pickSub("Community engagement") },
   ];
 
+  const SUGGESTION_KEY: Record<string, string> = {
+    "Travel habits": "Travel",
+    "Living and accommodation": "Living & accommodation",
+    "Buying and consumption": "Buying & consumption",
+    "Digital habits": "Digital habits",
+    "Community engagement": "Community engagement",
+  };
+
+  const GENERIC_TIPS: Record<string, string[]> = {
+    Awareness: [
+      "Considering low-emission transport options",
+      "Familiarity with green travel incentives",
+      "Learning about sustainable travel options",
+      "Reading about climate and sustainability topics",
+    ],
+    Attitudes: [
+      "Reflecting on personal environmental values",
+      "Discussing sustainability with peers",
+      "Supporting eco-friendly initiatives",
+      "Prioritizing long-term environmental impact",
+    ],
+  };
+
   const suggestionFor = (cat: string): string[] => {
+    if (GENERIC_TIPS[cat]) return GENERIC_TIPS[cat].slice(0, 4);
+    const key = SUGGESTION_KEY[cat];
     const pool: string[] = [];
-    if (cat === "Habits") {
-      Object.values(suggestions).forEach((arr) =>
-        arr.forEach((s) => s.tips.forEach((t) => pool.push(t))),
-      );
-    } else {
-      pool.push(
-        "Considering low-emission transport options",
-        "Familiarity with green travel incentives",
-        "Familiarity with green travel incentives",
-        "Learning about sustainable travel options",
-      );
+    if (key && suggestions[key]) {
+      suggestions[key].forEach((s) => s.tips.forEach((t) => pool.push(t)));
     }
     return pool.slice(0, 4);
   };
