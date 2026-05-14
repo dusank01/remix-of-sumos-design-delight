@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  ReactNode,
-} from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 import { fetchQuestions, submitSurvey } from "@/lib/api/questions";
 import { deriveMobilityDone } from "@/data/questions";
 import type { AnswerValue, Question, Submission } from "@/types/survey";
@@ -41,7 +34,7 @@ interface SurveyState {
   //   institution: string;
   //   mobility: boolean;
   // };
-//  mobility: boolean;
+  //  mobility: boolean;
   isCompleted: boolean;
   isRealAttempt: boolean | null;
   email: string;
@@ -59,7 +52,7 @@ interface SurveyContextType {
   /** Univerzalni setter — radi za sve tipove pitanja. */
   setAnswer: (questionKey: string, value: AnswerValue) => void;
 
- // setGeneralInfo: (info: SurveyState["generalInfo"]) => void;
+  // setGeneralInfo: (info: SurveyState["generalInfo"]) => void;
   setIsRealAttempt: (value: boolean) => void;
   setEmail: (email: string) => void;
   completeSurvey: (overrides?: Partial<SurveyState>) => Promise<void>;
@@ -82,7 +75,7 @@ interface SurveyContextType {
 
 const initialState: SurveyState = {
   answers: {},
- // generalInfo: { gender: "", country: "", institution: "", mobility: false },
+  // generalInfo: { gender: "", country: "", institution: "", mobility: false },
   // mobility: false,
   isCompleted: false,
   isRealAttempt: null,
@@ -128,7 +121,7 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
   const completeSurvey = async (overrides?: Partial<SurveyState>) => {
     const finalState = { ...state, ...overrides };
     const submission = buildSubmissionFrom(finalState, questions);
-    
+
     try {
       const response = await submitSurvey(submission);
       
@@ -170,14 +163,13 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
   const getProgress = () => {
     const required = questions.filter((q) => !q.optional);
     if (required.length === 0) return 0;
-    const answered = required.filter(
-      (q) => state.answers[q.key] !== undefined,
-    ).length;
+    const answered = required.filter((q) => state.answers[q.key] !== undefined).length;
     return Math.round((answered / required.length) * 100);
   };
 
+  // const buildSubmission = () => buildSubmissionFrom(state, questions, mobilityDone);
   const buildSubmission = () => buildSubmissionFrom(state, questions);
-  
+
   return (
     <SurveyContext.Provider
       value={{
@@ -187,6 +179,7 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         hasConsented,
         setHasConsented,
         setAnswer,
+        // setGeneralInfo,
         setIsRealAttempt,
         setEmail,
         completeSurvey,
@@ -195,6 +188,7 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         getCategoryScore,
         getSubcategoryScore,
         getProgress,
+        //        mobilityDone,
         buildSubmission,
       }}
     >
@@ -322,7 +316,7 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
 function buildSubmissionFrom(
   state: SurveyState,
   questions: Question[],
-//  mobilityDone: boolean
+  //  mobilityDone: boolean
 ): Submission {
   const answersArray = Object.entries(state.answers).map(([key, value]) => {
     const q = questions.find((q) => q.key === key);
@@ -335,17 +329,31 @@ function buildSubmissionFrom(
     };
   });
 
-//  const stateVal = state.answers["country"] || state.answers["country_of_study"] || state.generalInfo.country;
-//  const institutionVal = state.answers["institution"] || state.answers["home_university"] || state.generalInfo.institution;
-//  const stateVal = state.answers["country"] || state.answers["country_of_study"];
+  const startTimeStr = sessionStorage.getItem("surveyStartTime");
+  let completionTimeSeconds = 0;
+
+  if (startTimeStr) {
+    const startTime = parseInt(startTimeStr, 10);
+    const endTime = Date.now();
+    // Računamo razliku u sekundama i zaokružujemo
+    completionTimeSeconds = Math.floor((endTime - startTime) / 1000);
+
+    // Opciono: Čistimo storage jer smo završili
+    sessionStorage.removeItem("surveyStartTime");
+  }
+
+  //  const stateVal = state.answers["country"] || state.answers["country_of_study"] || state.generalInfo.country;
+  //  const institutionVal = state.answers["institution"] || state.answers["home_university"] || state.generalInfo.institution;
+  //  const stateVal = state.answers["country"] || state.answers["country_of_study"];
   //const institutionVal = state.answers["institution"] || state.answers["home_university"];
 
   return {
-  //  state: typeof stateVal === "string" && stateVal ? stateVal : "Unknown",
-  //  institution: typeof institutionVal === "string" && institutionVal ? institutionVal : "Unknown",
-  //  questionnaireVersion: 1,
+    //  state: typeof stateVal === "string" && stateVal ? stateVal : "Unknown",
+    //  institution: typeof institutionVal === "string" && institutionVal ? institutionVal : "Unknown",
+    //  questionnaireVersion: 1,
     email: state.email,
-  //  mobilityDone: mobilityDone,
+    //  mobilityDone: mobilityDone,
+    completionTimeSeconds: completionTimeSeconds,
     isRealAttempt: state.isRealAttempt ?? false,
     answers: answersArray,
   };
