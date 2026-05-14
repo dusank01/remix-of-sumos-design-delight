@@ -18,9 +18,25 @@ export async function fetchQuestions(): Promise<Question[]> {
 export async function submitSurvey(submission: Submission): Promise<{
   message: string;
   submissionId: string;
-  results: {
-    overallScore: number;
-    categoryScores: Record<string, number>;
+  result: {
+    scores: {
+      ecoScore: number;
+      categoryScores: Record<string, number>;
+      mobility: {
+        pre: number;
+        during: number;
+        after: number;
+        overall: number;
+        delta1: number;
+        delta2: number;
+        delta3: number;
+      };
+    };
+    feedback: {
+      badge: string;
+      message: string;
+      suggestions: Record<string, string>;
+    };
   };
 }> {
   const response = await fetch(`${API_HOST}/api/submissions`, {
