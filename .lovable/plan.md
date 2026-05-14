@@ -1,59 +1,35 @@
-## Cilj
-Uskladiti `/survey/results` 1:1 sa Figma dizajnom (node 419:3160). Trenutna implementacija je strukturno blizu, ali ima nekoliko vidljivih odstupanja u bojama, ikonama, tipografiji gauge-a i layout-u "Next steps" kartice.
+## Šta menjamo
 
-## Šta menjam
+1. **Brišemo `/survey/results` rutu i `src/pages/SurveyResults.tsx`** u potpunosti.
+2. **Uklanjamo trenutni Step 2 finish ekran** (Congratulations / badge / bar chart / email kartica / 3 next-steps kartice) iz `src/pages/Survey.tsx`.
+3. **Pravimo novu komponentu `src/components/survey/DetailedResults.tsx`** koja sadrži SAV vizuelni sadržaj sa stare `SurveyResults` stranice (eko profil, gauge chartovi po kategorijama, habit subkategorije, predlozi). Ova komponenta čita podatke iz `useSurvey()` baš kao stara stranica.
+4. **Renderujemo `<DetailedResults />` inline** kao jedini sadržaj nakon submit-a u Survey flow-u (na mestu gde je sada Step 2).
+5. **App.tsx**: brišemo import i `<Route path="/survey/results" />`. Link `/survey/results` u Survey.tsx (linija 843) više nije potreban — uklanjamo ga.
 
-### 1) `src/pages/SurveyResults.tsx`
+## O email-u (važno — odgovor na tvoje pitanje)
 
-**Eco Profile kartica**
-- Unutrašnji bordur boju promeniti sa `border-brand-green-soft/50` na `#f9f8d6` (sumos/green/100 — krem-žuta, kao u Figmi). Bordur ostaje `border-[12px]` sa offset `-4px`.
-- Globe ikonu zameniti sa pravom ilustracijom globusa (lokalni asset `src/assets/eco-profile-globe.png` koji ću dodati). Ukloniti kružni `bg-brand-green-soft/40` background — u Figmi nema kruga, samo slika 120×116.
-- Tipografija: "My Eco Profile" 24px semibold `text-[#444]`, badge naziv 32px semibold `text-brand-green`, "Your result is:" 24px semibold blue + brojevi bold green. Već skoro tačno — sitna podešavanja.
+Tvoj snippet pokazuje da **NestJS backend već sam pravi HTML mejla** sa inline stilovima (`style="..."`). To je ispravan pristup za mejl jer:
 
-**"What should you do next?" — 3 glavne kategorije**
-- Trenutni kontejner za jedan red (kartica + lista) je `flex-1` (preuzima celu širinu). U Figmi red ima fiksno `w-[680px]` (320 kartica + 40 gap + 320 suggestion). Postaviti `max-w-[680px]`.
-- Vrednost gauge-a u Figmi je 40px Bold u boji `brand-blue-deep` (ne foreground). To zahteva izmenu u `GaugeChart`.
+- Mejl klijenti (Gmail, Outlook) **ne razumeju Tailwind klase, CSS varijable, `oklch()`, ni `<link>` na stylesheet**. Sve mora biti inline `style=""` na svakom elementu.
+- React komponenta sa `className="bg-brand-blue rounded-xl"` se **ne može direktno "sibnuti" u mejl**. Klase bi stigle kao tekst, bez ijednog stila.
 
-**GaugeChart (`src/components/shared/GaugeChart.tsx`)**
-- Izmeniti boju teksta vrednosti u `text-brand-blue-deep`.
-- Proširiti boje arc-a sa 3 na 4 nivoa kako bi se reprodukovale boje iz Figme:
-  - `>= 60%` → zelena `#64a550`
-  - `40–60%` → plava `#518efa`
-  - `25–40%` → narandžasto-žuta `#f0a500` (Attitudes 1.8 u dizajnu prikazuje žutu)
-  - `< 25%` → crvena/tamna
-- Font size value: omogućiti veći (40px za main, 34px za sub) — već skalira preko `size`, podesiti faktor da odgovara dizajnu (≈19% size).
+Zato **stilovi se NE dele između frontend komponente i mejla**. Ono što se deli su **PODACI** (`overallScore`, `categoryScores`, `subcategoryScores`). Frontend ih prikazuje kroz Tailwind/React; backend ih ubacuje u svoj HTML template sa inline stilovima.
 
-**Habit sub-grid (3+2)**
-- Trenutno je tačno (w-280, h-240, gap-6). Zadržati.
+**Šta ćeš ti uraditi na backend strani** (van ovog projekta — samo info):
+- U `mailOptions.html` template-u, na osnovu `overallScore` i `categoryScores`, generiši `categoriesHtml` string sa `<li style="...">` elementima.
+- Ako želiš da mejl vizuelno liči na `DetailedResults` komponentu, prepiši ključne sekcije (eko profil card, score box, lista kategorija sa progress bar-om kao `<div>` sa `style="background: linear-gradient(...)"`) ručno sa inline stilovima. Boje pokupi iz dizajn tokena (`#518efa` za brand blue itd.) i hardkoduj ih u template.
+- Frontend submit poziv već šalje sve odgovore — backend računa skorove (kao što već radi u `state.results`) i ima sve što mu treba za HTML.
 
-**Send via email dugme**
-- Tačno (w-296, h-48, green). Zadržati.
+Ako kasnije poželiš da i frontend i mejl koriste **istu React komponentu**, moraćemo preći na `@react-email/components` + `render()` na backend-u (drugi setup, drugi paket). Za sada ostaje kako jeste: backend vlasnik HTML template-a.
 
-**"Next steps" sekcija — Launch benchmark kartica**
-- Layout u Figmi je VERTIKALAN: ikona (80×80) → naslov → opis, sve poređano u koloni `flex-col gap-3`, padding `px-6 py-4`. Trenutno je horizontalan (`flex items-start gap-4`). Promeniti u vertikalni.
-- Širina kartice `w-full` (max-w 1106 ≈ 1120 minus margine). Step 02 badge ostaje absolute `left-[244px] top-[-12px]`.
-- Ikonu (BarChart3) zadržati kao Lucide u zelenoj boji (Figma asset `07 seo 1` je sitna SEO/tree ilustracija; bez direktne lucide alternative — `BarChart3` u brand-green daje najbliži vizuelni efekat bez dodatnog assets).
-- Naslov "Launch benchmark" 22px bold green, opis 16px gray.
-- Dekorativne squiggly strelice iz Figme (između footera i kartice) — preskočiti (čisto dekorativno).
+## Tehnički detalji
 
-**Container širina**
-- Trenutni `max-w-[1120px]` mx-auto je već u skladu sa Figma 1440 viewport - 2×160 padding = 1120. Zadržati.
+**Fajlovi koji se menjaju:**
+- `src/pages/SurveyResults.tsx` → brisanje
+- `src/App.tsx` → ukloniti import + Route
+- `src/pages/Survey.tsx` → ukloniti Step 2 JSX, renderovati `<DetailedResults />` umesto njega; ukloniti `link: "/survey/results"` referencu
+- `src/components/survey/DetailedResults.tsx` → nov fajl, sadržaj iz starog `SurveyResults` (bez `<Layout>` i `<PageHeader>` wrapper-a — pošto se renderuje unutar Survey layout-a)
 
-### 2) Novi asset
-- `src/assets/eco-profile-globe.png` — preuzeti iz Figma local MCP servera (img13Globe1). Importovati ES6 i koristiti u Eco Profile kartici.
-
-### 3) Bez izmena
-- `SurveyContext`, `scoring.ts`, `mockData.ts`, ostale rute, navigacija, footer.
-
-## Tehnički detalji (boje iz Figme)
-- `sumos/blue/300` = `#233662` → već mapirano na `brand-blue-deep`
-- `sumos/green/300` = `#64a550` → `brand-green`
-- `sumos/green/100` = `#f9f8d6` → NOVO, koristiti kao inline arbitrary `[#f9f8d6]` (samo za ovaj inner border) — ne dodajem novi globalni token jer je samo jedna upotreba
-- `sumos/gray/300` = `#444` → već koristim `text-[#444444]`
-- `sumos/gray/100` = `#e5e7eb` → već koristim
-- `sumos/blue/100` = `#518efa` → `brand-blue`
-
-## Verifikacija
-- Pre/posle screenshot na `/survey/results` u 1440px širini i upoređenje sa Figma frame 419:3160.
-- Proveriti da Attitudes (npr. 1.8) prikazuje žuti arc, Awareness/Habits zeleni, sub-kategorije plavi.
-- Provera da "Launch benchmark" kartica ima vertikalan layout i Step 02 badge na pravoj poziciji.
+**Šta se ne menja:**
+- `SurveyContext`, scoring logika, submit flow, "fill with random answers" dugme.
+- Backend / mejl logika (to ti rešavaš van Lovable-a u NestJS-u).

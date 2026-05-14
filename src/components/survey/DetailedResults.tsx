@@ -1,5 +1,3 @@
-import { Layout } from "@/components/layout/Layout";
-import { PageHeader } from "@/components/shared/PageHeader";
 import { GaugeChart } from "@/components/shared/GaugeChart";
 import { useSurvey } from "@/contexts/SurveyContext";
 import { getBadge, suggestions } from "@/data/mockData";
@@ -15,7 +13,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, BarChart3 } from "lucide-react";
 import ecoGlobe from "@/assets/eco-profile-globe.png";
 
-export default function SurveyResults() {
+export function DetailedResults() {
   const { state, questions } = useSurvey();
 
   const local = computeScores(state.answers, questions);
@@ -63,12 +61,7 @@ export default function SurveyResults() {
   };
 
   return (
-    <Layout>
-      <PageHeader
-        title="View detailed results"
-        subtitle="Students' Green Awareness and Sustainable Habits"
-      />
-
+    <div className="space-y-0">
       {/* Eco profile band */}
       <section className="bg-background">
         <div className="mx-auto max-w-[1120px] px-6 pb-12 pt-8 sm:px-10">
@@ -176,36 +169,30 @@ export default function SurveyResults() {
           {/* Habit subcategory grid (3 + 2) */}
           <div className="mt-12 flex flex-col items-center gap-6">
             <div className="flex flex-wrap justify-center gap-6">
-              {habitSubs.slice(0, 3).map((sub) => {
-                const value = sub.value;
-                return (
-                  <div
-                    key={sub.name}
-                    className="flex h-[240px] w-[280px] flex-col items-center justify-between rounded-xl border border-[#e5e7eb] bg-card py-6 shadow-[0_0_17px_rgba(94,98,120,0.08)]"
-                  >
-                    <p className="px-4 text-center text-lg font-semibold text-brand-blue-deep">
-                      {sub.name}
-                    </p>
-                    <GaugeChart value={value} size={180} />
-                  </div>
-                );
-              })}
+              {habitSubs.slice(0, 3).map((sub) => (
+                <div
+                  key={sub.name}
+                  className="flex h-[240px] w-[280px] flex-col items-center justify-between rounded-xl border border-[#e5e7eb] bg-card py-6 shadow-[0_0_17px_rgba(94,98,120,0.08)]"
+                >
+                  <p className="px-4 text-center text-lg font-semibold text-brand-blue-deep">
+                    {sub.name}
+                  </p>
+                  <GaugeChart value={sub.value} size={180} />
+                </div>
+              ))}
             </div>
             <div className="flex flex-wrap justify-center gap-6">
-              {habitSubs.slice(3).map((sub) => {
-                const value = sub.value;
-                return (
-                  <div
-                    key={sub.name}
-                    className="flex h-[240px] w-[280px] flex-col items-center justify-between rounded-xl border border-[#e5e7eb] bg-card py-6 shadow-[0_0_17px_rgba(94,98,120,0.08)]"
-                  >
-                    <p className="px-4 text-center text-lg font-semibold text-brand-blue-deep">
-                      {sub.name}
-                    </p>
-                    <GaugeChart value={value} size={180} />
-                  </div>
-                );
-              })}
+              {habitSubs.slice(3).map((sub) => (
+                <div
+                  key={sub.name}
+                  className="flex h-[240px] w-[280px] flex-col items-center justify-between rounded-xl border border-[#e5e7eb] bg-card py-6 shadow-[0_0_17px_rgba(94,98,120,0.08)]"
+                >
+                  <p className="px-4 text-center text-lg font-semibold text-brand-blue-deep">
+                    {sub.name}
+                  </p>
+                  <GaugeChart value={sub.value} size={180} />
+                </div>
+              ))}
             </div>
           </div>
 
@@ -248,6 +235,6 @@ export default function SurveyResults() {
           </Link>
         </div>
       </section>
-    </Layout>
+    </div>
   );
 }
