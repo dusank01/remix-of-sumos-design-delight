@@ -33,7 +33,7 @@ export function Hero() {
                 (SuMoS).
               </p>
               <a
-                href="#survey"
+                href="/survey"
                 className="inline-flex items-center gap-1 rounded-lg bg-[#518efa] px-6 py-3 text-[16px] font-medium text-white transition-transform hover:-translate-y-0.5"
               >
                 Take a survey <ArrowRight className="h-6 w-6" />

@@ -436,10 +436,10 @@ export default function SurveyPage() {
         <div className={cn("relative w-full", currentStep === 2 ? "" : "mx-auto max-w-3xl")}>
           
           {/* Left Sidebar (Question Navigator) - absolute so it doesn't shift centered content */}
-          {hasConsented && currentStep === 0 && !showBeforeFinish && (
+          {hasConsented && currentStep === 0 && (
             <div className="hidden lg:block lg:absolute lg:right-full lg:top-0 lg:mr-8 w-64 xl:w-80 shrink-0">
               <div className="sticky top-8 max-h-[85vh] overflow-y-auto rounded-lg border bg-card p-4 shadow-sm scrollbar-thin">
-                <h3 className="text-sm font-bold mb-4 text-foreground text-center">Question Navigator</h3>
+                <h3 className="text-base font-bold mb-4 text-foreground text-center">Question Navigator</h3>
                 <div className="grid grid-cols-10 gap-1">
                   {allQuestionsNav.map((item) => (
                     <button
@@ -469,7 +469,7 @@ export default function SurveyPage() {
             </div>
           )}
 
-          <div className="flex-1 w-full max-w-3xl mx-auto">
+          <div className="flex-1 w-full max-w-6xl mx-auto">
           {!hasConsented ? (
             <ConsentStep
               onAgree={() => setHasConsented(true)}
@@ -478,10 +478,10 @@ export default function SurveyPage() {
           ) : (
             <>
               {/* ─────────── Step 0 & 1: Dinamička pitanja ─────────── */}
-              {currentStep === 0 && !showBeforeFinish && (
+              {currentStep === 0 && (
                 <div className="space-y-6">
                   {questionsLoading || groups.length === 0 ? (
-                    <div className="rounded-lg border bg-card p-10 text-center text-sm text-muted-foreground">
+                    <div className="rounded-lg border bg-card p-10 text-center text-base text-muted-foreground">
                       Loading questions…
                     </div>
                   ) : (
@@ -517,7 +517,7 @@ export default function SurveyPage() {
                                 setSubIdx(0);
                               }}
                               className={cn(
-                                "flex items-center gap-2 rounded-full px-5 py-2 text-xs font-bold tracking-wider transition-colors",
+                                "flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold tracking-wider transition-colors",
                                 btnClass,
                               )}
                             >
@@ -545,7 +545,7 @@ export default function SurveyPage() {
                                 >
                                   <div
                                     className={cn(
-                                      "flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold transition-colors",
+                                      "flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold transition-colors",
                                       isCurrent
                                         ? "bg-brand-green text-white"
                                         : subStatus === "completed"
@@ -581,7 +581,7 @@ export default function SurveyPage() {
                       <div className="rounded-lg border bg-card p-6 space-y-2">
                         {currentSub && (
                           <div className="mb-2 border-b border-border pb-3">
-                            <h3 className="text-sm font-bold text-foreground">
+                            <h3 className="text-base font-bold text-foreground">
                               {currentSub.category}
                             </h3>
                           </div>
@@ -614,7 +614,7 @@ export default function SurveyPage() {
                             type="button"
                             variant="outline"
                             size="sm"
-                            className="rounded-full border-dashed text-xs"
+                            className="rounded-full border-dashed text-sm"
                             onClick={fillRandomAnswers}
                           >
                             🎲 Fill with random answers (dev)
@@ -628,7 +628,7 @@ export default function SurveyPage() {
                           >
                             Back
                           </Button>
-                          <span className="text-sm font-bold text-foreground">
+                          <span className="text-base font-bold text-foreground">
                             {progress}%
                           </span>
                           <Button
@@ -645,90 +645,6 @@ export default function SurveyPage() {
                 </div>
               )}
 
-              {/* ─────────── Real attempt vs Pilot ─────────── */}
-              {currentStep === 1 && showBeforeFinish && (
-                <div className="space-y-6">
-                  <div className="flex gap-2 justify-center flex-wrap">
-                    {groups.map((g) => {
-                      const Icon = g.icon;
-                      return (
-                        <div
-                          key={g.key}
-                          className="flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold tracking-wider bg-brand-green text-white"
-                        >
-                          <Icon className="h-3.5 w-3.5" />
-                          {g.label}
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div className="rounded-3xl bg-white p-6 shadow-[var(--shadow-card)] border border-border/40">
-                    <div className="grid gap-8 lg:grid-cols-[1fr_auto] items-center">
-                      <div className="px-2 lg:px-8 py-6 max-w-[460px]">
-                        <h2 className="mb-6 text-3xl font-bold text-brand-blue-deep leading-tight">
-                          Before finishing the survey....
-                        </h2>
-                        <p className="mb-8 text-base text-muted-foreground leading-relaxed">
-                          Please tell us whether you actually completed the
-                          survey for real or were just trying it out.
-                        </p>
-                        <div className="space-y-4 w-full max-w-[400px]">
-                          <Button
-                            className="w-full h-12 rounded-lg bg-brand-blue text-white hover:bg-brand-blue/90 text-base font-medium"
-                            onClick={() => handleAttemptChoice(true)}
-                          >
-                            Real attempt
-                          </Button>
-                          <Button
-                            variant="outline"
-                            className="w-full h-12 rounded-lg border-foreground/70 text-foreground text-base font-medium hover:bg-muted"
-                            onClick={() => handleAttemptChoice(false)}
-                          >
-                            Just trying it out (pilot attempt)
-                          </Button>
-                        </div>
-                      </div>
-                      <div className="hidden lg:flex items-center justify-center">
-                        <img
-                          src={scooterGirl}
-                          alt="Person riding an electric scooter with groceries"
-                          width={348}
-                          height={480}
-                          loading="lazy"
-                          className="h-[420px] w-auto object-contain"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 pt-2">
-                    <div className="flex items-center justify-between">
-                      <Button
-                        variant="outline"
-                        className="rounded-full px-6"
-                        onClick={() => {
-                          setShowBeforeFinish(false);
-                          setCurrentStep(0);
-                        }}
-                      >
-                        Back
-                      </Button>
-                      <span className="text-sm font-bold text-foreground">
-                        99%
-                      </span>
-                      <Button
-                        className="rounded-full bg-brand-green px-8 text-white hover:bg-brand-green/90"
-                        onClick={() => handleAttemptChoice(true)}
-                      >
-                        Finish
-                      </Button>
-                    </div>
-                    <Progress value={99} className="h-2" />
-                  </div>
-                </div>
-              )}
-
               {/* ─────────── Step 2: Detailed Results ─────────── */}
               {currentStep === 2 && <DetailedResults />}
             </>
@@ -736,11 +652,63 @@ export default function SurveyPage() {
           </div>
 
           {/* Right Dummy Element (Balances the Left Sidebar to keep the main form perfectly centered) */}
-          {hasConsented && currentStep === 0 && !showBeforeFinish && (
+          {hasConsented && currentStep === 0 && (
             <div className="hidden lg:block w-64 xl:w-80 shrink-0" />
           )}
         </div>
       </div>
+
+      {/* Before finishing modal — Real attempt vs Pilot */}
+      <Dialog
+        open={showBeforeFinish}
+        onOpenChange={(open) => {
+          if (!open) {
+            setShowBeforeFinish(false);
+            setCurrentStep(0);
+          }
+        }}
+      >
+        <DialogContent className="max-w-[760px] rounded-3xl p-0 overflow-hidden border border-border/40">
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto] items-center bg-white p-6">
+            <div className="px-2 lg:px-8 py-6 max-w-[460px]">
+              <DialogHeader>
+                <DialogTitle className="mb-6 text-3xl font-bold text-brand-blue-deep leading-tight text-left">
+                  Before finishing the survey....
+                </DialogTitle>
+                <DialogDescription className="mb-8 text-base text-muted-foreground leading-relaxed text-left">
+                  Please tell us whether you actually completed the survey for
+                  real or were just trying it out.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 w-full max-w-[400px]">
+                <Button
+                  className="w-full h-12 rounded-lg bg-brand-blue text-white hover:bg-brand-blue/90 text-base font-medium"
+                  onClick={() => handleAttemptChoice(true)}
+                >
+                  Real attempt
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full h-12 rounded-lg border-foreground/70 text-foreground text-base font-medium hover:bg-muted"
+                  onClick={() => handleAttemptChoice(false)}
+                >
+                  Just trying it out (pilot attempt)
+                </Button>
+              </div>
+            </div>
+            <div className="hidden lg:flex items-center justify-center">
+              <img
+                src={scooterGirl}
+                alt="Person riding an electric scooter with groceries"
+                width={348}
+                height={480}
+                loading="lazy"
+                className="h-[420px] w-auto object-contain"
+              />
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Email Modal */}
       <Dialog open={showEmailModal} onOpenChange={setShowEmailModal}>
@@ -765,7 +733,7 @@ export default function SurveyPage() {
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label className="text-sm font-semibold text-foreground">
+              <Label className="text-base font-semibold text-foreground">
                 E-mail address
               </Label>
               <Input
@@ -776,7 +744,7 @@ export default function SurveyPage() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <p className="text-xs text-muted-foreground text-center px-2">
+            <p className="text-sm text-muted-foreground text-center px-2">
               If you leave this page without requesting the results, you won't
               be able to return to your completed survey.
             </p>

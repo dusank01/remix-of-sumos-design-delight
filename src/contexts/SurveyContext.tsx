@@ -3,6 +3,27 @@ import { fetchQuestions, submitSurvey } from "@/lib/api/questions";
 import { deriveMobilityDone } from "@/data/questions";
 import type { AnswerValue, Question, Submission } from "@/types/survey";
 
+export interface SurveyResult {
+  scores: {
+    ecoScore: number;
+    categoryScores: Record<string, number>;
+    mobility: {
+      pre: number;
+      during: number;
+      after: number;
+      overall: number;
+      delta1: number;
+      delta2: number;
+      delta3: number;
+    };
+  };
+  feedback: {
+    badge: string;
+    message: string;
+    suggestions: Record<string, string>;
+  };
+}
+
 interface SurveyState {
   /** Backend-shaped answers: questionKey -> AnswerValue (number | string | Record<string, number>). */
   answers: Record<string, AnswerValue>;
@@ -17,10 +38,7 @@ interface SurveyState {
   isCompleted: boolean;
   isRealAttempt: boolean | null;
   email: string;
-  results?: {
-    overallScore: number;
-    categoryScores: Record<string, number>;
-  };
+  results?: SurveyResult;
 }
 
 interface SurveyContextType {
@@ -72,7 +90,6 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
   const [questionsLoading, setQuestionsLoading] = useState(true);
   const [hasConsented, setHasConsented] = useState(false);
 
-  // Učitavanje pitanja preko API loader-a.
   useEffect(() => {
     let mounted = true;
     fetchQuestions()
@@ -83,9 +100,7 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         }
       })
       .catch(() => mounted && setQuestionsLoading(false));
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, []);
 
   const setAnswer = (questionKey: string, value: AnswerValue) => {
@@ -95,10 +110,6 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     }));
   };
 
-  // const setGeneralInfo = (info: SurveyState["generalInfo"]) => {
-  //   setState((prev) => ({ ...prev, generalInfo: info }));
-  // };
-
   const setIsRealAttempt = (value: boolean) => {
     setState((prev) => ({ ...prev, isRealAttempt: value }));
   };
@@ -107,25 +118,19 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     setState((prev) => ({ ...prev, email }));
   };
 
-  // const mobilityDone = useMemo(() => {
-  //   const v = state.answers["exchange_status"];
-  //   return (
-  //     deriveMobilityDone(typeof v === "string" ? v : undefined) ||
-  //     state.mobility
-  //   );
-  // }, [state.answers, state.mobility]);
-
   const completeSurvey = async (overrides?: Partial<SurveyState>) => {
     const finalState = { ...state, ...overrides };
     const submission = buildSubmissionFrom(finalState, questions);
 
     try {
       const response = await submitSurvey(submission);
+      
       setState((prev) => ({
         ...prev,
         ...overrides,
         isCompleted: true,
-        results: response.results,
+        // Backend vraća "result" (jednina) sa scores i feedback poljima
+        results: response.result, 
       }));
     } catch (error) {
       console.error("Survey submission failed:", error);
@@ -136,11 +141,24 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
 
   const resetSurvey = () => setState(initialState);
 
-  //  Skor helperi oslanjaju se na rezultate sa backend-a
-  const getScore = () => state.results?.overallScore || 0;
-  const getCategoryScore = (category: string) => state.results?.categoryScores?.[category] || 0;
-  const getSubcategoryScore = (subcategory: string) =>
-    state.results?.categoryScores?.[`HABITS - ${subcategory}`] || 0;
+  // Ažurirani helperi koji čitaju iz nove 'scores' strukture
+  const getScore = () => state.results?.scores.ecoScore || 0;
+
+  const getCategoryScore = (category: string) =>
+    state.results?.scores.categoryScores?.[category] || 0;
+
+  const getSubcategoryScore = (subcategory: string) => {
+    // Mapiranje naziva iz UI-a na ključeve koje šalje backend
+    const mapping: Record<string, string> = {
+      "Travel": "Travel",
+      "Living and accommodation": "Living",
+      "Buying and consumption": "Consumption",
+      "Digital habits": "Digital",
+      "Community engagement": "Engagement"
+    };
+    const backendKey = mapping[subcategory] || subcategory;
+    return state.results?.scores.categoryScores?.[backendKey] || 0;
+  };
 
   const getProgress = () => {
     const required = questions.filter((q) => !q.optional);
@@ -178,6 +196,122 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     </SurveyContext.Provider>
   );
 }
+
+// export function SurveyProvider({ children }: { children: ReactNode }) {
+//   const [state, setState] = useState<SurveyState>(initialState);
+//   const [questions, setQuestions] = useState<Question[]>([]);
+//   const [questionsLoading, setQuestionsLoading] = useState(true);
+//   const [hasConsented, setHasConsented] = useState(false);
+
+//   // Učitavanje pitanja preko API loader-a.
+//   useEffect(() => {
+//     let mounted = true;
+//     fetchQuestions()
+//       .then((qs) => {
+//         if (mounted) {
+//           setQuestions(qs);
+//           setQuestionsLoading(false);
+//         }
+//       })
+//       .catch(() => mounted && setQuestionsLoading(false));
+//     return () => {
+//       mounted = false;
+//     };
+//   }, []);
+
+//   const setAnswer = (questionKey: string, value: AnswerValue) => {
+//     setState((prev) => ({
+//       ...prev,
+//       answers: { ...prev.answers, [questionKey]: value },
+//     }));
+//   };
+
+//   // const setGeneralInfo = (info: SurveyState["generalInfo"]) => {
+//   //   setState((prev) => ({ ...prev, generalInfo: info }));
+//   // };
+
+//   const setIsRealAttempt = (value: boolean) => {
+//     setState((prev) => ({ ...prev, isRealAttempt: value }));
+//   };
+
+//   const setEmail = (email: string) => {
+//     setState((prev) => ({ ...prev, email }));
+//   };
+
+//   // const mobilityDone = useMemo(() => {
+//   //   const v = state.answers["exchange_status"];
+//   //   return (
+//   //     deriveMobilityDone(typeof v === "string" ? v : undefined) ||
+//   //     state.mobility
+//   //   );
+//   // }, [state.answers, state.mobility]);
+
+//   const completeSurvey = async (overrides?: Partial<SurveyState>) => {
+//    const finalState = { ...state, ...overrides };
+//    const submission = buildSubmissionFrom(finalState, questions);
+   
+//     try {
+//       const response = await submitSurvey(submission);
+//       setState((prev) => ({
+//         ...prev,
+//         ...overrides,
+//         isCompleted: true,
+//         results: response.results,
+//       }));
+//     } catch (error) {
+//       console.error("Survey submission failed:", error);
+//       setState((prev) => ({ ...prev, ...overrides, isCompleted: true }));
+//       throw error;
+//     }
+//   };
+
+//   const resetSurvey = () => setState(initialState);
+
+//   //  Skor helperi oslanjaju se na rezultate sa backend-a 
+//   const getScore = () => state.results?.overallScore || 0;
+//   const getCategoryScore = (category: string) =>
+//     state.results?.categoryScores?.[category] || 0;
+//   const getSubcategoryScore = (subcategory: string) =>
+//     state.results?.categoryScores?.[`HABITS - ${subcategory}`] || 0;
+
+//   const getProgress = () => {
+//     const required = questions.filter((q) => !q.optional);
+//     if (required.length === 0) return 0;
+//     const answered = required.filter(
+//       (q) => state.answers[q.key] !== undefined,
+//     ).length;
+//     return Math.round((answered / required.length) * 100);
+//   };
+
+// // const buildSubmission = () => buildSubmissionFrom(state, questions, mobilityDone);
+//  const buildSubmission = () => buildSubmissionFrom(state, questions);
+ 
+//   return (
+//     <SurveyContext.Provider
+//       value={{
+//         state,
+//         questions,
+//         questionsLoading,
+//         hasConsented,
+//         setHasConsented,
+//         setAnswer,
+//        // setGeneralInfo,
+//         setIsRealAttempt,
+//         setEmail,
+//         completeSurvey,
+//         resetSurvey,
+//         getScore,
+//         getCategoryScore,
+//         getSubcategoryScore,
+//         getProgress,
+// //        mobilityDone,
+//         buildSubmission,
+//       }}
+//     >
+//       {children}
+//     </SurveyContext.Provider>
+//   );
+// }
 
 function buildSubmissionFrom(
   state: SurveyState,
