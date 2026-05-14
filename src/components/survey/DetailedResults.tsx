@@ -23,7 +23,7 @@ function CategoryGauge({
   const dash = circ * pct;
 
   const color =
-    pct >= 0.6 ? "#64a550" : pct >= 0.4 ? "#518efa" : pct >= 0.25 ? "#f0a500" : "#e85d3a";
+    pct >= 0.8 ? "#64a550" : pct >= 0.6 ? "#A3C27C": pct >= 0.4 ? "#455369" : pct >= 0.21 ? "#D89B39" : "#DC493A";
 
   if (size === "sm") {
     return (
@@ -51,15 +51,15 @@ function CategoryGauge({
   }
 
   return (
-    <div className="flex h-[288px] w-[360px] shrink-0 flex-col items-center justify-between rounded-[12px] bg-white px-6 pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)] font-sans">
+    <div className="flex h-[288px] w-[360px] shrink-0 flex-col items-center justify-between rounded-[12px] bg-white px-6 pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
       <h3 className="text-center text-[20px] font-semibold" style={{ color }}>
         {name}
       </h3>
       <div className="flex flex-col items-center">
         <div className="relative h-[110px] w-[212px]">
           <svg viewBox="0 0 212 110" className="h-full w-full">
-            <path d="M16,106 A90,90 0 0 1 196,106" fill="none" stroke="#E5E7EB" strokeWidth="30" />
-            <path d="M16,106 A90,90 0 0 1 196,106" fill="none" stroke={color} strokeWidth="30" strokeDasharray={`${dash} ${circ}`} />
+            <path d="M16,106 A90,90 0 0 1 196,106" fill="none" stroke="#E5E7EB" strokeWidth="30" strokeLinecap="butt"/>
+            <path d="M16,106 A90,90 0 0 1 196,106" fill="none" stroke={color} strokeWidth="30" strokeLinecap="butt" strokeDasharray={`${dash} ${circ}`} />
           </svg>
           <div className="absolute inset-x-0 bottom-1 text-center text-[40px] font-bold leading-none text-sumos-blue-300">
             {fmt(value)}
@@ -115,13 +115,13 @@ export function DetailedResults() {
   }));
 
   return (
-    <div className="space-y-0 font-sans">
-      <section className="bg-white">
+    <div className="space-y-0">
+      <section className="bg-background">
         <div className="mx-auto w-full max-w-[1440px] px-3 pb-12 pt-8 sm:px-6">
           <div className="flex flex-col items-center gap-10 lg:flex-row lg:items-stretch lg:gap-[60px]">
             <div className="flex flex-col items-center gap-3">
-              <div className="relative w-[320px] overflow-hidden rounded-xl border-4 border-sumos-green-300 bg-white px-8 py-8 shadow-[0_0_20px_rgba(94,98,120,0.08)] sm:w-[360px]">
-                <div className="pointer-events-none absolute inset-0 rounded-[8px] border-[12px] border-sumos-gray-50" />
+              <div className="relative w-[320px] overflow-hidden rounded-xl border-4 border-brand-green bg-card px-8 py-8 shadow-[0_0_20px_rgba(94,98,120,0.08)] sm:w-[360px]">
+                <div className="pointer-events-none absolute inset-0 rounded-[8px] border-[12px] border-[#f9f8d6]" />
                 <div className="relative flex flex-col items-center gap-6">
                   <p className="text-2xl font-semibold text-sumos-blue-300">My Eco Profile</p>
                   <img src={ecoGlobe} alt="" className="h-[120px] w-[120px] object-contain" />
@@ -150,7 +150,7 @@ export function DetailedResults() {
         </div>
       </section>
 
-      <section className="bg-sumos-gray-50">
+      <section className="bg-[#f5f5f5]">
         <div className="mx-auto w-full max-w-[1440px] px-3 pb-20 pt-8 sm:px-6">
           <h2 className="mb-8 text-[32px] font-bold text-sumos-blue-300 sm:text-[40px]">What should you do next?</h2>
           <div className="h-px w-full bg-sumos-gray-100" />

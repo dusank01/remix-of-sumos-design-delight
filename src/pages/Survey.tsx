@@ -469,7 +469,7 @@ export default function SurveyPage() {
             </div>
           )}
 
-          <div className="flex-1 w-full max-w-3xl mx-auto">
+          <div className="flex-1 w-full max-w-6xl mx-auto">
           {!hasConsented ? (
             <ConsentStep
               onAgree={() => setHasConsented(true)}
