@@ -12,11 +12,12 @@ export function GaugeChart({ value, maxValue = 5, size = 140, label, sublabel }:
   const circumference = Math.PI * radius;
   const offset = circumference - (percentage / 100) * circumference;
 
-  // Color based on percentage - matching prototype (green-first)
+  // Color based on percentage - matching Figma (green/blue/yellow tiers)
   const getColor = () => {
-    if (percentage >= 60) return "hsl(142, 55%, 45%)"; // green
-    if (percentage >= 40) return "hsl(218, 94%, 65%)"; // blue
-    return "hsl(220, 48%, 26%)"; // navy
+    if (percentage >= 60) return "#64a550"; // green
+    if (percentage >= 40) return "#518efa"; // blue
+    if (percentage >= 25) return "#f0a500"; // yellow/orange (low)
+    return "#e85d3a"; // red (very low)
   };
 
   return (
