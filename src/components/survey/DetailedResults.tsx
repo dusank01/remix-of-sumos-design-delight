@@ -141,7 +141,7 @@ export function DetailedResults() {
                 </p>
               </div>
               <div className="flex justify-end">
-                <Link to="/benchmark" className="inline-flex items-center gap-1 rounded-lg px-6 py-3 text-base font-medium text-sumos-blue-100 hover:underline">
+                <Link to="/tips" className="inline-flex items-center gap-1 rounded-lg px-6 py-3 text-base font-medium text-sumos-blue-100 hover:underline">
                   View suggestions <ArrowRight className="h-5 w-5" />
                 </Link>
               </div>
