@@ -439,7 +439,7 @@ export default function SurveyPage() {
           {hasConsented && currentStep === 0 && !showBeforeFinish && (
             <div className="hidden lg:block lg:absolute lg:right-full lg:top-0 lg:mr-8 w-64 xl:w-80 shrink-0">
               <div className="sticky top-8 max-h-[85vh] overflow-y-auto rounded-lg border bg-card p-4 shadow-sm scrollbar-thin">
-                <h3 className="text-sm font-bold mb-4 text-foreground text-center">Question Navigator</h3>
+                <h3 className="text-base font-bold mb-4 text-foreground text-center">Question Navigator</h3>
                 <div className="grid grid-cols-10 gap-1">
                   {allQuestionsNav.map((item) => (
                     <button
@@ -481,7 +481,7 @@ export default function SurveyPage() {
               {currentStep === 0 && !showBeforeFinish && (
                 <div className="space-y-6">
                   {questionsLoading || groups.length === 0 ? (
-                    <div className="rounded-lg border bg-card p-10 text-center text-sm text-muted-foreground">
+                    <div className="rounded-lg border bg-card p-10 text-center text-base text-muted-foreground">
                       Loading questions…
                     </div>
                   ) : (
@@ -517,7 +517,7 @@ export default function SurveyPage() {
                                 setSubIdx(0);
                               }}
                               className={cn(
-                                "flex items-center gap-2 rounded-full px-5 py-2 text-xs font-bold tracking-wider transition-colors",
+                                "flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold tracking-wider transition-colors",
                                 btnClass,
                               )}
                             >
@@ -545,7 +545,7 @@ export default function SurveyPage() {
                                 >
                                   <div
                                     className={cn(
-                                      "flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold transition-colors",
+                                      "flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold transition-colors",
                                       isCurrent
                                         ? "bg-brand-green text-white"
                                         : subStatus === "completed"
@@ -581,7 +581,7 @@ export default function SurveyPage() {
                       <div className="rounded-lg border bg-card p-6 space-y-2">
                         {currentSub && (
                           <div className="mb-2 border-b border-border pb-3">
-                            <h3 className="text-sm font-bold text-foreground">
+                            <h3 className="text-base font-bold text-foreground">
                               {currentSub.category}
                             </h3>
                           </div>
@@ -614,7 +614,7 @@ export default function SurveyPage() {
                             type="button"
                             variant="outline"
                             size="sm"
-                            className="rounded-full border-dashed text-xs"
+                            className="rounded-full border-dashed text-sm"
                             onClick={fillRandomAnswers}
                           >
                             🎲 Fill with random answers (dev)
@@ -628,7 +628,7 @@ export default function SurveyPage() {
                           >
                             Back
                           </Button>
-                          <span className="text-sm font-bold text-foreground">
+                          <span className="text-base font-bold text-foreground">
                             {progress}%
                           </span>
                           <Button
@@ -654,7 +654,7 @@ export default function SurveyPage() {
                       return (
                         <div
                           key={g.key}
-                          className="flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold tracking-wider bg-brand-green text-white"
+                          className="flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold tracking-wider bg-brand-green text-white"
                         >
                           <Icon className="h-3.5 w-3.5" />
                           {g.label}
@@ -714,7 +714,7 @@ export default function SurveyPage() {
                       >
                         Back
                       </Button>
-                      <span className="text-sm font-bold text-foreground">
+                      <span className="text-base font-bold text-foreground">
                         99%
                       </span>
                       <Button
@@ -765,7 +765,7 @@ export default function SurveyPage() {
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div>
-              <Label className="text-sm font-semibold text-foreground">
+              <Label className="text-base font-semibold text-foreground">
                 E-mail address
               </Label>
               <Input
@@ -776,7 +776,7 @@ export default function SurveyPage() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <p className="text-xs text-muted-foreground text-center px-2">
+            <p className="text-sm text-muted-foreground text-center px-2">
               If you leave this page without requesting the results, you won't
               be able to return to your completed survey.
             </p>
