@@ -12,7 +12,8 @@ import {
 } from "@/lib/scoring";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Globe2, BarChart3 } from "lucide-react";
+import { ArrowRight, BarChart3 } from "lucide-react";
+import ecoGlobe from "@/assets/eco-profile-globe.png";
 
 export default function SurveyResults() {
   const { state, questions } = useSurvey();
