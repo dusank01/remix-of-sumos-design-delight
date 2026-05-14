@@ -888,55 +888,50 @@ export default function SurveyPage() {
 
       {/* Email Modal */}
       <Dialog open={showEmailModal} onOpenChange={setShowEmailModal}>
-        <DialogContent className="max-w-md">
-          <div className="flex justify-center mb-2">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-green/10">
-              <svg
-                className="h-8 w-8 text-brand-green"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <rect width="20" height="16" x="2" y="4" rx="2" />
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-              </svg>
-            </div>
+        <DialogContent className="max-w-[520px] rounded-2xl p-10">
+          <div className="flex justify-center">
+            <img
+              src={postalEnvelope}
+              alt="Envelope with benchmark code"
+              width={140}
+              height={140}
+              className="h-[120px] w-auto object-contain"
+            />
           </div>
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-brand-blue-deep text-center">
-              Before You Continue
+          <DialogHeader className="mt-2">
+            <DialogTitle className="text-3xl font-extrabold text-brand-blue-deep text-center">
+              Before You Leave
             </DialogTitle>
-            <DialogDescription className="text-sm text-center">
+            <DialogDescription className="text-base text-muted-foreground text-center mt-2 px-2">
               Make sure to enter your email now so we can generate and send your
               benchmark code.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 mt-2">
+          <div className="space-y-4 mt-4">
             <div>
-              <Label className="text-xs font-semibold text-foreground">
+              <Label className="text-sm font-semibold text-foreground">
                 E-mail address
               </Label>
               <Input
                 type="email"
                 placeholder="marko@example.com"
-                className="mt-1"
+                className="mt-2 h-11 rounded-md"
                 value={state.email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <p className="text-[11px] text-muted-foreground text-center">
+            <p className="text-xs text-muted-foreground text-center px-2">
               If you leave this page without requesting the results, you won't
               be able to return to your completed survey.
             </p>
             <Button
               onClick={handleEmailSubmit}
-              className="w-full rounded-full bg-brand-blue-deep text-white hover:bg-primary/90"
+              className="w-full h-12 rounded-md bg-brand-blue text-white text-base font-semibold hover:bg-brand-blue/90"
             >
               Get my Benchmark Code
             </Button>
             <button
-              className="w-full text-center text-sm text-muted-foreground hover:underline"
+              className="w-full text-center text-base font-semibold text-foreground hover:underline"
               onClick={() => {
                 setShowEmailModal(false);
                 completeSurvey();
