@@ -1,71 +1,75 @@
 ## Cilj
 
-Preneti Survey i SurveyResults funkcionalnost iz `sumos-benchmarking-tool-front-feat-survey` (grana `feat/survey`) u trenutni Vite + React + React Router projekat, **bez ijedne izmene naziva** (pitanja, ID-jevi, payload polja, API endpoint-i) tako da mapiranje na backend ostane identično.
+Trenutno `SurveyResults.tsx` koristi stari `surveyQuestions` iz `mockData.ts` sa ključevima poput `a1`, `h1`. Realna anketa (`Survey.tsx` + `SurveyContext`) čuva odgovore pod backend ključevima (`awareness_1`, `habits_travel_daily`, …) iz `MOCK_QUESTIONS`. Zato sve gauges trenutno prikazuju 0. Treba računati skorove iz stvarnih odgovora.
 
-## Šta se kopira (1:1)
+## Šta menjam
 
-**Strane:**
-- `src/pages/Survey.tsx` (874 linija)
-- `src/pages/SurveyResults.tsx` (110 linija)
-- `src/pages/SurveyTips.tsx` (već imamo `Tips.tsx` — ostaviću postojeću; SurveyTips iz repo-a se ne kopira osim ako tražiš)
+### 1) Novi helper `src/lib/scoring.ts`
+Čista funkcija koja iz `state.answers` + `questions` (oboje već dostupno preko `useSurvey()`) vraća:
+- `overall: number` (1–5)
+- `categories: { Awareness, Attitudes, Habits }` (1–5)
+- `subcategories: { Travel, "Living and accommodation", "Buying and consumption", "Digital habits", "Community engagement" }` (1–5)
 
-**Survey podsistem:**
-- `src/contexts/SurveyContext.tsx` — globalno stanje ankete
-- `src/types/survey.ts` — Question / Submission tipovi
-- `src/data/questions.ts` — fallback/mock pitanja
-- `src/lib/api/questions.ts` — `fetchQuestions()` i `submitSurvey()` (koriste `VITE_API_HOST`)
-- `src/components/survey/` — svih 7 komponenti:
-  - ConsentStep.tsx
-  - QuestionRenderer.tsx
-  - SingleChoice.tsx
-  - LikertMatrix.tsx
-  - RubricMatrix.tsx
-  - NumberInput.tsx
-  - TextInput.tsx
+Pravila:
+- Računaju se samo `LIKERT` i `LIKERT-MATRIX` odgovori (skala 1–5).
+- `LIKERT-MATRIX` doprinosi prosekom svojih sub-vrednosti.
+- `SINGLE_CHOICE`, `NUMBER`, `TEXT`, demografija, barijere — ignorišu se za score.
+- Ako za kategoriju nema odgovora → score 0.
+- `overall` = prosek svih validnih likert vrednosti (svaki matrix ulaz brojan 1×).
 
-## Integracija u postojeći projekat
+Mapping UI labela → backend kategorije:
+- Awareness ← `AWARENESS`
+- Attitudes ← `ATTITUDES/MOTIVATIONS`
+- Habits ← sve `HABITS - *` zajedno
+- Travel ← `HABITS - Travel`
+- Living and accommodation ← `HABITS - Living and accommodation`
+- Buying and consumption ← `HABITS - Buying and consumption`
+- Digital habits ← `HABITS - Digital habits`
+- Community engagement ← `HABITS - Engagement in the community`
 
-1. **Rute** — dodati u `src/App.tsx`:
-   - `/survey` → `Survey`
-   - `/survey/results` → `SurveyResults`
-   
-   Postojeće rute (`/`, `/benchmark`, `/statistics`, `/tips`) ostaju netaknute.
+### 2) `src/pages/SurveyResults.tsx`
+- Skinuti zavisnost od `surveyQuestions`/`state.answers[id]` lookup-a po starim ID-jevima.
+- Pozvati novi `computeScores(state.answers, questions)` jednom; iz njega čitati sve vrednosti za:
+  - hero "Your result is: X,X" i `getBadge(overall)`,
+  - tri glavne `GaugeChart` kartice (Awareness / Attitudes / Habits),
+  - pet `GaugeChart` mini-kartica (Travel, Living…, Buying…, Digital…, Community…).
+- Ako su rezultati sa backend-a već stigli (`state.results`), preferirati ih (tačniji, jer backend nosi merodavnu logiku); inače fallback na lokalno računat skor. Ovo zadržava ispravno ponašanje kad backend bude vraćao `overallScore`/`categoryScores`.
 
-2. **Provider** — `<SurveyProvider>` se dodaje u `src/main.tsx` oko `<App />` (unutar `QueryClientProvider`), tako da Survey i SurveyResults dele stanje.
+### 3) Bez izmena
+- `SurveyContext`, `questions.ts`, `mockData.ts` ostaju isti.
+- Layout / dizajn sekcije se ne dira — menja se samo izvor brojeva.
 
-3. **Navigacija** — postojeći link "SURVEY" u `Navigation.tsx` trenutno vodi na `/#survey`; menjam ga na `/survey` (ako želiš da ostane hash, reci).
+## Tehnički detalji
 
-4. **Toaster** — dodaću `<Toaster />` i `<Sonner />` (već postoje shadcn komponente) u `main.tsx` jer Survey koristi `useToast`.
+```ts
+// src/lib/scoring.ts
+import type { AnswerValue, Question } from "@/types/survey";
 
-5. **Env varijabla** — `VITE_API_HOST` se koristi za backend host. Ako nije set-ovan, fallback je relativan path (`/api/...`). Napomena ti: postavi `VITE_API_HOST` u Lovable secrets/env kad budeš spreman da pokažeš na pravi backend.
+export interface SurveyScores {
+  overall: number;
+  categories: { Awareness: number; Attitudes: number; Habits: number };
+  subcategories: Record<
+    "Travel" | "Living and accommodation" | "Buying and consumption"
+      | "Digital habits" | "Community engagement",
+    number
+  >;
+}
 
-## Šta se NE menja (kritično)
+export function computeScores(
+  answers: Record<string, AnswerValue>,
+  questions: Question[],
+): SurveyScores { /* avg LIKERT + LIKERT-MATRIX po kategoriji/podkategoriji */ }
+```
 
-- Nazivi pitanja, `questionId`, `category`, opcije i njihovi `value` u `data/questions.ts`
-- Oblik `Submission` payload-a u `types/survey.ts`
-- URL-ovi `/api/questions` i `/api/submissions`
-- Polja u response-u (`overallScore`, `categoryScores`, `submissionId`)
+U `SurveyResults.tsx`:
+```ts
+const { state, questions } = useSurvey();
+const local = computeScores(state.answers, questions);
+const overall = state.results?.overallScore ?? local.overall;
+const awareness = state.results?.categoryScores?.["AWARENESS"] ?? local.categories.Awareness;
+// ... isto za ostale; pa: <GaugeChart value={awareness} ... />
+```
 
-## Zavisnosti
-
-Sve potrebne pakete (`react-hook-form`, `@hookform/resolvers`, `zod`, radix komponente, `lucide-react`, `sonner`) već postoje u trenutnom `package.json` — nema novih instalacija.
-
-## Šta NE kopiram (osim ako tražiš)
-
-- `Suggestions.tsx`, `SuggestionDetail.tsx`, `SurveyTips.tsx`, `NotFound.tsx` (ti već imaš svoj NotFound u App.tsx)
-- `mockSubmissions.ts`, `mockData.ts`
-- `components/layout/`, `components/shared/`, `NavLink.tsx` (ti koristiš svoju `Navigation.tsx`)
-- `Index.tsx`, `Statistics.tsx`, `Benchmark.tsx` iz repo-a (ti imaš svoje stilizovane verzije)
-
-## Verifikacija nakon implementacije
-
-- Build prolazi bez TS grešaka
-- `/survey` se otvara i prikazuje prvi korak (Consent)
-- Console nema grešaka
-- Network tab: `GET /api/questions` se okida na učitavanju (404 je očekivan dok ne podigneš backend — nije bug)
-
-## Pitanje pre nego što krenem
-
-Da li da:
-- (a) link "SURVEY" u nav-u promenim na `/survey` (preporučeno), ili
-- (b) ostavim `/#survey` i samo dodam rute?
+## Verifikacija
+- Otvoriti `/survey`, popuniti par likert pitanja u različitim kategorijama, kliknuti dalje do submit-a.
+- Na `/survey/results` proveriti da su brojevi u gauges različiti od 0 i da odgovaraju proseku unetih odgovora; "Your result is" odgovara `overall` i badge se menja u skladu sa skalom.
