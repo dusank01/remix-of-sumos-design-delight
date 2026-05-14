@@ -89,12 +89,6 @@ export function DetailedResults() {
   const cs = scores?.categoryScores ?? {};
   const sg = feedback?.suggestions ?? {};
 
-  const habitKeys = ["Travel", "Living", "Consumption", "Digital", "Engagement"] as const;
-  const habitValues = habitKeys.map((k) => cs[k] ?? 0);
-  const habitsAvg = habitValues.length
-    ? habitValues.reduce((a, b) => a + b, 0) / habitValues.length
-    : 0;
-
   const toBullets = (s: string) =>
     s
       ? s
@@ -103,23 +97,22 @@ export function DetailedResults() {
           .filter(Boolean)
       : [];
 
-  const mainCategories = [
-    { name: "Awareness", value: cs["Awareness"] ?? 0, bullets: toBullets(sg["Awareness"] ?? "") },
-    { name: "Attitudes", value: cs["Attitudes"] ?? 0, bullets: toBullets(sg["Attitudes"] ?? "") },
-    {
-      name: "Habits",
-      value: habitsAvg,
-      bullets: habitKeys.flatMap((k) => toBullets(sg[k] ?? "")).slice(0, 6),
-    },
+  const categoryConfig = [
+    { key: "Awareness", label: "Awareness" },
+    { key: "Attitudes", label: "Attitudes" },
+    { key: "Travel", label: "Travel habits" },
+    { key: "Living", label: "Living and accommodation" },
+    { key: "Consumption", label: "Buying and consumption" },
+    { key: "Digital", label: "Digital habits" },
+    { key: "Engagement", label: "Community engagement" },
   ];
 
-  const subHabits = [
-    { name: "Travel", value: cs["Travel"] ?? 0 },
-    { name: "Living and accommodation", value: cs["Living"] ?? 0 },
-    { name: "Buying and consumption", value: cs["Consumption"] ?? 0 },
-    { name: "Digital habits", value: cs["Digital"] ?? 0 },
-    { name: "Community engagement", value: cs["Engagement"] ?? 0 },
-  ];
+  const allCategories = categoryConfig.map((cfg) => ({
+    name: cfg.label,
+    value: cs[cfg.key] ?? 0,
+    bullets: toBullets(sg[cfg.key] ?? ""),
+    suggestion: sg[cfg.key] ?? "",
+  }));
 
   return (
     <div className="space-y-0 font-sans">
@@ -162,7 +155,7 @@ export function DetailedResults() {
           <h2 className="mb-8 text-[32px] font-bold text-sumos-blue-300 sm:text-[40px]">What should you do next?</h2>
           <div className="h-px w-full bg-sumos-gray-100" />
           <div className="mt-10 space-y-12">
-            {mainCategories.map((cat) => (
+            {allCategories.map((cat) => (
               <div key={cat.name} className="flex w-full flex-col items-center gap-10 md:flex-row md:items-center">
                 <CategoryGauge name={cat.name} value={cat.value} />
                 <div className="flex-1 space-y-4 py-6">
@@ -174,16 +167,10 @@ export function DetailedResults() {
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-base leading-relaxed text-sumos-blue-200">—</p>
+                    <p className="text-base leading-relaxed text-sumos-blue-200">{cat.suggestion || "—"}</p>
                   )}
                 </div>
               </div>
-            ))}
-          </div>
-
-          <div className="mt-12 flex flex-wrap justify-center gap-6">
-            {subHabits.map((cat) => (
-              <CategoryGauge key={cat.name} name={cat.name} value={cat.value} size="sm" />
             ))}
           </div>
 
