@@ -422,7 +422,7 @@ export default function SurveyPage() {
 
   const headerTitle =
     currentStep === 2
-      ? "Export data & Download results"
+      ? "View detailed result"
       : "Complete the Survey";
 
   return (
@@ -432,8 +432,8 @@ export default function SurveyPage() {
         subtitle="Students' Green Awareness and Sustainable Habits"
       />
 
-      <div className="w-full px-4 py-8">
-        <div className="relative mx-auto w-full max-w-3xl">
+      <div className={cn("w-full", currentStep === 2 ? "py-8" : "px-4 py-8")}>
+        <div className={cn("relative mx-auto w-full", currentStep === 2 ? "max-w-[1120px]" : "max-w-3xl")}>
           
           {/* Left Sidebar (Question Navigator) - absolute so it doesn't shift centered content */}
           {hasConsented && currentStep === 0 && !showBeforeFinish && (
