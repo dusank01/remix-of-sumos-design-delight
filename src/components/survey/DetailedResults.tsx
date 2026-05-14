@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, BarChart3 } from "lucide-react";
-import ecoGlobe from "@/assets/eco-profile-globe.png";
+import ecoGlobe from "@/assets/icon-globe.gif";
 
 function CategoryGauge({ name, value }: { name: string; value: number }) {
   const max = 5;
