@@ -25,7 +25,6 @@ export async function submitSurvey(submission: Submission): Promise<{
   };
 }> {
   const response = await fetch(`${API_HOST}/api/submissions`, {
-  const response = await fetch(`${API_HOST}/api/submissions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
