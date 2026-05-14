@@ -76,13 +76,18 @@ export default function SurveyResults() {
             {/* Profile card */}
             <div className="flex flex-col items-center gap-3">
               <div className="relative w-[320px] overflow-hidden rounded-xl border-4 border-brand-green bg-card px-8 py-8 shadow-[0_0_20px_rgba(94,98,120,0.08)] sm:w-[360px]">
-                <div className="pointer-events-none absolute inset-0 rounded-[8px] border-[12px] border-brand-green-soft/50" />
+                <div className="pointer-events-none absolute inset-0 rounded-[8px] border-[12px] border-[#f9f8d6]" />
                 <div className="relative flex flex-col items-center gap-6">
                   <p className="text-2xl font-semibold text-[#444444]">My Eco Profile</p>
-                  <div className="flex h-[120px] w-[120px] items-center justify-center rounded-full bg-brand-green-soft/40">
-                    <Globe2 className="h-16 w-16 text-brand-green" strokeWidth={1.5} />
-                  </div>
-                  <p className="text-[32px] font-bold text-brand-green">
+                  <img
+                    src={ecoGlobe}
+                    alt="Eco profile globe"
+                    width={120}
+                    height={120}
+                    loading="lazy"
+                    className="h-[120px] w-[120px] object-contain"
+                  />
+                  <p className="text-[32px] font-semibold text-brand-green">
                     {badge.name}
                   </p>
                 </div>
