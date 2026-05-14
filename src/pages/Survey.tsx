@@ -338,6 +338,50 @@ export default function SurveyPage() {
 
   };
 
+  const fillRandomAnswers = () => {
+    const rand = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+    const randInt = (min: number, max: number) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
+
+    for (const q of questions) {
+      // Mobility pitanja preskači ako student nije bio na razmeni
+      if (q.requiresMobility && !mobilityDone) continue;
+
+      switch (q.type) {
+        case "LIKERT":
+          setAnswer(q.key, randInt(1, 5));
+          break;
+        case "SINGLE_CHOICE": {
+          const opts = q.options as string[];
+          if (opts?.length) setAnswer(q.key, rand(opts));
+          break;
+        }
+        case "NUMBER":
+          setAnswer(q.key, randInt(0, 50));
+          break;
+        case "TEXT":
+          setAnswer(q.key, "Test answer");
+          break;
+        case "LIKERT-MATRIX": {
+          const opts = q.options as string[];
+          const v: Record<string, number> = {};
+          opts?.forEach((o) => (v[o] = randInt(1, 5)));
+          setAnswer(q.key, v);
+          break;
+        }
+        case "RUBRIC": {
+          const dims = q.options as { dimension: string }[];
+          const v: Record<string, number> = {};
+          dims?.forEach((d) => (v[d.dimension] = randInt(1, 5)));
+          setAnswer(q.key, v);
+          break;
+        }
+      }
+    }
+    setErrorKey(null);
+    toast.success("Survey filled with random answers");
+  };
+
   const handleAttemptChoice = async (isReal: boolean) => {
     setIsRealAttempt(isReal);
     setShowBeforeFinish(false);
