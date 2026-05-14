@@ -46,6 +46,7 @@ import { cn } from "@/lib/utils";
 import type { Question } from "@/types/survey";
 import { toast } from "sonner";
 import ConsentStep from "@/components/survey/ConsentStep";
+import { DetailedResults } from "@/components/survey/DetailedResults";
 import scooterGirl from "@/assets/scooter-girl.png";
 import postalEnvelope from "@/assets/postal-envelope.png";
 /** Mapiranje backend kategorija na ikonice (case-insensitive prefiks). */
