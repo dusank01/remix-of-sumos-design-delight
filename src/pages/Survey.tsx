@@ -47,6 +47,7 @@ import type { Question } from "@/types/survey";
 import { toast } from "sonner";
 import ConsentStep from "@/components/survey/ConsentStep";
 import scooterGirl from "@/assets/scooter-girl.png";
+import postalEnvelope from "@/assets/postal-envelope.png";
 /** Mapiranje backend kategorija na ikonice (case-insensitive prefiks). */
 const CATEGORY_META: {
   match: (c: string) => boolean;
