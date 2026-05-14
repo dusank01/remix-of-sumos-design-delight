@@ -7,7 +7,6 @@ const API_HOST = import.meta.env.VITE_API_HOST || "";
 
 export async function fetchQuestions(): Promise<Question[]> {
   const response = await fetch(`${API_HOST}/api/questions`);
-  const response = await fetch(`${API_HOST}/api/questions`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch questions");
