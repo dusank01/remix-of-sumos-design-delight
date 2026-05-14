@@ -132,9 +132,9 @@ function BenchmarkPage() {
 
           <div className="h-px w-full bg-[#e5e7eb]" />
 
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
+          <div className="flex flex-col gap-3 xl:flex-row xl:items-stretch">
             {/* Form card */}
-            <div className="flex w-full shrink-0 flex-col items-center justify-between gap-6 rounded-[12px] bg-white px-4 py-6 shadow-[0_0_20px_0_rgba(94,98,120,0.08)] lg:w-[280px]">
+            <div className="flex w-full shrink-0 flex-col items-center justify-between gap-6 rounded-[12px] bg-white px-4 py-6 shadow-[0_0_20px_0_rgba(94,98,120,0.08)] xl:w-[280px]">
               <div className="flex w-full flex-col gap-5">
                 <div className="flex flex-col gap-1">
                   <label className="px-2 text-[14px] font-semibold text-[#444]">
@@ -205,7 +205,7 @@ function BenchmarkPage() {
             </div>
 
             {/* Radar card */}
-            <div className="flex w-full shrink-0 flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)] lg:w-[300px]">
+            <div className="flex w-full shrink-0 flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)] xl:w-[300px]">
               <div className="flex w-full flex-col items-center gap-3">
                 <h3 className="w-full px-6 text-[24px] font-semibold leading-none text-[#233662]">
                   Survey results
