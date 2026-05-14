@@ -136,7 +136,7 @@ export default function SurveyResults() {
           {/* Main 3 categories */}
           <div className="mt-10 space-y-12">
             {mainCategories.map((cat) => {
-              const value = avg(cat.questions);
+              const value = cat.value;
               const tips = suggestionFor(cat.name);
               return (
                 <div
@@ -171,7 +171,7 @@ export default function SurveyResults() {
           <div className="mt-12 flex flex-col items-center gap-6">
             <div className="flex flex-wrap justify-center gap-6">
               {habitSubs.slice(0, 3).map((sub) => {
-                const value = avg(sub.questions);
+                const value = sub.value;
                 return (
                   <div
                     key={sub.name}
@@ -187,7 +187,7 @@ export default function SurveyResults() {
             </div>
             <div className="flex flex-wrap justify-center gap-6">
               {habitSubs.slice(3).map((sub) => {
-                const value = avg(sub.questions);
+                const value = sub.value;
                 return (
                   <div
                     key={sub.name}
