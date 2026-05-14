@@ -1,4 +1,3 @@
-
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -10,7 +9,6 @@ import {
 import { Navigation } from "@/components/sumos/Navigation";
 import { Footer } from "@/components/sumos/Footer";
 import sumosWordmark from "@/assets/sumos-wordmark.png";
-
 
 const radarData = [
   { axis: "Awareness", me: 3.5, mate: 4 },
@@ -108,11 +106,7 @@ function BenchmarkPage() {
           <h1 className="text-[40px] font-bold leading-tight text-[#233662] md:text-[48px]">
             Benchmark
           </h1>
-          <img
-            src={sumosWordmark}
-            alt="SuMoS"
-            className="hidden h-12 w-auto md:block"
-          />
+          <img src={sumosWordmark} alt="SuMoS" className="hidden h-12 w-auto md:block" />
         </div>
       </section>
 
@@ -125,8 +119,8 @@ function BenchmarkPage() {
             </h2>
             <p className="text-[18px] leading-snug text-[#444] md:text-[20px]">
               This option allows user to{" "}
-              <span className="font-semibold">make 1 to 1 benchmark</span> with
-              other respondents, using their code.
+              <span className="font-semibold">make 1 to 1 benchmark</span> with other respondents,
+              using their code.
             </p>
           </div>
 
@@ -137,9 +131,7 @@ function BenchmarkPage() {
             <div className="flex w-full shrink-0 flex-col items-center justify-between gap-6 rounded-[12px] bg-white px-4 py-6 shadow-[0_0_20px_0_rgba(94,98,120,0.08)] xl:w-[280px]">
               <div className="flex w-full flex-col gap-5">
                 <div className="flex flex-col gap-1">
-                  <label className="px-2 text-[14px] font-semibold text-[#444]">
-                    Your code
-                  </label>
+                  <label className="px-2 text-[14px] font-semibold text-[#444]">Your code</label>
                   <input
                     type="text"
                     placeholder="Enter your code"
@@ -150,9 +142,7 @@ function BenchmarkPage() {
                   </button>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="px-2 text-[14px] font-semibold text-[#444]">
-                    Another code
-                  </label>
+                  <label className="px-2 text-[14px] font-semibold text-[#444]">Another code</label>
                   <input
                     type="text"
                     placeholder="Enter another code"
@@ -184,20 +174,16 @@ function BenchmarkPage() {
                     <div className="text-[20px] font-semibold leading-none text-[#64a550]">
                       Your green score
                     </div>
-                    <div className="text-[18px] leading-none text-[#444]">
-                      Overall
-                    </div>
+                    <div className="text-[18px] leading-none text-[#444]">Overall</div>
                   </div>
-                  <Gauge value={3} max={5} color="#64A550" />
+                  <Gauge value={5} max={5} color="#64A550" />
                 </div>
                 <div className="flex flex-1 flex-col items-center justify-center gap-4">
                   <div className="flex flex-col items-center gap-1 text-center">
                     <div className="text-[20px] font-semibold leading-none text-[#518efa]">
                       Another green score
                     </div>
-                    <div className="text-[18px] leading-none text-[#444]">
-                      Overall
-                    </div>
+                    <div className="text-[18px] leading-none text-[#444]">Overall</div>
                   </div>
                   <Gauge value={3.6} max={5} color="#518EFA" />
                 </div>
@@ -216,10 +202,7 @@ function BenchmarkPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={radarData} outerRadius={75}>
                     <PolarGrid stroke="#bfbfbf" />
-                    <PolarAngleAxis
-                      dataKey="axis"
-                      tick={{ fill: "#444", fontSize: 9 }}
-                    />
+                    <PolarAngleAxis dataKey="axis" tick={{ fill: "#444", fontSize: 9 }} />
                     <PolarRadiusAxis
                       angle={90}
                       domain={[0, 5]}
@@ -246,15 +229,11 @@ function BenchmarkPage() {
               <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
                 <div className="flex items-center gap-2">
                   <span className="h-2 w-[21px] bg-[#528ffa]" />
-                  <span className="text-[14px] font-semibold text-[#444]">
-                    Me
-                  </span>
+                  <span className="text-[14px] font-semibold text-[#444]">Me</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="h-2 w-[21px] bg-[#b6d989]" />
-                  <span className="text-[14px] font-semibold text-[#444]">
-                    My colleague
-                  </span>
+                  <span className="text-[14px] font-semibold text-[#444]">My colleague</span>
                 </div>
               </div>
             </div>
@@ -272,10 +251,7 @@ function BenchmarkPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <RadarChart data={barriersRadarData} outerRadius="70%">
                   <PolarGrid stroke="#bfbfbf" />
-                  <PolarAngleAxis
-                    dataKey="axis"
-                    tick={{ fill: "#444", fontSize: 12 }}
-                  />
+                  <PolarAngleAxis dataKey="axis" tick={{ fill: "#444", fontSize: 12 }} />
                   <PolarRadiusAxis
                     angle={90}
                     domain={[0, 5]}
@@ -306,9 +282,7 @@ function BenchmarkPage() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="h-2 w-[21px] bg-[#b6d989]" />
-                <span className="text-[14px] font-semibold text-[#444]">
-                  My colleague
-                </span>
+                <span className="text-[14px] font-semibold text-[#444]">My colleague</span>
               </div>
             </div>
           </div>
