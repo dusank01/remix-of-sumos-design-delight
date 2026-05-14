@@ -7,6 +7,7 @@ const API_HOST = import.meta.env.VITE_API_HOST || "";
 
 export async function fetchQuestions(): Promise<Question[]> {
   const response = await fetch(`${API_HOST}/api/questions`);
+  const response = await fetch(`${API_HOST}/api/questions`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch questions");
@@ -23,6 +24,7 @@ export async function submitSurvey(submission: Submission): Promise<{
     categoryScores: Record<string, number>;
   };
 }> {
+  const response = await fetch(`${API_HOST}/api/submissions`, {
   const response = await fetch(`${API_HOST}/api/submissions`, {
     method: "POST",
     headers: {
