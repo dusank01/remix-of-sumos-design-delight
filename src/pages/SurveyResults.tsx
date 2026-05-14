@@ -12,7 +12,8 @@ import {
 } from "@/lib/scoring";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Globe2, BarChart3 } from "lucide-react";
+import { ArrowRight, BarChart3 } from "lucide-react";
+import ecoGlobe from "@/assets/eco-profile-globe.png";
 
 export default function SurveyResults() {
   const { state, questions } = useSurvey();
@@ -75,13 +76,18 @@ export default function SurveyResults() {
             {/* Profile card */}
             <div className="flex flex-col items-center gap-3">
               <div className="relative w-[320px] overflow-hidden rounded-xl border-4 border-brand-green bg-card px-8 py-8 shadow-[0_0_20px_rgba(94,98,120,0.08)] sm:w-[360px]">
-                <div className="pointer-events-none absolute inset-0 rounded-[8px] border-[12px] border-brand-green-soft/50" />
+                <div className="pointer-events-none absolute inset-0 rounded-[8px] border-[12px] border-[#f9f8d6]" />
                 <div className="relative flex flex-col items-center gap-6">
                   <p className="text-2xl font-semibold text-[#444444]">My Eco Profile</p>
-                  <div className="flex h-[120px] w-[120px] items-center justify-center rounded-full bg-brand-green-soft/40">
-                    <Globe2 className="h-16 w-16 text-brand-green" strokeWidth={1.5} />
-                  </div>
-                  <p className="text-[32px] font-bold text-brand-green">
+                  <img
+                    src={ecoGlobe}
+                    alt="Eco profile globe"
+                    width={120}
+                    height={120}
+                    loading="lazy"
+                    className="h-[120px] w-[120px] object-contain"
+                  />
+                  <p className="text-[32px] font-semibold text-brand-green">
                     {badge.name}
                   </p>
                 </div>
@@ -141,7 +147,7 @@ export default function SurveyResults() {
               return (
                 <div
                   key={cat.name}
-                  className="flex flex-col items-center gap-10 md:flex-row md:items-center md:gap-10"
+                  className="flex w-full max-w-[680px] flex-col items-center gap-10 md:flex-row md:items-center md:gap-10"
                 >
                   <div className="flex h-[280px] w-[320px] shrink-0 flex-col items-center justify-between rounded-xl border border-[#e5e7eb] bg-card pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
                     <p className="text-2xl font-semibold text-brand-blue-deep">
@@ -222,25 +228,22 @@ export default function SurveyResults() {
         <div className="mx-auto max-w-[1120px] px-6 pb-20 pt-12 sm:px-10">
           <Link
             to="/benchmark"
-            className="group relative block rounded-xl border border-brand-green bg-card px-6 py-6 transition-shadow hover:shadow-[0_0_20px_rgba(94,98,120,0.12)]"
+            className="group relative block rounded-lg border border-brand-green bg-card px-6 py-4 transition-shadow hover:shadow-[0_0_20px_rgba(94,98,120,0.12)]"
           >
             <span className="absolute -top-3 left-[244px] rounded-md bg-brand-green px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white">
               Step 02
             </span>
-            <div className="flex items-start gap-4">
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg bg-brand-blue/10">
-                <BarChart3 className="h-10 w-10 text-brand-blue" />
+            <div className="flex flex-col gap-3">
+              <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-brand-green/10">
+                <BarChart3 className="h-10 w-10 text-brand-green" />
               </div>
-              <div className="flex-1">
-                <h3 className="mb-2 text-[22px] font-bold text-brand-green">
-                  Launch benchmark
-                </h3>
-                <p className="text-base text-[#444444]">
-                  Compare your results with others based on gender, country,
-                  mobility participation, etc.
-                </p>
-              </div>
-              <ArrowRight className="mt-2 h-5 w-5 text-brand-blue-deep transition-transform group-hover:translate-x-1" />
+              <h3 className="text-[22px] font-bold text-brand-green">
+                Launch benchmark
+              </h3>
+              <p className="text-base text-[#444444]">
+                Compare your results with others based on gender, country,
+                mobility participation, etc.
+              </p>
             </div>
           </Link>
         </div>
