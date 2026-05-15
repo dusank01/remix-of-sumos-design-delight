@@ -58,7 +58,7 @@ function FootprintChart({ averages }: { averages?: Averages }) {
   const ticks = [5, 4, 3, 2, 1, 0];
 
   return (
-    <div className="flex h-[288px] w-full flex-col gap-8 rounded-[12px] bg-white px-6 py-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
+    <div className="flex h-[288px] w-full min-w-0 flex-col gap-8 rounded-[12px] bg-white px-4 py-8 shadow-[0_0_20px_rgba(94,98,120,0.08)] sm:px-6">
       <div className="flex items-center justify-between">
         <h3 className="text-[20px] font-semibold text-[#233662]">Green scores by category</h3>
         {/* <Info className="h-6 w-6 text-[#444444]" /> */}
@@ -75,7 +75,7 @@ function FootprintChart({ averages }: { averages?: Averages }) {
               <div key={t} className="h-px w-full bg-[#e5e7eb]" />
             ))}
           </div>
-          <div className="relative flex h-full items-end gap-12 px-8">
+          <div className="relative flex h-full items-end gap-3 px-2 sm:gap-12 sm:px-8">
             {footprintBars.map((b) => (
               <div
                 key={b.label}
@@ -90,7 +90,7 @@ function FootprintChart({ averages }: { averages?: Averages }) {
           </div>
         </div>
       </div>
-      <div className="flex gap-12 pl-9 pr-2">
+      <div className="flex gap-3 pl-9 pr-2 sm:gap-12">
         {footprintBars.map((b) => (
           <span key={b.label} className="flex-1 text-center text-[12px] text-[#444444]">
             {b.label}
@@ -119,7 +119,7 @@ function GreenScore({ ecoScore }: { ecoScore?: number }) {
   };
 
   return (
-    <div className="flex h-[288px] w-[360px] shrink-0 flex-col items-center justify-between rounded-[12px] bg-white px-6 pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
+    <div className="flex h-[288px] w-full max-w-[360px] mx-auto flex-col items-center justify-between rounded-[12px] bg-white px-6 pb-6 pt-8 shadow-[0_0_20px_rgba(94,98,120,0.08)] lg:mx-0 lg:w-[360px] lg:shrink-0">
       <h3 className="text-[20px] font-semibold text-[#64a550]">Green score</h3>
       <div className="flex flex-col items-center">
         <div className="relative h-[110px] w-[212px]">
