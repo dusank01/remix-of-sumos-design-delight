@@ -6,6 +6,7 @@ import { Statistics } from "@/components/sumos/Statistics";
 import { Awareness } from "@/components/sumos/Awareness";
 import { Institutions } from "@/components/sumos/Institutions";
 import { Footer } from "@/components/sumos/Footer";
+import StatisticsOverview from "@/components/sumos/StatisticsOverview";
 
 
 function Index() {
@@ -14,7 +15,7 @@ function Index() {
       <Navigation />
       <Hero />
       <StepCards />
-      <Statistics />
+      <StatisticsOverview />
       <div className="hidden"><Awareness /></div>
       <Institutions />
       <Footer />

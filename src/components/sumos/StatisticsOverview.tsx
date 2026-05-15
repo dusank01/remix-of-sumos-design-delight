@@ -61,7 +61,7 @@ function FootprintChart({ averages }: { averages?: Averages }) {
     <div className="flex h-[288px] w-full flex-col gap-8 rounded-[12px] bg-white px-6 py-8 shadow-[0_0_20px_rgba(94,98,120,0.08)]">
       <div className="flex items-center justify-between">
         <h3 className="text-[20px] font-semibold text-[#233662]">Green scores by category</h3>
-        <Info className="h-6 w-6 text-[#444444]" />
+        {/* <Info className="h-6 w-6 text-[#444444]" /> */}
       </div>
       <div className="flex flex-1 gap-3">
         <div className="flex flex-col justify-between text-right text-[12px] text-[#444444]">
@@ -103,7 +103,7 @@ function FootprintChart({ averages }: { averages?: Averages }) {
 
 /* ---------- Green score gauge ---------- */
 function GreenScore({ ecoScore }: { ecoScore?: number }) {
-  const value = ecoScore || 0;
+  const value = Math.round((ecoScore || 0) * 10) / 10 || 0;
   const max = 5;
   const pct = value / max;
   const r = 90;
