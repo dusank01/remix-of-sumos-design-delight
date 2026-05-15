@@ -10,6 +10,7 @@ import {
 import { Navigation } from "@/components/sumos/Navigation";
 import { Footer } from "@/components/sumos/Footer";
 import sumosWordmark from "@/assets/sumos-wordmark.png";
+import { toast } from "sonner";
 
 // --- Tipovi za API ---
 interface CategoryScores {
@@ -83,8 +84,12 @@ function Gauge({
       <div className="absolute left-0 right-0 top-[58px] text-center font-bold text-[40px] leading-none text-[#233662]">
         {value.toFixed(1).replace(".", ",")}
       </div>
-      <div className="absolute left-[2px] top-[112px] px-[10px] text-[12px] leading-none text-[#bfbfbf]">0</div>
-      <div className="absolute right-[2px] top-[112px] px-[10px] text-[12px] leading-none text-[#bfbfbf]">{max}</div>
+      <div className="absolute left-[2px] top-[112px] px-[10px] text-[12px] leading-none text-[#bfbfbf]">
+        0
+      </div>
+      <div className="absolute right-[2px] top-[112px] px-[10px] text-[12px] leading-none text-[#bfbfbf]">
+        {max}
+      </div>
     </div>
   );
 }
@@ -97,8 +102,17 @@ function BenchmarkPage() {
   const API_HOST = import.meta.env.VITE_API_HOST || "";
 
   const handleCompare = async () => {
-    if (!myCode || !otherCode) return;
+    if (!myCode || !otherCode) {
+      toast.error("Invalid input", {
+        description: "Please enter both benchmark codes.",
+        duration: 3000,
+      });
+      return;
+    }
+
     setLoading(true);
+    setData(null); // Čistimo prethodne rezultate dok se učitavaju novi
+
     try {
       const response = await fetch(`${API_HOST}/api/benchmark/compare`, {
         method: "POST",
@@ -108,10 +122,32 @@ function BenchmarkPage() {
           otherBenchmarkCode: otherCode,
         }),
       });
+
+      // Uvek prvo parsiramo odgovor (bilo da je uspeh ili NestJS greška)
       const result = await response.json();
+
+      // Ručno hvatamo HTTP greške (400, 404, 500)
+      if (!response.ok) {
+        // result.message je tekst koji šalje tvoj NestJS
+        throw new Error(
+          result.message || "THere was an error processing your request. Please try again.",
+        );
+      }
+
+      // Ako je response.ok true, setujemo podatke
       setData(result);
     } catch (error) {
       console.error("Benchmark error:", error);
+
+      // Proveravamo da li je to stvarna greška i izvlačimo poruku,
+      // u suprotnom bacamo generički string.
+      const errorMessage =
+        error instanceof Error ? error.message : "Connection error. Please try again.";
+
+      toast.error("Unsuccessful benchmark", {
+        description: errorMessage,
+        duration: 3000,
+      });
     } finally {
       setLoading(false);
     }
@@ -156,9 +192,12 @@ function BenchmarkPage() {
       <section className="bg-white">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-6 pb-20 pt-8 sm:px-10 lg:px-[160px]">
           <div className="flex flex-col gap-4">
-            <h2 className="text-[28px] font-semibold text-[#233662] md:text-[32px]">Benchmark with a friend or yourself</h2>
+            <h2 className="text-[28px] font-semibold text-[#233662] md:text-[32px]">
+              Benchmark with a friend or yourself
+            </h2>
             <p className="text-[18px] text-[#444] md:text-[20px]">
-              This option allows user to <span className="font-semibold">make 1 to 1 benchmark</span> with other respondents.
+              This option allows user to{" "}
+              <span className="font-semibold">make 1 to 1 benchmark</span> with other respondents.
             </p>
           </div>
 
@@ -202,8 +241,12 @@ function BenchmarkPage() {
             {/* Ecological footprint card */}
             <div className="flex flex-1 flex-col gap-8 rounded-[12px] bg-white p-6 shadow-[0_0_10px_0_rgba(94,98,120,0.08)]">
               <div className="flex items-center justify-between">
-                <h3 className="text-[24px] font-semibold text-[#233662]">Students ecological footprint</h3>
-                <span className="grid h-6 w-6 place-items-center rounded-full border border-[#bfbfbf] text-[12px] text-[#bfbfbf]">i</span>
+                <h3 className="text-[24px] font-semibold text-[#233662]">
+                  Students ecological footprint
+                </h3>
+                <span className="grid h-6 w-6 place-items-center rounded-full border border-[#bfbfbf] text-[12px] text-[#bfbfbf]">
+                  i
+                </span>
               </div>
               <div className="flex flex-col items-center justify-around gap-6 md:flex-row">
                 <div className="flex flex-col items-center gap-4">
@@ -215,7 +258,9 @@ function BenchmarkPage() {
                 </div>
                 <div className="flex flex-col items-center gap-4">
                   <div className="text-center">
-                    <div className="text-[20px] font-semibold text-[#518efa]">Another green score</div>
+                    <div className="text-[20px] font-semibold text-[#518efa]">
+                      Another green score
+                    </div>
                     <div className="text-[18px] text-[#444]">Overall</div>
                   </div>
                   <Gauge value={data?.otherData.ecoScore || 0} color="#518EFA" />
@@ -228,16 +273,35 @@ function BenchmarkPage() {
           <div className="flex flex-col gap-6 lg:flex-row lg:items-stretch">
             {/* Survey Results Radar */}
             <div className="flex flex-1 flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)]">
-              <h3 className="w-full px-6 text-[24px] font-semibold text-[#233662]">Survey results</h3>
+              <h3 className="w-full px-6 text-[24px] font-semibold text-[#233662]">
+                Survey results
+              </h3>
               <div className="h-px w-full bg-[#e5e7eb]" />
               <div className="h-[250px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={radarData} outerRadius={100}>
                     <PolarGrid stroke="#bfbfbf" />
                     <PolarAngleAxis dataKey="axis" tick={{ fill: "#444", fontSize: 13 }} />
-                    <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: "#bfbfbf", fontSize: 10 }} stroke="transparent" />
-                    <Radar name="Another" dataKey="mate" stroke="#518EFA" fill="#518EFA" fillOpacity={0.5} />
-                    <Radar name="Me" dataKey="me" stroke="#64A550" fill="#64A550" fillOpacity={0.5} />
+                    <PolarRadiusAxis
+                      angle={90}
+                      domain={[0, 5]}
+                      tick={{ fill: "#bfbfbf", fontSize: 10 }}
+                      stroke="transparent"
+                    />
+                    <Radar
+                      name="Another"
+                      dataKey="mate"
+                      stroke="#518EFA"
+                      fill="#518EFA"
+                      fillOpacity={0.5}
+                    />
+                    <Radar
+                      name="Me"
+                      dataKey="me"
+                      stroke="#64A550"
+                      fill="#64A550"
+                      fillOpacity={0.5}
+                    />
                   </RadarChart>
                 </ResponsiveContainer>
               </div>
@@ -255,16 +319,35 @@ function BenchmarkPage() {
 
             {/* Habits Radar */}
             <div className="flex flex-1 flex-col items-center gap-6 rounded-[12px] bg-white py-6 shadow-[0_0_10px_0_rgba(94,98,120,0.16)]">
-              <h3 className="w-full px-6 text-[24px] font-semibold text-[#233662]">Habits — subsection averages</h3>
+              <h3 className="w-full px-6 text-[24px] font-semibold text-[#233662]">
+                Habits — subsection averages
+              </h3>
               <div className="h-px w-full bg-[#e5e7eb]" />
               <div className="h-[250px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={habitsRadarData} outerRadius={100}>
                     <PolarGrid stroke="#bfbfbf" />
                     <PolarAngleAxis dataKey="axis" tick={{ fill: "#444", fontSize: 13 }} />
-                    <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: "#bfbfbf", fontSize: 10 }} stroke="transparent" />
-                    <Radar name="Another" dataKey="mate" stroke="#518EFA" fill="#518EFA" fillOpacity={0.5} />
-                    <Radar name="Me" dataKey="me" stroke="#64A550" fill="#64A550" fillOpacity={0.5} />
+                    <PolarRadiusAxis
+                      angle={90}
+                      domain={[0, 5]}
+                      tick={{ fill: "#bfbfbf", fontSize: 10 }}
+                      stroke="transparent"
+                    />
+                    <Radar
+                      name="Another"
+                      dataKey="mate"
+                      stroke="#518EFA"
+                      fill="#518EFA"
+                      fillOpacity={0.5}
+                    />
+                    <Radar
+                      name="Me"
+                      dataKey="me"
+                      stroke="#64A550"
+                      fill="#64A550"
+                      fillOpacity={0.5}
+                    />
                   </RadarChart>
                 </ResponsiveContainer>
               </div>
