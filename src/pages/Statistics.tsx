@@ -34,7 +34,7 @@ function SustainableBehaviour({ averages }: ChartProps) {
   const ticks = [5, 4, 3, 2, 1, 0];
 
   return (
-    <div className="flex h-[341px] w-[540px] shrink-0 flex-col gap-6 rounded-[12px] bg-white px-6 py-8 shadow-[0_0_10px_rgba(94,98,120,0.16)]">
+    <div className="flex h-[341px] w-full min-w-0 flex-col gap-6 rounded-[12px] bg-white px-4 py-8 shadow-[0_0_10px_rgba(94,98,120,0.16)] sm:px-6 lg:w-[540px] lg:shrink-0">
       <div className="flex flex-col gap-6">
         <h3 className="text-[20px] font-semibold text-[#233662]">Sustainable categories</h3>
         <div className="h-px w-full bg-[#e5e7eb]" />
@@ -51,11 +51,11 @@ function SustainableBehaviour({ averages }: ChartProps) {
               <div key={t} className="h-px w-full bg-[#e5e7eb]" />
             ))}
           </div>
-          <div className="relative flex h-full items-end gap-8 px-6">
+          <div className="relative flex h-full items-end gap-3 px-2 sm:gap-8 sm:px-6">
             {behaviourBars.map((b) => (
               <div
                 key={b.label}
-                className=" flex h-full items-center justify-end flex-1 flex-col items-centerflex flex-1 flex-col items-center"
+                className="flex h-full flex-1 flex-col items-center justify-end"
               >
                 <div
                   className="w-full max-w-[64px] transition-all duration-1000"
@@ -66,7 +66,7 @@ function SustainableBehaviour({ averages }: ChartProps) {
           </div>
         </div>
       </div>
-      <div className="flex gap-8 pl-9 pr-6">
+      <div className="flex gap-3 pl-9 pr-2 sm:gap-8 sm:pr-6">
         {behaviourBars.map((b) => (
           <span key={b.label} className="flex-1 text-center text-[12px] text-[#444444]">
             {b.label}
@@ -98,13 +98,13 @@ const radarData = radarCountries.map((country: string, i: number) => ({
 
 function SustainableHabits() {
   return (
-    <div className="flex h-[341px] flex-1 flex-col gap-6 rounded-[12px] bg-white px-6 py-8 shadow-[0_0_10px_rgba(94,98,120,0.16)]">
+    <div className="flex min-h-[341px] w-full min-w-0 flex-1 flex-col gap-6 rounded-[12px] bg-white px-4 py-8 shadow-[0_0_10px_rgba(94,98,120,0.16)] sm:px-6">
       <div className="flex flex-col gap-6">
         <h3 className="text-[20px] font-semibold text-[#233662]">Sustainable habits</h3>
         <div className="h-px w-full bg-[#e5e7eb]" />
       </div>
-      <div className="flex flex-1 items-center justify-between gap-4">
-        <div className="h-[220px] w-[260px]">
+      <div className="flex flex-1 flex-col items-center justify-between gap-4 sm:flex-row">
+        <div className="h-[220px] w-full max-w-[260px]">
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart data={radarData} outerRadius="80%">
               <PolarGrid stroke="#bfbfbf" />
