@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import navLogo from "@/assets/nav-logo.png";
 
 const links: { label: string; to: string }[] = [
@@ -10,6 +12,7 @@ const links: { label: string; to: string }[] = [
 
 export function Navigation() {
   const location = useLocation();
+  const [open, setOpen] = useState(false);
   return (
     <header
       className="bg-white"
@@ -42,7 +45,39 @@ export function Navigation() {
             );
           })}
         </ul>
+        <button
+          type="button"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-md text-[#233662] hover:bg-[#f3f4f6] md:hidden"
+        >
+          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
       </nav>
+      {open && (
+        <div className="border-t border-[#e5e7eb] bg-white md:hidden">
+          <ul className="flex flex-col px-6 py-2 sm:px-10">
+            {links.map(({ label, to }) => {
+              const path = to.split("#")[0] || "/";
+              const isActive = location.pathname === path;
+              return (
+                <li key={label}>
+                  <a
+                    href={to}
+                    onClick={() => setOpen(false)}
+                    className={`block py-3 text-[14px] font-medium uppercase ${
+                      isActive ? "text-[#518efa]" : "text-[#233662]"
+                    }`}
+                  >
+                    {label}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </header>
   );
 }
