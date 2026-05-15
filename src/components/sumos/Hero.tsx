@@ -6,12 +6,14 @@ import heroBgShape from "@/assets/hero-bg-shape.svg";
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-background">
-      <img
-        src={heroBgShape}
-        alt=""
-        aria-hidden
-        className="pointer-events-none absolute -left-[61px] -top-[67px] h-[637px] w-[791px] max-w-none"
-      />
+      <div className="pointer-events-none absolute inset-x-0 top-0 mx-auto max-w-[1440px]">
+        <img
+          src={heroBgShape}
+          alt=""
+          aria-hidden
+          className="absolute -top-[67px] right-[649px] h-[637px] w-[791px] max-w-none"
+        />
+      </div>
       <div className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-10 px-6 pt-12 pb-6 sm:px-10 md:grid-cols-2 md:items-center md:pt-16 lg:px-[160px]">
         <div className="relative flex flex-col gap-6">
           <img

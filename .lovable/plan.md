@@ -1,35 +1,51 @@
-## Šta menjamo
+## Goal
+Fix the Hero background "cloud" shape so it doesn't drift far left on wide screens. Anchor it to the right edge of the hero, and let it extend to the left as far as needed (clipped by the section).
 
-1. **Brišemo `/survey/results` rutu i `src/pages/SurveyResults.tsx`** u potpunosti.
-2. **Uklanjamo trenutni Step 2 finish ekran** (Congratulations / badge / bar chart / email kartica / 3 next-steps kartice) iz `src/pages/Survey.tsx`.
-3. **Pravimo novu komponentu `src/components/survey/DetailedResults.tsx`** koja sadrži SAV vizuelni sadržaj sa stare `SurveyResults` stranice (eko profil, gauge chartovi po kategorijama, habit subkategorije, predlozi). Ova komponenta čita podatke iz `useSurvey()` baš kao stara stranica.
-4. **Renderujemo `<DetailedResults />` inline** kao jedini sadržaj nakon submit-a u Survey flow-u (na mestu gde je sada Step 2).
-5. **App.tsx**: brišemo import i `<Route path="/survey/results" />`. Link `/survey/results` u Survey.tsx (linija 843) više nije potreban — uklanjamo ga.
+## Change
+In `src/components/sumos/Hero.tsx`:
 
-## O email-u (važno — odgovor na tvoje pitanje)
+- Ensure the parent `<section>` keeps `relative overflow-hidden` (already does).
+- Replace the bg shape image positioning:
+  - Remove `-left-[61px] -top-[67px]` (left-anchored absolute).
+  - Anchor it right + top instead, so it stays fixed on the right and overflows to the left:
+    - `absolute top-[-67px] right-[calc(100%-791px-61px+...)]` — simpler: position it relative to the right side of the content container.
+  - Concretely: use `right-[649px]` (so the 791px-wide shape ends 649px from right, matching Figma where shape right edge sits at left+791-61 = 730px from left of 1440 frame → 710px from right). We'll compute against the max-width container.
 
-Tvoj snippet pokazuje da **NestJS backend već sam pravi HTML mejla** sa inline stilovima (`style="..."`). To je ispravan pristup za mejl jer:
+Cleanest approach — wrap the shape in a right-anchored positioning context:
 
-- Mejl klijenti (Gmail, Outlook) **ne razumeju Tailwind klase, CSS varijable, `oklch()`, ni `<link>` na stylesheet**. Sve mora biti inline `style=""` na svakom elementu.
-- React komponenta sa `className="bg-brand-blue rounded-xl"` se **ne može direktno "sibnuti" u mejl**. Klase bi stigle kao tekst, bez ijednog stila.
+```tsx
+<div className="pointer-events-none absolute inset-y-0 right-0 left-0 overflow-hidden">
+  <img
+    src={heroBgShape}
+    alt=""
+    aria-hidden
+    className="absolute -top-[67px] h-[637px] w-[791px] max-w-none"
+    style={{ right: 'calc(50% + 80px)' }}  /* anchor to right side of the 1440 max-width container's left column */
+  />
+</div>
+```
 
-Zato **stilovi se NE dele između frontend komponente i mejla**. Ono što se deli su **PODACI** (`overallScore`, `categoryScores`, `subcategoryScores`). Frontend ih prikazuje kroz Tailwind/React; backend ih ubacuje u svoj HTML template sa inline stilovima.
+Or simpler and matching Figma intent exactly: position the image so its **right edge** sits at a fixed offset from the right edge of the inner 1440 container (mirroring how `lg:px-[160px]` anchors content). On screens wider than 1440 the shape will appear to extend left toward the viewport edge while keeping a stable right anchor under the text column.
 
-**Šta ćeš ti uraditi na backend strani** (van ovog projekta — samo info):
-- U `mailOptions.html` template-u, na osnovu `overallScore` i `categoryScores`, generiši `categoriesHtml` string sa `<li style="...">` elementima.
-- Ako želiš da mejl vizuelno liči na `DetailedResults` komponentu, prepiši ključne sekcije (eko profil card, score box, lista kategorija sa progress bar-om kao `<div>` sa `style="background: linear-gradient(...)"`) ručno sa inline stilovima. Boje pokupi iz dizajn tokena (`#518efa` za brand blue itd.) i hardkoduj ih u template.
-- Frontend submit poziv već šalje sve odgovore — backend računa skorove (kao što već radi u `state.results`) i ima sve što mu treba za HTML.
+Final implementation:
+- Add a centered max-w-[1440px] wrapper `relative` around the shape with `mx-auto`.
+- Inside, position `<img>` absolutely with `right-[649px] top-[-67px]` (so its right edge lands ~710px from the right of the 1440 container — aligned with the text/illustration split). On screens narrower than 1440, the wrapper shrinks and shape moves with it; on wider screens the shape stays anchored to that right-side reference and extends further left as the viewport grows (clipped by section `overflow-hidden`).
 
-Ako kasnije poželiš da i frontend i mejl koriste **istu React komponentu**, moraćemo preći na `@react-email/components` + `render()` na backend-u (drugi setup, drugi paket). Za sada ostaje kako jeste: backend vlasnik HTML template-a.
+```tsx
+<section className="relative overflow-hidden bg-background">
+  <div className="pointer-events-none absolute inset-x-0 top-0 mx-auto max-w-[1440px]">
+    <img
+      src={heroBgShape}
+      alt=""
+      aria-hidden
+      className="absolute -top-[67px] right-[649px] h-[637px] w-[791px] max-w-none"
+    />
+  </div>
+  {/* existing content unchanged */}
+</section>
+```
 
-## Tehnički detalji
-
-**Fajlovi koji se menjaju:**
-- `src/pages/SurveyResults.tsx` → brisanje
-- `src/App.tsx` → ukloniti import + Route
-- `src/pages/Survey.tsx` → ukloniti Step 2 JSX, renderovati `<DetailedResults />` umesto njega; ukloniti `link: "/survey/results"` referencu
-- `src/components/survey/DetailedResults.tsx` → nov fajl, sadržaj iz starog `SurveyResults` (bez `<Layout>` i `<PageHeader>` wrapper-a — pošto se renderuje unutar Survey layout-a)
-
-**Šta se ne menja:**
-- `SurveyContext`, scoring logika, submit flow, "fill with random answers" dugme.
-- Backend / mejl logika (to ti rešavaš van Lovable-a u NestJS-u).
+## Notes
+- No content/layout changes; only the bg shape positioning.
+- `overflow-hidden` on the section prevents horizontal scrollbars from the overflowing shape.
+- Right-anchored offset (`right-[649px]`) keeps the cloud visually tied to the text column on all viewport widths.
